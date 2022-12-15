@@ -1,11 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const itemData = [
   {
@@ -71,8 +70,20 @@ const itemData = [
 ];
 
 function TitlebarBelowImageList() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'))
+  const isLarge = useMediaQuery(theme.breakpoints.down('lg'))
+  const isXLarge = useMediaQuery(theme.breakpoints.down('xl'))
+  let cols = 8
+  if (isXLarge) cols = 7
+  if (isLarge) cols = 5
+  if (isLarge) cols = 5
+  if (isTablet) cols = 3
+  if (isMobile) cols = 2
+
   return (
-    <ImageList sx={{width: '100%'}} cols={6} gap={8}>
+    <ImageList sx={{width: '100%'}} cols={cols} gap={8}>
       {itemData.map((item) => (
         <ImageListItem key={item.img}>
           <img
