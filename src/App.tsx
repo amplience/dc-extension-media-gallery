@@ -21,7 +21,9 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GraphQLClient } from "./graphql-client";
+import { ExtensionContextProvider } from "./extension-context";
 
 const itemData = [
   {
@@ -120,6 +122,41 @@ function TitlebarBelowImageList() {
     })
   );
 
+  useEffect(() => {
+    (async () => {
+      const gqlTest = new GraphQLClient('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
+
+      // absolutely do not push client credentials!
+      
+      await gqlTest.auth('clientid', 'secret');
+
+      const result = await gqlTest.fetch(`
+        { 
+          assetSearch(
+            keyword: "*"
+            first: 100
+            filters: { createdDate: "2022-01-01T00:00:00.000Z TO NOW" }
+            sort: { createdDate: DESC }
+          ) {
+            total
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                id
+                name
+              }
+            }
+          }
+        }
+      `);
+
+      console.log(result)
+    })();
+  })
+
   const dragEnd = (event: any) => {
     const { active, over } = event;
 
@@ -132,40 +169,42 @@ function TitlebarBelowImageList() {
   };
 
   return (
-    <ImageList sx={{ width: "100%" }} cols={cols} gap={8}>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={dragEnd}
-      >
-        <SortableContext items={items} strategy={rectSortingStrategy}>
-          {items.map((item) => (
-            <SortableListItem key={item.img} id={item.id}>
-              <img
-                src={`${item.img}?w=248&fit=crop&auto=format`}
-                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={item.title}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title={item.title}
-                subtitle={<span>by: {item.author}</span>}
-                position="below"
-                actionIcon={
-                  <IconButton
-                    sx={{ color: "white" }}
-                    aria-label={`select ${item.title}`}
-                  >
-                    <CheckBoxOutlineBlank />
-                  </IconButton>
-                }
-                actionPosition="left"
-              />
-            </SortableListItem>
-          ))}
-        </SortableContext>
-      </DndContext>
-    </ImageList>
+    <ExtensionContextProvider>
+      <ImageList sx={{ width: "100%" }} cols={cols} gap={8}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={dragEnd}
+        >
+          <SortableContext items={items} strategy={rectSortingStrategy}>
+            {items.map((item) => (
+              <SortableListItem key={item.img} id={item.id}>
+                <img
+                  src={`${item.img}?w=248&fit=crop&auto=format`}
+                  srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.title}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title={item.title}
+                  subtitle={<span>by: {item.author}</span>}
+                  position="below"
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: "white" }}
+                      aria-label={`select ${item.title}`}
+                    >
+                      <CheckBoxOutlineBlank />
+                    </IconButton>
+                  }
+                  actionPosition="left"
+                />
+              </SortableListItem>
+            ))}
+          </SortableContext>
+        </DndContext>
+      </ImageList>
+    </ExtensionContextProvider>
   );
 }
 
