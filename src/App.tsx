@@ -29,9 +29,10 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
-import { GraphQLClient } from "./graphql-client";
 import { ExtensionContextProvider } from "./extension-context";
 import SortableTableRow from "./sortable-table-row";
+import { ChApi } from "./ch-api";
+import credentials from "./credentials";
 
 const itemData = [
   {
@@ -122,6 +123,7 @@ function TitlebarBelowImageList() {
   if (isMobile) cols = 2;
 
   const [items, setItems] = useState(itemData);
+  const {clientId, clientSecret} = credentials;
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -132,36 +134,17 @@ function TitlebarBelowImageList() {
 
   useEffect(() => {
     (async () => {
-      const gqlTest = new GraphQLClient('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
+      if (clientId) {
+        const gqlTest = new ChApi('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
 
-      // absolutely do not push client credentials!
+        // absolutely do not push client credentials!
 
-      await gqlTest.auth('clientid', 'secret');
+        await gqlTest.auth(clientId, clientSecret);
 
-      const result = await gqlTest.fetch(`
-        { 
-          assetSearch(
-            keyword: "*"
-            first: 100
-            filters: { createdDate: "2022-01-01T00:00:00.000Z TO NOW" }
-            sort: { createdDate: DESC }
-          ) {
-            total
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-            edges {
-              node {
-                id
-                name
-              }
-            }
-          }
-        }
-      `);
+        const result = await gqlTest.allReposWithFolders();
 
-      console.log(result)
+        console.log(result)
+      }
     })();
   })
 

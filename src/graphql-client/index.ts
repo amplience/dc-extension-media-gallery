@@ -43,6 +43,6 @@ export class GraphQLClient {
       body: JSON.stringify({ query, variables }),
     });
 
-    return await response.json();
+    return (await response.json()).data;
   }
 }
