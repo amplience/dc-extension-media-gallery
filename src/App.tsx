@@ -21,11 +21,13 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import { GraphQLClient } from "./graphql-client";
 import { ExtensionContextProvider } from "./extension-context";
+import SortableTableRow from "./sortable-table-row";
 
 const itemData = [
   {
@@ -226,44 +228,52 @@ function TitlebarBelowImageList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell component="th">
-                <IconButton
-                  sx={{ color: "white" }}
-                  aria-label={`select all`}
-                >
-                  <CheckBoxOutlineBlank />
-                </IconButton>
-              </TableCell>
-              <TableCell>
-                <img
-                  src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
-                  loading="lazy"
-                />
-              </TableCell>
-              <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
-              <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
-              <TableCell align="left">
-                <IconButton
-                  sx={{ color: "white" }}
-                  aria-label={`select all`}
-                >
-                  <EditOutlined />
-                </IconButton>
-              </TableCell>
-              <TableCell align="left">
-                <IconButton
-                  sx={{ color: "white" }}
-                  aria-label={`select all`}
-                >
-                  <DeleteOutline />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={dragEnd}
+          >
+            <SortableContext items={items} strategy={verticalListSortingStrategy}>
+              {items.map((item) => (
+                <SortableTableRow key={item.img} id={item.id}>
+                  <TableCell component="th">
+                    <IconButton
+                      sx={{ color: "white" }}
+                      aria-label={`select all`}
+                    >
+                      <CheckBoxOutlineBlank />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    <img
+                      src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
+                      srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+                  </TableCell>
+                  <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
+                  <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
+                  <TableCell align="left">
+                    <IconButton
+                      sx={{ color: "white" }}
+                      aria-label={`select all`}
+                    >
+                      <EditOutlined />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell align="left">
+                    <IconButton
+                      sx={{ color: "white" }}
+                      aria-label={`select all`}
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                  </TableCell>
+                </SortableTableRow>
+              ))}
+            </SortableContext>
+          </DndContext>
         </TableBody>
       </Table>
     </ExtensionContextProvider>
