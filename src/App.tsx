@@ -10,6 +10,7 @@ import SortableListItem from "./sortable-list-item";
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
+  restrictToParentElement,
 } from '@dnd-kit/modifiers'
 
 import {
@@ -124,7 +125,9 @@ function TitlebarBelowImageList() {
   const [items, setItems] = useState(itemData);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {delay: 150, tolerance: 5}
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -163,7 +166,7 @@ function TitlebarBelowImageList() {
 
       console.log(result)
     })();
-  })
+  }, [])
 
   const dragEnd = (event: any) => {
     const { active, over } = event;
@@ -174,6 +177,12 @@ function TitlebarBelowImageList() {
 
       setItems(arrayMove(items, oldIndex, newIndex));
     }
+  };
+
+  const removeItem = (index: number) => {
+    console.log("REMOVING ITEM ", index)
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
   };
 
   return (
@@ -213,14 +222,14 @@ function TitlebarBelowImageList() {
         </DndContext>
       </ImageList>
 
-      <Table>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={dragEnd}
-          modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
-        >
-          <SortableContext items={items} strategy={verticalListSortingStrategy}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={dragEnd}
+        modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}
+      >
+        <SortableContext items={items} strategy={verticalListSortingStrategy}>
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell component="th">
@@ -239,7 +248,7 @@ function TitlebarBelowImageList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((item) => (
+              {items.map((item: any, index: number) => (
                 <SortableTableRow key={item.img} id={item.id}>
                   <TableCell component="th">
                     <IconButton
@@ -262,7 +271,7 @@ function TitlebarBelowImageList() {
                   <TableCell align="left">
                     <IconButton
                       sx={{ color: "white" }}
-                      aria-label={`select all`}
+                      aria-label={`edit`}
                     >
                       <EditOutlined />
                     </IconButton>
@@ -270,7 +279,8 @@ function TitlebarBelowImageList() {
                   <TableCell align="left">
                     <IconButton
                       sx={{ color: "white" }}
-                      aria-label={`select all`}
+                      aria-label={`delete`}
+                      onClick={() => removeItem(index)}
                     >
                       <DeleteOutline />
                     </IconButton>
@@ -279,9 +289,9 @@ function TitlebarBelowImageList() {
               ))}
 
             </TableBody>
-          </SortableContext>
-        </DndContext>
-      </Table>
+          </Table>
+        </SortableContext>
+      </DndContext>
     </ExtensionContextProvider >
   );
 }
