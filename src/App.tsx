@@ -3,7 +3,9 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import { useMediaQuery, useTheme } from "@mui/material";
+import DeleteOutline from "@mui/icons-material/DeleteOutline";
+import EditOutlined from "@mui/icons-material/EditOutlined";
+import { Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material";
 import SortableListItem from "./sortable-list-item";
 
 import {
@@ -127,7 +129,7 @@ function TitlebarBelowImageList() {
       const gqlTest = new GraphQLClient('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
 
       // absolutely do not push client credentials!
-      
+
       await gqlTest.auth('clientid', 'secret');
 
       const result = await gqlTest.fetch(`
@@ -204,6 +206,66 @@ function TitlebarBelowImageList() {
           </SortableContext>
         </DndContext>
       </ImageList>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell component="th">
+              <IconButton
+                sx={{ color: "white" }}
+                aria-label={`select all`}
+              >
+                <CheckBoxOutlineBlank />
+              </IconButton>
+            </TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {items.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell component="th">
+                <IconButton
+                  sx={{ color: "white" }}
+                  aria-label={`select all`}
+                >
+                  <CheckBoxOutlineBlank />
+                </IconButton>
+              </TableCell>
+              <TableCell>
+                <img
+                  src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
+                  srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.title}
+                  loading="lazy"
+                />
+              </TableCell>
+              <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
+              <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
+              <TableCell align="left">
+                <IconButton
+                  sx={{ color: "white" }}
+                  aria-label={`select all`}
+                >
+                  <EditOutlined />
+                </IconButton>
+              </TableCell>
+              <TableCell align="left">
+                <IconButton
+                  sx={{ color: "white" }}
+                  aria-label={`select all`}
+                >
+                  <DeleteOutline />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </ExtensionContextProvider>
   );
 }
