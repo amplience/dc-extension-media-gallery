@@ -136,9 +136,7 @@ function TitlebarBelowImageList() {
   const [gridMode, setGridMode] = useState(true)
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { delay: 150, tolerance: 5 }
-    }),
+    useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -267,6 +265,8 @@ function TitlebarBelowImageList() {
                       <CheckBoxOutlineBlank />
                     </IconButton>
                   </TableCell>
+                  <TableCell component="th">
+                  </TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
@@ -276,45 +276,15 @@ function TitlebarBelowImageList() {
               </TableHead>
               <TableBody>
                 {items.map((item: any, index: number) => (
-                  <SortableTableRow key={item.img} id={item.id}>
-                    <TableCell component="th">
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`select all`}
-                      >
-                        <CheckBoxOutlineBlank />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell>
-                      <img
-                        src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
-                        srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
-                        alt={item.title}
-                        loading="lazy"
-                      />
-                    </TableCell>
-                    <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
-                    <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
-                    <TableCell align="left">
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`edit`}
-                      >
-                        <EditOutlined />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell align="left">
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`delete`}
-                        onClick={() => removeItem(index)}
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-                    </TableCell>
-                  </SortableTableRow>
+                  <SortableTableRow 
+                    key={item.img} 
+                    id={item.id} 
+                    handle={true} 
+                    item={item} 
+                    removeItem={removeItem} 
+                    index={index} 
+                  />
                 ))}
-
               </TableBody>
             </Table>
           </SortableContext>
