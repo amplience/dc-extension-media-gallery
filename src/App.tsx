@@ -27,7 +27,7 @@ import { ExtensionContextProvider } from "./extension-context";
 
 const itemData = [
   {
-    id: 0,
+    id: 12,
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
     title: "Breakfast",
     author: "@bkristastucchio",
