@@ -1,15 +1,28 @@
-import "./App.css";
-import ImageList from "@mui/material/ImageList";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
-import IconButton from "@mui/material/IconButton";
+import "./App.css"
+import ImageList from "@mui/material/ImageList"
+import ImageListItemBar from "@mui/material/ImageListItemBar"
+import IconButton from "@mui/material/IconButton"
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
-import EditOutlined from "@mui/icons-material/EditOutlined";
-import { Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material";
-import SortableListItem from "./sortable-list-item";
+import DeleteOutline from "@mui/icons-material/DeleteOutline"
+import EditOutlined from "@mui/icons-material/EditOutlined"
+import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
+import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined'
+import { 
+  Stack, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableRow, 
+  useMediaQuery, 
+  useTheme 
+} from "@mui/material"
+import SortableListItem from "./sortable-list-item"
+import SortableTableRow from "./sortable-table-row"
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
+  restrictToParentElement,
 } from '@dnd-kit/modifiers'
 
 import {
@@ -19,8 +32,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
-
+} from "@dnd-kit/core"
 import {
   arrayMove,
   SortableContext,
@@ -28,9 +40,9 @@ import {
   verticalListSortingStrategy,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
+
 import { useEffect, useState } from "react";
 import { ExtensionContextProvider } from "./extension-context";
-import SortableTableRow from "./sortable-table-row";
 import { ChApi } from "./ch-api";
 import credentials from "./credentials";
 
@@ -107,37 +119,38 @@ const itemData = [
     title: "Bike",
     author: "@southside_customs",
   },
-];
+]
 
 function TitlebarBelowImageList() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-  const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
-  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
-  let cols = 8;
-  if (isXLarge) cols = 7;
-  if (isLarge) cols = 5;
-  if (isLarge) cols = 5;
-  if (isTablet) cols = 3;
-  if (isMobile) cols = 2;
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+  const isLarge = useMediaQuery(theme.breakpoints.down("lg"))
+  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"))
+  let cols = 8
+  if (isXLarge) cols = 7
+  if (isLarge) cols = 5
+  if (isLarge) cols = 5
+  if (isTablet) cols = 3
+  if (isMobile) cols = 2
 
   const [items, setItems] = useState(itemData);
+  const [gridMode, setGridMode] = useState(true)
   const {clientId, clientSecret} = credentials;
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 }
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
-  );
+  )
 
   useEffect(() => {
     (async () => {
       if (clientId) {
         const gqlTest = new ChApi('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
-
-        // absolutely do not push client credentials!
 
         await gqlTest.auth(clientId, clientSecret);
 
@@ -146,84 +159,88 @@ function TitlebarBelowImageList() {
         console.log(result)
       }
     })();
-  })
+  });
 
   const dragEnd = (event: any) => {
-    const { active, over } = event;
+    const { active, over } = event
 
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex(item => item.id === active.id);
-      const newIndex = items.findIndex(item => item.id === over.id);
+      const oldIndex = items.findIndex(item => item.id === active.id)
+      const newIndex = items.findIndex(item => item.id === over.id)
 
-      setItems(arrayMove(items, oldIndex, newIndex));
+      setItems(arrayMove(items, oldIndex, newIndex))
     }
+  };
+
+  const removeItem = (index: number) => {
+    const newItems = items.filter((_, i) => i !== index)
+    setItems(newItems)
   };
 
   return (
     <ExtensionContextProvider>
-      <ImageList sx={{ width: "100%" }} cols={cols} gap={8}>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={dragEnd}
+      <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`select all`}
+          onClick={() => setGridMode(false)}
         >
-          <SortableContext items={items} strategy={rectSortingStrategy}>
-            {items.map((item) => (
-              <SortableListItem key={item.img} id={item.id}>
-                <img
-                  src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
-                  loading="lazy"
-                />
-                <ImageListItemBar
-                  title={item.title}
-                  subtitle={<span>by: {item.author}</span>}
-                  position="below"
-                  actionIcon={
-                    <IconButton
-                      sx={{ color: "white" }}
-                      aria-label={`select ${item.title}`}
-                    >
-                      <CheckBoxOutlineBlank />
-                    </IconButton>
-                  }
-                  actionPosition="left"
-                />
-              </SortableListItem>
-            ))}
-          </SortableContext>
-        </DndContext>
-      </ImageList>
-
-      <Table>
+          <ViewHeadlineOutlinedIcon />
+        </IconButton>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`select all`}
+          onClick={() => setGridMode(true)}
+        >
+          <AppsOutlinedIcon />
+        </IconButton>
+      </Stack>
+      {gridMode ?
+        <ImageList sx={{ width: "100%" }} cols={cols} gap={8}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={dragEnd}
+          >
+            <SortableContext items={items} strategy={rectSortingStrategy}>
+              {items.map((item) => (
+                <SortableListItem key={item.img} id={item.id}>
+                  <img
+                    src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
+                    srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
+                    alt={item.title}
+                    loading="lazy"
+                  />
+                  <ImageListItemBar
+                    title={item.title}
+                    subtitle={<span>by: {item.author}</span>}
+                    position="below"
+                    actionIcon={
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`select ${item.title}`}
+                      >
+                        <CheckBoxOutlineBlank />
+                      </IconButton>
+                    }
+                    actionPosition="left"
+                  />
+                </SortableListItem>
+              ))}
+            </SortableContext>
+          </DndContext>
+        </ImageList>
+        :
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={dragEnd}
-          modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
+          modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}
         >
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            <TableHead>
-              <TableRow>
-                <TableCell component="th">
-                  <IconButton
-                    sx={{ color: "white" }}
-                    aria-label={`select all`}
-                  >
-                    <CheckBoxOutlineBlank />
-                  </IconButton>
-                </TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {items.map((item) => (
-                <SortableTableRow key={item.img} id={item.id}>
+            <Table>
+              <TableHead>
+                <TableRow>
                   <TableCell component="th">
                     <IconButton
                       sx={{ color: "white" }}
@@ -232,41 +249,61 @@ function TitlebarBelowImageList() {
                       <CheckBoxOutlineBlank />
                     </IconButton>
                   </TableCell>
-                  <TableCell>
-                    <img
-                      src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
-                      srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
-                      alt={item.title}
-                      loading="lazy"
-                    />
-                  </TableCell>
-                  <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
-                  <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
-                  <TableCell align="left">
-                    <IconButton
-                      sx={{ color: "white" }}
-                      aria-label={`select all`}
-                    >
-                      <EditOutlined />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="left">
-                    <IconButton
-                      sx={{ color: "white" }}
-                      aria-label={`select all`}
-                    >
-                      <DeleteOutline />
-                    </IconButton>
-                  </TableCell>
-                </SortableTableRow>
-              ))}
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {items.map((item: any, index: number) => (
+                  <SortableTableRow key={item.img} id={item.id}>
+                    <TableCell component="th">
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`select all`}
+                      >
+                        <CheckBoxOutlineBlank />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>
+                      <img
+                        src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
+                        srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
+                        alt={item.title}
+                        loading="lazy"
+                      />
+                    </TableCell>
+                    <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
+                    <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
+                    <TableCell align="left">
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`edit`}
+                      >
+                        <EditOutlined />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="left">
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`delete`}
+                        onClick={() => removeItem(index)}
+                      >
+                        <DeleteOutline />
+                      </IconButton>
+                    </TableCell>
+                  </SortableTableRow>
+                ))}
 
-            </TableBody>
+              </TableBody>
+            </Table>
           </SortableContext>
         </DndContext>
-      </Table>
+      }
     </ExtensionContextProvider >
-  );
+  )
 }
 
 function App() {
@@ -276,7 +313,7 @@ function App() {
         <TitlebarBelowImageList />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
