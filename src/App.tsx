@@ -39,10 +39,12 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   rectSortingStrategy,
-} from "@dnd-kit/sortable"
-import { useEffect, useState } from "react"
-import { GraphQLClient } from "./graphql-client"
-import { ExtensionContextProvider } from "./extension-context"
+} from "@dnd-kit/sortable";
+
+import { useEffect, useState } from "react";
+import { ExtensionContextProvider } from "./extension-context";
+import { ChApi } from "./ch-api";
+import credentials from "./credentials";
 
 const itemData = [
   {
@@ -134,6 +136,7 @@ function TitlebarBelowImageList() {
 
   const [items, setItems] = useState(itemData);
   const [gridMode, setGridMode] = useState(true)
+  const {clientId, clientSecret} = credentials;
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -144,38 +147,17 @@ function TitlebarBelowImageList() {
 
   useEffect(() => {
     (async () => {
-      const gqlTest = new GraphQLClient('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql')
+      if (clientId) {
+        const gqlTest = new ChApi('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
 
-      // absolutely do not push client credentials!
+        await gqlTest.auth(clientId, clientSecret);
 
-      await gqlTest.auth('clientid', 'secret')
+        const result = await gqlTest.allReposWithFolders();
 
-      const result = await gqlTest.fetch(`
-        { 
-          assetSearch(
-            keyword: "*"
-            first: 100
-            filters: { createdDate: "2022-01-01T00:00:00.000Z TO NOW" }
-            sort: { createdDate: DESC }
-          ) {
-            total
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-            edges {
-              node {
-                id
-                name
-              }
-            }
-          }
-        }
-      `)
-
-      console.log(result)
-    })()
-  }, [])
+        console.log(result)
+      }
+    })();
+  });
 
   const dragEnd = (event: any) => {
     const { active, over } = event
