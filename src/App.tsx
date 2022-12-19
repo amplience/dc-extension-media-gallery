@@ -1,15 +1,24 @@
-import "./App.css";
-import ImageList from "@mui/material/ImageList";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
-import IconButton from "@mui/material/IconButton";
+import "./App.css"
+import ImageList from "@mui/material/ImageList"
+import ImageListItemBar from "@mui/material/ImageListItemBar"
+import IconButton from "@mui/material/IconButton"
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
-import EditOutlined from "@mui/icons-material/EditOutlined";
-import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
-import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined';
-import { Stack, Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material";
-import SortableListItem from "./sortable-list-item";
-import SortableTableRow from "./sortable-table-row";
+import DeleteOutline from "@mui/icons-material/DeleteOutline"
+import EditOutlined from "@mui/icons-material/EditOutlined"
+import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
+import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined'
+import { 
+  Stack, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableRow, 
+  useMediaQuery, 
+  useTheme 
+} from "@mui/material"
+import SortableListItem from "./sortable-list-item"
+import SortableTableRow from "./sortable-table-row"
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
@@ -23,18 +32,17 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
-
+} from "@dnd-kit/core"
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   rectSortingStrategy,
-} from "@dnd-kit/sortable";
-import { useEffect, useState } from "react";
-import { GraphQLClient } from "./graphql-client";
-import { ExtensionContextProvider } from "./extension-context";
+} from "@dnd-kit/sortable"
+import { useEffect, useState } from "react"
+import { GraphQLClient } from "./graphql-client"
+import { ExtensionContextProvider } from "./extension-context"
 
 const itemData = [
   {
@@ -109,20 +117,20 @@ const itemData = [
     title: "Bike",
     author: "@southside_customs",
   },
-];
+]
 
 function TitlebarBelowImageList() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-  const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
-  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
-  let cols = 8;
-  if (isXLarge) cols = 7;
-  if (isLarge) cols = 5;
-  if (isLarge) cols = 5;
-  if (isTablet) cols = 3;
-  if (isMobile) cols = 2;
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
+  const isLarge = useMediaQuery(theme.breakpoints.down("lg"))
+  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"))
+  let cols = 8
+  if (isXLarge) cols = 7
+  if (isLarge) cols = 5
+  if (isLarge) cols = 5
+  if (isTablet) cols = 3
+  if (isMobile) cols = 2
 
   const [items, setItems] = useState(itemData);
   const [gridMode, setGridMode] = useState(true)
@@ -134,15 +142,15 @@ function TitlebarBelowImageList() {
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
-  );
+  )
 
   useEffect(() => {
     (async () => {
-      const gqlTest = new GraphQLClient('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
+      const gqlTest = new GraphQLClient('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql')
 
       // absolutely do not push client credentials!
 
-      await gqlTest.auth('clientid', 'secret');
+      await gqlTest.auth('clientid', 'secret')
 
       const result = await gqlTest.fetch(`
         { 
@@ -165,32 +173,31 @@ function TitlebarBelowImageList() {
             }
           }
         }
-      `);
+      `)
 
       console.log(result)
-    })();
+    })()
   }, [])
 
   const dragEnd = (event: any) => {
-    const { active, over } = event;
+    const { active, over } = event
 
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex(item => item.id === active.id);
-      const newIndex = items.findIndex(item => item.id === over.id);
+      const oldIndex = items.findIndex(item => item.id === active.id)
+      const newIndex = items.findIndex(item => item.id === over.id)
 
-      setItems(arrayMove(items, oldIndex, newIndex));
+      setItems(arrayMove(items, oldIndex, newIndex))
     }
   };
 
   const removeItem = (index: number) => {
-    console.log("REMOVING ITEM ", index)
-    const newItems = items.filter((_, i) => i !== index);
-    setItems(newItems);
+    const newItems = items.filter((_, i) => i !== index)
+    setItems(newItems)
   };
 
   return (
     <ExtensionContextProvider>
-      <Stack alignSelf={"end"} direction="row" spacing={2}>
+      <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
         <IconButton
           sx={{ color: "white" }}
           aria-label={`select all`}
@@ -314,7 +321,7 @@ function TitlebarBelowImageList() {
         </DndContext>
       }
     </ExtensionContextProvider >
-  );
+  )
 }
 
 function App() {
@@ -324,7 +331,7 @@ function App() {
         <TitlebarBelowImageList />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
