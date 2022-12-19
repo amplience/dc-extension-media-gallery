@@ -180,8 +180,8 @@ function TitlebarBelowImageList() {
             {items.map((item) => (
               <SortableListItem key={item.img} id={item.id}>
                 <img
-                  src={`${item.img}?w=248&fit=crop&auto=format`}
-                  srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
+                  srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
                   alt={item.title}
                   loading="lazy"
                 />
