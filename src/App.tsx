@@ -7,6 +7,10 @@ import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import EditOutlined from "@mui/icons-material/EditOutlined";
 import { Table, TableBody, TableCell, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material";
 import SortableListItem from "./sortable-list-item";
+import {
+  restrictToVerticalAxis,
+  restrictToWindowEdges,
+} from '@dnd-kit/modifiers'
 
 import {
   closestCenter,
@@ -210,30 +214,31 @@ function TitlebarBelowImageList() {
       </ImageList>
 
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell component="th">
-              <IconButton
-                sx={{ color: "white" }}
-                aria-label={`select all`}
-              >
-                <CheckBoxOutlineBlank />
-              </IconButton>
-            </TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={dragEnd}
-          >
-            <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={dragEnd}
+          modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
+        >
+          <SortableContext items={items} strategy={verticalListSortingStrategy}>
+            <TableHead>
+              <TableRow>
+                <TableCell component="th">
+                  <IconButton
+                    sx={{ color: "white" }}
+                    aria-label={`select all`}
+                  >
+                    <CheckBoxOutlineBlank />
+                  </IconButton>
+                </TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {items.map((item) => (
                 <SortableTableRow key={item.img} id={item.id}>
                   <TableCell component="th">
@@ -272,11 +277,12 @@ function TitlebarBelowImageList() {
                   </TableCell>
                 </SortableTableRow>
               ))}
-            </SortableContext>
-          </DndContext>
-        </TableBody>
+
+            </TableBody>
+          </SortableContext>
+        </DndContext>
       </Table>
-    </ExtensionContextProvider>
+    </ExtensionContextProvider >
   );
 }
 
