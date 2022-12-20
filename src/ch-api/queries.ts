@@ -108,6 +108,14 @@ query foldersByRepo($repoId: ID!, $after: String) {
             children {
               id
               label
+              children {
+                id
+                label
+                children {
+                  id
+                  label
+                }
+              }
             }
           }
         }
@@ -127,6 +135,14 @@ query foldersByFolder($folderId: ID!) {
       children {
         id
         label
+        children {
+          id
+          label
+          children {
+            id
+            label
+          }
+        }
       }
     }
 	}
