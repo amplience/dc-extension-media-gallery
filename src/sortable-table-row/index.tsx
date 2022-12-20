@@ -2,7 +2,7 @@ import React from 'react';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
 import { Button, IconButton, TableCell, TableRow } from '@mui/material';
-import { CheckBoxOutlineBlank, DeleteOutline, EditOutlined, DragIndicatorOutlined } from '@mui/icons-material';
+import { CheckBoxOutlineBlank, DeleteOutline, EditOutlined, DragIndicatorOutlined, VisibilityOutlined } from '@mui/icons-material';
 export default function SortableTableRow(props: any) {
   const {
     attributes,
@@ -20,7 +20,7 @@ export default function SortableTableRow(props: any) {
   };
   
   return (
-    <TableRow ref={setNodeRef} style={style}>
+    <TableRow ref={setNodeRef} style={style} {...listeners} {...attributes}>
       <TableCell>
         <IconButton
           sx={{ color: "white" }}
@@ -28,9 +28,6 @@ export default function SortableTableRow(props: any) {
         >
           <CheckBoxOutlineBlank />
         </IconButton>
-      </TableCell>
-      <TableCell>
-        <DragIndicatorOutlined className='dragHandle' sx={{ color: "white" }} {...listeners} {...attributes} />
       </TableCell>
       <TableCell>
         <img
@@ -47,10 +44,14 @@ export default function SortableTableRow(props: any) {
           sx={{ color: "white" }}
           aria-label={`edit`}
         >
+          <VisibilityOutlined />
+        </IconButton>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`edit`}
+        >
           <EditOutlined />
         </IconButton>
-      </TableCell>
-      <TableCell align="left">
         <IconButton
           sx={{ color: "white" }}
           aria-label={`delete`}

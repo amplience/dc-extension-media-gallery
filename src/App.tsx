@@ -1,24 +1,29 @@
-import "./App.css";
-import ImageList from "@mui/material/ImageList";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
-import IconButton from "@mui/material/IconButton";
-import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
-import ViewHeadlineOutlinedIcon from "@mui/icons-material/ViewHeadlineOutlined";
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
-import EditOutlined from "@mui/icons-material/EditOutlined";
+import "./App.css"
+import ImageList from "@mui/material/ImageList"
+import ImageListItemBar from "@mui/material/ImageListItemBar"
+import IconButton from "@mui/material/IconButton"
 import {
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import SortableListItem from "./sortable-list-item";
-import SortableTableRow from "./sortable-table-row";
+  CheckBoxOutlineBlank,
+  AppsOutlined,
+  EditOutlined,
+  DeleteOutline,
+  ViewHeadlineOutlined,
+  SortOutlined,
+  CachedOutlined,
+  AddPhotoAlternateOutlined
+} from "@mui/icons-material";
+import { 
+  Stack, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableRow, 
+  useMediaQuery, 
+  useTheme 
+} from "@mui/material"
+import SortableListItem from "./sortable-list-item"
+import SortableTableRow from "./sortable-table-row"
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
@@ -50,6 +55,7 @@ import { ExtensionContextProvider } from "./extension-context";
 import { ChApi, Folder, EnrichedRepository } from "./ch-api";
 import credentials from "./credentials";
 import { convertToEntry, defaultExifMap } from "./model/conversion";
+import { Box } from "@mui/system";
 
 const itemData = [
   {
@@ -210,18 +216,41 @@ function TitlebarBelowImageList() {
       <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
         <IconButton
           sx={{ color: "white" }}
-          aria-label={`select all`}
-          onClick={() => setGridMode(false)}
+          aria-label={`sort`}
         >
-          <ViewHeadlineOutlinedIcon />
+          <AddPhotoAlternateOutlined />
         </IconButton>
         <IconButton
           sx={{ color: "white" }}
-          aria-label={`select all`}
-          onClick={() => setGridMode(true)}
+          aria-label={`sync`}
         >
-          <AppsOutlinedIcon />
+          <CachedOutlined />
         </IconButton>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`sort`}
+        >
+          <SortOutlined />
+        </IconButton>
+        {
+          gridMode && 
+          <IconButton
+            sx={{ color: "white" }}
+            aria-label={`list mode`}
+            onClick={() => setGridMode(false)}
+          >
+            <ViewHeadlineOutlined />
+          </IconButton>
+        }
+        { !gridMode &&
+          <IconButton
+            sx={{ color: "white" }}
+            aria-label={`grid mode`}
+            onClick={() => setGridMode(true)}
+          >
+            <AppsOutlined />
+          </IconButton>
+        }
       </Stack>
       {gridMode ? (
         <ImageList cols={cols} gap={8}>
@@ -310,52 +339,20 @@ function TitlebarBelowImageList() {
                       <CheckBoxOutlineBlank />
                     </IconButton>
                   </TableCell>
-                  <TableCell component="th"></TableCell>
-                  <TableCell
-                    sx={{ color: "white", fontWeight: "bold" }}
-                    component="th"
-                  >
-                    Media
-                  </TableCell>
-                  <TableCell
-                    sx={{ color: "white", fontWeight: "bold" }}
-                    component="th"
-                    align="left"
-                  >
-                    Title
-                  </TableCell>
-                  <TableCell
-                    sx={{ color: "white", fontWeight: "bold" }}
-                    component="th"
-                    align="left"
-                  >
-                    Author
-                  </TableCell>
-                  <TableCell
-                    sx={{ color: "white", fontWeight: "bold" }}
-                    component="th"
-                    align="left"
-                  >
-                    Edit
-                  </TableCell>
-                  <TableCell
-                    sx={{ color: "white", fontWeight: "bold" }}
-                    component="th"
-                    align="left"
-                  >
-                    Delete
-                  </TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {items.map((item: any, index: number) => (
-                  <SortableTableRow
-                    key={item.img}
-                    id={item.id}
-                    handle={true}
-                    item={item}
-                    removeItem={removeItem}
-                    index={index}
+                  <SortableTableRow 
+                    key={item.img} 
+                    id={item.id} 
+                    item={item} 
+                    removeItem={removeItem} 
+                    index={index} 
                   />
                 ))}
               </TableBody>
@@ -384,6 +381,7 @@ function RichObjectTreeView(props: any) {
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpanded={["root"]}
       defaultExpandIcon={<ChevronRightIcon />}
+      style={{flexGrow: 1}}
       onNodeSelect={(event: React.SyntheticEvent, nodeId: string) => {
         if (props.onChange) {
           props.onChange(nodeId);
