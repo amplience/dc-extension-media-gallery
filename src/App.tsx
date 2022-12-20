@@ -10,17 +10,18 @@ import {
   ViewHeadlineOutlined,
   SortOutlined,
   CachedOutlined,
-  AddPhotoAlternateOutlined
+  AddPhotoAlternateOutlined,
+  VisibilityOutlined
 } from "@mui/icons-material";
-import { 
-  Stack, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableRow, 
-  useMediaQuery, 
-  useTheme 
+import {
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  useMediaQuery,
+  useTheme
 } from "@mui/material"
 import SortableListItem from "./sortable-list-item"
 import SortableTableRow from "./sortable-table-row"
@@ -55,7 +56,6 @@ import { ExtensionContextProvider } from "./extension-context";
 import { ChApi, Folder, EnrichedRepository } from "./ch-api";
 import credentials from "./credentials";
 import { convertToEntry, defaultExifMap } from "./model/conversion";
-import { Box } from "@mui/system";
 
 const itemData = [
   {
@@ -233,7 +233,7 @@ function TitlebarBelowImageList() {
           <SortOutlined />
         </IconButton>
         {
-          gridMode && 
+          gridMode &&
           <IconButton
             sx={{ color: "white" }}
             aria-label={`list mode`}
@@ -242,7 +242,7 @@ function TitlebarBelowImageList() {
             <ViewHeadlineOutlined />
           </IconButton>
         }
-        { !gridMode &&
+        {!gridMode &&
           <IconButton
             sx={{ color: "white" }}
             aria-label={`grid mode`}
@@ -347,13 +347,49 @@ function TitlebarBelowImageList() {
               </TableHead>
               <TableBody>
                 {items.map((item: any, index: number) => (
-                  <SortableTableRow 
-                    key={item.img} 
-                    id={item.id} 
-                    item={item} 
-                    removeItem={removeItem} 
-                    index={index} 
-                  />
+                  <SortableTableRow
+                    key={item.img}
+                    id={item.id}>
+                    <TableCell>
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`select`}
+                      >
+                        <CheckBoxOutlineBlank />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>
+                      <img
+                        src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
+                        srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
+                        alt={item.title}
+                        loading="lazy"
+                      />
+                    </TableCell>
+                    <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
+                    <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
+                    <TableCell align="left">
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`edit`}
+                      >
+                        <VisibilityOutlined />
+                      </IconButton>
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`edit`}
+                      >
+                        <EditOutlined />
+                      </IconButton>
+                      <IconButton
+                        sx={{ color: "white" }}
+                        aria-label={`delete`}
+                        onClick={() => removeItem(index)}
+                      >
+                        <DeleteOutline />
+                      </IconButton>
+                    </TableCell>
+                  </SortableTableRow>
                 ))}
               </TableBody>
             </Table>
@@ -381,7 +417,7 @@ function RichObjectTreeView(props: any) {
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpanded={["root"]}
       defaultExpandIcon={<ChevronRightIcon />}
-      style={{flexGrow: 1}}
+      style={{ flexGrow: 1 }}
       onNodeSelect={(event: React.SyntheticEvent, nodeId: string) => {
         if (props.onChange) {
           props.onChange(nodeId);
