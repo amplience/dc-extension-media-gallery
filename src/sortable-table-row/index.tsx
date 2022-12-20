@@ -38,6 +38,7 @@ export default function SortableTableRow(props: any) {
           srcSet={`${props.item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
           alt={props.item.title}
           loading="lazy"
+          {...listeners} {...attributes}
         />
       </TableCell>
       <TableCell sx={{ color: "white" }} align="left">{props.item.title}</TableCell>

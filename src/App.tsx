@@ -2,11 +2,16 @@ import "./App.css"
 import ImageList from "@mui/material/ImageList"
 import ImageListItemBar from "@mui/material/ImageListItemBar"
 import IconButton from "@mui/material/IconButton"
-import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
-import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined'
-import DeleteOutline from '@mui/icons-material/DeleteOutline'
-import EditOutlined from '@mui/icons-material/EditOutlined'
+import {
+  CheckBoxOutlineBlank,
+  AppsOutlined,
+  EditOutlined,
+  DeleteOutline,
+  ViewHeadlineOutlined,
+  SortOutlined,
+  CachedOutlined,
+  AddPhotoAlternateOutlined
+} from "@mui/icons-material";
 import { 
   Stack, 
   Table, 
@@ -49,6 +54,7 @@ import { useEffect, useState } from "react";
 import { ExtensionContextProvider } from "./extension-context";
 import { ChApi, Folder } from "./ch-api";
 import credentials from "./credentials";
+import { Box } from "@mui/system";
 
 const itemData = [
   {
@@ -185,6 +191,24 @@ function TitlebarBelowImageList() {
   return (
     <ExtensionContextProvider>
       <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`sort`}
+        >
+          <AddPhotoAlternateOutlined />
+        </IconButton>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`sync`}
+        >
+          <CachedOutlined />
+        </IconButton>
+        <IconButton
+          sx={{ color: "white" }}
+          aria-label={`sort`}
+        >
+          <SortOutlined />
+        </IconButton>
         {
           gridMode && 
           <IconButton
@@ -192,7 +216,7 @@ function TitlebarBelowImageList() {
             aria-label={`list mode`}
             onClick={() => setGridMode(false)}
           >
-            <ViewHeadlineOutlinedIcon />
+            <ViewHeadlineOutlined />
           </IconButton>
         }
         { !gridMode &&
@@ -201,7 +225,7 @@ function TitlebarBelowImageList() {
             aria-label={`grid mode`}
             onClick={() => setGridMode(true)}
           >
-            <AppsOutlinedIcon />
+            <AppsOutlined />
           </IconButton>
         }
       </Stack>
@@ -321,6 +345,7 @@ function RichObjectTreeView(props: any) {
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpanded={['root']}
       defaultExpandIcon={<ChevronRightIcon />}
+      style={{flexGrow: 1}}
     >
       <TreeItem nodeId="root" label="Content Hub">
         {props.folders.map((folder: Folder) => renderTree(folder))}
