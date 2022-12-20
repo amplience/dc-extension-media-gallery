@@ -160,7 +160,7 @@ function TitlebarBelowImageList() {
         setFolders(result[0].folders)
       }
     })();
-  });
+  }, []);
 
   const dragEnd = (event: any) => {
     const { active, over } = event
@@ -215,13 +215,13 @@ function TitlebarBelowImageList() {
                     style={{display: 'block'}}
                   />
                   <IconButton
-                    sx={{ color: "white", position: 'absolute', top: 0, right: 0 }}
+                    sx={{ color: "white", position: 'absolute', top: 0, left: 0 }}
                     aria-label={`edit`}
                   >
                     <EditOutlined />
                   </IconButton>
                   <IconButton
-                    sx={{ color: "white", position: 'absolute', top: 0, left: 0 }}
+                    sx={{ color: "white", position: 'absolute', top: 0, right: 0 }}
                     aria-label={`delete`}
                     onClick={() => removeItem(index)}
                   >
