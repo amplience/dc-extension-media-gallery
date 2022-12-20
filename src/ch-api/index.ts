@@ -1,5 +1,5 @@
 import { GraphQLClient } from "../graphql-client";
-import { queryAssetByFolder, assetEXIF, repositories, foldersByRepo, foldersByParent } from "./queries";
+import { queryAssetByFolder, assetEXIF, repositories, foldersByRepo, foldersByParent, exifByRepo, exifByFolder } from "./queries";
 
 interface Edge<T> {
   node: T;
@@ -11,7 +11,7 @@ interface PageInfo {
   endCursor: string;
 }
 
-interface List<T> {
+export interface List<T> {
   edges: Edge<T>[];
 }
 
@@ -23,6 +23,7 @@ interface Paginated<T> extends List<T> {
 interface AssetSearchItem {
   id: string,
   name: string;
+  label: string;
 }
 
 interface FetchAssetSearch {
@@ -49,9 +50,7 @@ interface MetadataResult<T extends MetadataProperties> {
 interface FetchExifMetadata {
   node: {
     id: string;
-    exifMetadata: {
-      edges: Edge<MetadataResult<ExifMetadataProperties>>[];
-    }
+    exifMetadata?: List<MetadataResult<ExifMetadataProperties>>
   }
 }
 
@@ -85,8 +84,36 @@ interface FetchFoldersByParent {
   node: Folder
 }
 
-interface EnrichedRepository extends Repository {
+export interface EnrichedRepository extends Repository {
   folders: Folder[]
+}
+
+export interface AssetWithExif extends AssetSearchItem {
+  exifMetadata?: List<MetadataResult<ExifMetadataProperties>>
+}
+
+interface FetchExifByRepo {
+  node: {
+    id: string;
+    assets: Paginated<AssetWithExif>;
+  }
+}
+
+interface FetchExifByFolder {
+  node: {
+    id: string;
+    assets: Paginated<AssetWithExif>;
+  }
+}
+
+export function getFirstListItem<T>(list: List<T> | undefined): T | undefined {
+  const edges = list?.edges;
+
+  if (edges) {
+    return edges[0]?.node;
+  }
+
+  return undefined;
 }
 
 export class ChApi extends GraphQLClient {
@@ -108,6 +135,14 @@ export class ChApi extends GraphQLClient {
 
   async fetchFoldersByParent(folderId: string): Promise<FetchFoldersByParent> {
     return await this.fetch(foldersByParent, { folderId });
+  }
+
+  async fetchExifByRepo(repoId: string, after?: string): Promise<FetchExifByRepo> {
+    return await this.fetch(exifByRepo, { repoId, after });
+  }
+
+  async fetchExifByFolder(folderId: string, after?: string): Promise<FetchExifByFolder> {
+    return await this.fetch(exifByFolder, { folderId, after });
   }
 
   // ---
@@ -139,10 +174,10 @@ export class ChApi extends GraphQLClient {
     });
   }
 
-  async assetEXIF(uuid: string): Promise<MetadataResult<ExifMetadataProperties>> {
+  async assetEXIF(uuid: string): Promise<MetadataResult<ExifMetadataProperties> | undefined> {
     const result = await this.fetchAssetEXIF(uuid);
 
-    return result.node.exifMetadata.edges[0]?.node;
+    return getFirstListItem(result.node.exifMetadata);
   }
 
   async recursiveFolderEnrich(folder: Folder) {
@@ -172,5 +207,22 @@ export class ChApi extends GraphQLClient {
     }
 
     return repos;
+  }
+
+  async getExifByFolder(repoId: string, folderId: string): Promise<AssetWithExif[]> {
+    let result: AssetWithExif[];
+
+    if (folderId === "QXNzZXRGb2xkZXI6MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAw") {
+      // No folder - use repo.
+      result = await this.paginate(async (after?: string) => {
+        return (await this.fetchExifByRepo(repoId, after)).node.assets;
+      });
+    } else {
+      result = await this.paginate(async (after?: string) => {
+        return (await this.fetchExifByFolder(folderId, after)).node.assets;
+      });
+    }
+
+    return result;
   }
 }

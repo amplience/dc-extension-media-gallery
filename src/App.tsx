@@ -1,29 +1,29 @@
-import "./App.css"
-import ImageList from "@mui/material/ImageList"
-import ImageListItemBar from "@mui/material/ImageListItemBar"
-import IconButton from "@mui/material/IconButton"
+import "./App.css";
+import ImageList from "@mui/material/ImageList";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import IconButton from "@mui/material/IconButton";
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
-import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined'
-import DeleteOutline from '@mui/icons-material/DeleteOutline'
-import EditOutlined from '@mui/icons-material/EditOutlined'
-import { 
-  Stack, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableRow, 
-  useMediaQuery, 
-  useTheme 
-} from "@mui/material"
-import SortableListItem from "./sortable-list-item"
-import SortableTableRow from "./sortable-table-row"
+import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
+import ViewHeadlineOutlinedIcon from "@mui/icons-material/ViewHeadlineOutlined";
+import DeleteOutline from "@mui/icons-material/DeleteOutline";
+import EditOutlined from "@mui/icons-material/EditOutlined";
+import {
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import SortableListItem from "./sortable-list-item";
+import SortableTableRow from "./sortable-table-row";
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
   restrictToParentElement,
-} from '@dnd-kit/modifiers'
+} from "@dnd-kit/modifiers";
 
 import {
   closestCenter,
@@ -32,7 +32,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
+} from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -40,15 +40,16 @@ import {
   verticalListSortingStrategy,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import TreeView from '@mui/lab/TreeView';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
+import TreeView from "@mui/lab/TreeView";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TreeItem from "@mui/lab/TreeItem";
 
 import { useEffect, useState } from "react";
 import { ExtensionContextProvider } from "./extension-context";
-import { ChApi, Folder } from "./ch-api";
+import { ChApi, Folder, EnrichedRepository } from "./ch-api";
 import credentials from "./credentials";
+import { convertToEntry, defaultExifMap } from "./model/conversion";
 
 const itemData = [
   {
@@ -123,63 +124,85 @@ const itemData = [
     title: "Bike",
     author: "@southside_customs",
   },
-]
+];
 
 function TitlebarBelowImageList() {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"))
-  const isLarge = useMediaQuery(theme.breakpoints.down("lg"))
-  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"))
-  let cols = 8
-  if (isXLarge) cols = 7
-  if (isLarge) cols = 5
-  if (isLarge) cols = 5
-  if (isTablet) cols = 3
-  if (isMobile) cols = 2
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
+  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
+  let cols = 8;
+  if (isXLarge) cols = 7;
+  if (isLarge) cols = 5;
+  if (isLarge) cols = 5;
+  if (isTablet) cols = 3;
+  if (isMobile) cols = 2;
 
   const [items, setItems] = useState(itemData);
-  const [gridMode, setGridMode] = useState(true)
-  const {clientId, clientSecret} = credentials;
-  const [folders, setFolders] = useState<Folder[]>([])
+  const [gridMode, setGridMode] = useState(true);
+  const [repo, setRepo] = useState<EnrichedRepository>();
+  const [chApi, setChApi] = useState<ChApi>();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8 
-      }
+        distance: 8,
+      },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
-  )
+  );
+
+  const getEntries = async (id: string) => {
+    if (chApi && repo) {
+      const assets = await chApi.getExifByFolder(repo.id, id);
+
+      const entries = assets.map((asset) =>
+        convertToEntry(asset, defaultExifMap, {
+          endpoint: "nmrsaalphatest",
+          defaultHost: "cdn.media.amplience.net",
+        })
+      );
+
+      console.log(entries);
+    }
+  };
 
   useEffect(() => {
     (async () => {
+      const { clientId, clientSecret } = credentials;
+
       if (clientId) {
-        const gqlTest = new ChApi('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
+        const gqlTest = new ChApi(
+          "https://auth.amplience.net/oauth/token",
+          "https://api.amplience.net/graphql"
+        );
         await gqlTest.auth(clientId, clientSecret);
+        setChApi(gqlTest);
+
         const result = await gqlTest.allReposWithFolders();
-        console.log(result)
-        setFolders(result[0].folders)
+        console.log(result);
+        setRepo(result[0]);
       }
     })();
   }, []);
 
   const dragEnd = (event: any) => {
-    const { active, over } = event
+    const { active, over } = event;
 
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex(item => item.id === active.id)
-      const newIndex = items.findIndex(item => item.id === over.id)
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
 
-      setItems(arrayMove(items, oldIndex, newIndex))
+      setItems(arrayMove(items, oldIndex, newIndex));
     }
   };
 
   const removeItem = (index: number) => {
-    const newItems = items.filter((_, i) => i !== index)
-    setItems(newItems)
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
   };
 
   return (
@@ -200,7 +223,7 @@ function TitlebarBelowImageList() {
           <AppsOutlinedIcon />
         </IconButton>
       </Stack>
-      {gridMode ?
+      {gridMode ? (
         <ImageList cols={cols} gap={8}>
           <DndContext
             sensors={sensors}
@@ -210,22 +233,36 @@ function TitlebarBelowImageList() {
           >
             <SortableContext items={items} strategy={rectSortingStrategy}>
               {items.map((item, index) => (
-                <SortableListItem key={item.img} id={item.id} style={{position: 'relative'}}>
+                <SortableListItem
+                  key={item.img}
+                  id={item.id}
+                  style={{ position: "relative" }}
+                >
                   <img
                     src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
                     srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
                     alt={item.title}
                     loading="lazy"
-                    style={{display: 'block'}}
+                    style={{ display: "block" }}
                   />
                   <IconButton
-                    sx={{ color: "white", position: 'absolute', top: 0, left: 0 }}
+                    sx={{
+                      color: "white",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                    }}
                     aria-label={`edit`}
                   >
                     <EditOutlined />
                   </IconButton>
                   <IconButton
-                    sx={{ color: "white", position: 'absolute', top: 0, right: 0 }}
+                    sx={{
+                      color: "white",
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                    }}
                     aria-label={`delete`}
                     onClick={() => removeItem(index)}
                   >
@@ -250,12 +287,16 @@ function TitlebarBelowImageList() {
             </SortableContext>
           </DndContext>
         </ImageList>
-        :
+      ) : (
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={dragEnd}
-          modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}
+          modifiers={[
+            restrictToVerticalAxis,
+            restrictToWindowEdges,
+            restrictToParentElement,
+          ]}
         >
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
             <Table>
@@ -269,37 +310,64 @@ function TitlebarBelowImageList() {
                       <CheckBoxOutlineBlank />
                     </IconButton>
                   </TableCell>
-                  <TableCell component="th">
+                  <TableCell component="th"></TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontWeight: "bold" }}
+                    component="th"
+                  >
+                    Media
                   </TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontWeight: "bold" }}
+                    component="th"
+                    align="left"
+                  >
+                    Title
+                  </TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontWeight: "bold" }}
+                    component="th"
+                    align="left"
+                  >
+                    Author
+                  </TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontWeight: "bold" }}
+                    component="th"
+                    align="left"
+                  >
+                    Edit
+                  </TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontWeight: "bold" }}
+                    component="th"
+                    align="left"
+                  >
+                    Delete
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {items.map((item: any, index: number) => (
-                  <SortableTableRow 
-                    key={item.img} 
-                    id={item.id} 
-                    handle={true} 
-                    item={item} 
-                    removeItem={removeItem} 
-                    index={index} 
+                  <SortableTableRow
+                    key={item.img}
+                    id={item.id}
+                    handle={true}
+                    item={item}
+                    removeItem={removeItem}
+                    index={index}
                   />
                 ))}
               </TableBody>
             </Table>
           </SortableContext>
         </DndContext>
-      }
-      {
-        folders &&
-        <RichObjectTreeView folders={folders}/>
-      }
-    </ExtensionContextProvider >
-  )
+      )}
+      {repo && (
+        <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
+      )}
+    </ExtensionContextProvider>
+  );
 }
 
 function RichObjectTreeView(props: any) {
@@ -314,8 +382,13 @@ function RichObjectTreeView(props: any) {
     <TreeView
       aria-label="rich object"
       defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpanded={['root']}
+      defaultExpanded={["root"]}
       defaultExpandIcon={<ChevronRightIcon />}
+      onNodeSelect={(event: React.SyntheticEvent, nodeId: string) => {
+        if (props.onChange) {
+          props.onChange(nodeId);
+        }
+      }}
     >
       <TreeItem nodeId="root" label="Content Hub">
         {props.folders.map((folder: Folder) => renderTree(folder))}
@@ -331,7 +404,7 @@ function App() {
         <TitlebarBelowImageList />
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
