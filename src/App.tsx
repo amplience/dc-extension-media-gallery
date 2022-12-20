@@ -3,8 +3,6 @@ import ImageList from "@mui/material/ImageList"
 import ImageListItemBar from "@mui/material/ImageListItemBar"
 import IconButton from "@mui/material/IconButton"
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
-import DeleteOutline from "@mui/icons-material/DeleteOutline"
-import EditOutlined from "@mui/icons-material/EditOutlined"
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
 import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined'
 import { 
@@ -40,10 +38,14 @@ import {
   verticalListSortingStrategy,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
+import TreeView from '@mui/lab/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem';
 
 import { useEffect, useState } from "react";
 import { ExtensionContextProvider } from "./extension-context";
-import { ChApi } from "./ch-api";
+import { ChApi, Folder } from "./ch-api";
 import credentials from "./credentials";
 
 const itemData = [
@@ -137,6 +139,7 @@ function TitlebarBelowImageList() {
   const [items, setItems] = useState(itemData);
   const [gridMode, setGridMode] = useState(true)
   const {clientId, clientSecret} = credentials;
+  const [folders, setFolders] = useState<Folder[]>([])
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -149,12 +152,10 @@ function TitlebarBelowImageList() {
     (async () => {
       if (clientId) {
         const gqlTest = new ChApi('https://auth.amplience.net/oauth/token', 'https://api.amplience.net/graphql');
-
         await gqlTest.auth(clientId, clientSecret);
-
         const result = await gqlTest.allReposWithFolders();
-
         console.log(result)
+        setFolders(result[0].folders)
       }
     })();
   });
@@ -194,7 +195,7 @@ function TitlebarBelowImageList() {
         </IconButton>
       </Stack>
       {gridMode ?
-        <ImageList sx={{ width: "100%" }} cols={cols} gap={8}>
+        <ImageList cols={cols} gap={8}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -273,8 +274,34 @@ function TitlebarBelowImageList() {
           </SortableContext>
         </DndContext>
       }
+      {
+        folders &&
+        <RichObjectTreeView folders={folders}/>
+      }
     </ExtensionContextProvider >
   )
+}
+
+function RichObjectTreeView(props: any) {
+  const renderTree = (node: Folder) => (
+    <TreeItem key={node.id} nodeId={node.id} label={node.label}>
+      {Array.isArray(node.children)
+        ? node.children.map((childNode) => renderTree(childNode))
+        : null}
+    </TreeItem>
+  );
+  return (
+    <TreeView
+      aria-label="rich object"
+      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultExpanded={['root']}
+      defaultExpandIcon={<ChevronRightIcon />}
+    >
+      <TreeItem nodeId="root" label="Content Hub">
+        {props.folders.map((folder: Folder) => renderTree(folder))}
+      </TreeItem>
+    </TreeView>
+  );
 }
 
 function App() {

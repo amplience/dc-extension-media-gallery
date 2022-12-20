@@ -68,7 +68,7 @@ interface FetchRepositories {
   }
 }
 
-interface Folder {
+export interface Folder {
   id: string;
   label: string;
   children?: Folder[]
