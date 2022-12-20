@@ -303,8 +303,7 @@ function TitlebarBelowImageList() {
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Edit</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Delete</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
