@@ -5,6 +5,8 @@ import IconButton from "@mui/material/IconButton"
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined'
 import ViewHeadlineOutlinedIcon from '@mui/icons-material/ViewHeadlineOutlined'
+import DeleteOutline from '@mui/icons-material/DeleteOutline'
+import EditOutlined from '@mui/icons-material/EditOutlined'
 import { 
   Stack, 
   Table, 
@@ -203,14 +205,28 @@ function TitlebarBelowImageList() {
             modifiers={[restrictToWindowEdges, restrictToParentElement]}
           >
             <SortableContext items={items} strategy={rectSortingStrategy}>
-              {items.map((item) => (
-                <SortableListItem key={item.img} id={item.id}>
+              {items.map((item, index) => (
+                <SortableListItem key={item.img} id={item.id} style={{position: 'relative'}}>
                   <img
                     src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
                     srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
                     alt={item.title}
                     loading="lazy"
+                    style={{display: 'block'}}
                   />
+                  <IconButton
+                    sx={{ color: "white", position: 'absolute', top: 0, right: 0 }}
+                    aria-label={`edit`}
+                  >
+                    <EditOutlined />
+                  </IconButton>
+                  <IconButton
+                    sx={{ color: "white", position: 'absolute', top: 0, left: 0 }}
+                    aria-label={`delete`}
+                    onClick={() => removeItem(index)}
+                  >
+                    <DeleteOutline />
+                  </IconButton>
                   <ImageListItemBar
                     title={item.title}
                     subtitle={<span>by: {item.author}</span>}
