@@ -298,8 +298,6 @@ function TitlebarBelowImageList() {
                       <CheckBoxOutlineBlank />
                     </IconButton>
                   </TableCell>
-                  <TableCell component="th">
-                  </TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
@@ -311,7 +309,6 @@ function TitlebarBelowImageList() {
                   <SortableTableRow 
                     key={item.img} 
                     id={item.id} 
-                    handle={true} 
                     item={item} 
                     removeItem={removeItem} 
                     index={index} 
