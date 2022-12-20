@@ -185,20 +185,25 @@ function TitlebarBelowImageList() {
   return (
     <ExtensionContextProvider>
       <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
-        <IconButton
-          sx={{ color: "white" }}
-          aria-label={`select all`}
-          onClick={() => setGridMode(false)}
-        >
-          <ViewHeadlineOutlinedIcon />
-        </IconButton>
-        <IconButton
-          sx={{ color: "white" }}
-          aria-label={`select all`}
-          onClick={() => setGridMode(true)}
-        >
-          <AppsOutlinedIcon />
-        </IconButton>
+        {
+          gridMode && 
+          <IconButton
+            sx={{ color: "white" }}
+            aria-label={`list mode`}
+            onClick={() => setGridMode(false)}
+          >
+            <ViewHeadlineOutlinedIcon />
+          </IconButton>
+        }
+        { !gridMode &&
+          <IconButton
+            sx={{ color: "white" }}
+            aria-label={`grid mode`}
+            onClick={() => setGridMode(true)}
+          >
+            <AppsOutlinedIcon />
+          </IconButton>
+        }
       </Stack>
       {gridMode ?
         <ImageList cols={cols} gap={8}>
