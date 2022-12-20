@@ -2,7 +2,7 @@ import React from 'react';
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
 import { Button, IconButton, TableCell, TableRow } from '@mui/material';
-import { CheckBoxOutlineBlank, DeleteOutline, EditOutlined, DragHandleOutlined } from '@mui/icons-material';
+import { CheckBoxOutlineBlank, DeleteOutline, EditOutlined, DragIndicatorOutlined } from '@mui/icons-material';
 export default function SortableTableRow(props: any) {
   const {
     attributes,
@@ -30,7 +30,7 @@ export default function SortableTableRow(props: any) {
         </IconButton>
       </TableCell>
       <TableCell>
-        <DragHandleOutlined className='dragHandle' sx={{ color: "white" }} {...listeners} {...attributes} />
+        <DragIndicatorOutlined className='dragHandle' sx={{ color: "white" }} {...listeners} {...attributes} />
       </TableCell>
       <TableCell>
         <img
