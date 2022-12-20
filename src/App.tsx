@@ -199,6 +199,7 @@ function TitlebarBelowImageList() {
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={dragEnd}
+            modifiers={[restrictToWindowEdges, restrictToParentElement]}
           >
             <SortableContext items={items} strategy={rectSortingStrategy}>
               {items.map((item) => (

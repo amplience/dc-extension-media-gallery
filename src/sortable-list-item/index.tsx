@@ -10,11 +10,13 @@ export default function SortableListItem(props: any) {
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({id: props.id});
   
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? "100" : "auto",
   };
   
   return (

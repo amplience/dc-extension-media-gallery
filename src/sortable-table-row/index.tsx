@@ -10,11 +10,13 @@ export default function SortableTableRow(props: any) {
     setNodeRef,
     transform,
     transition,
+    isDragging
   } = useSortable({id: props.id});
   
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? "100" : "auto",
   };
   
   return (
@@ -28,7 +30,7 @@ export default function SortableTableRow(props: any) {
         </IconButton>
       </TableCell>
       <TableCell>
-        <DragHandleOutlined sx={{ color: "white" }} {...listeners} {...attributes} />
+        <DragHandleOutlined className='dragHandle' sx={{ color: "white" }} {...listeners} {...attributes} />
       </TableCell>
       <TableCell>
         <img
