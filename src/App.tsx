@@ -455,13 +455,15 @@ function TitlebarBelowImageList() {
           <Stack direction={"row"}>
             <Typography sx={{pb: 2}} variant="h5" component="h5">Media Details</Typography>
             <Box sx={{ flexGrow: 1 }} />
+            <Box>
               <IconButton
                 aria-label={`close detail drawer`}
                 size="small"
                 onClick={() => setDetailDrawerOpen(false)}
               >
-              <CloseOutlined />
-            </IconButton>
+                <CloseOutlined />
+              </IconButton>
+            </Box>
           </Stack>
         </SwipeableDrawer>
         <SwipeableDrawer
@@ -475,13 +477,15 @@ function TitlebarBelowImageList() {
           <Stack direction={"row"}>
             <Typography sx={{pb: 2}} variant="h5" component="h5">Import Media</Typography>
             <Box sx={{ flexGrow: 1 }} />
+            <Box>
               <IconButton
                 aria-label={`close import drawer`}
                 size="small"
                 onClick={() => setImportDrawerOpen(false)}
               >
-              <CloseOutlined />
-            </IconButton>
+                <CloseOutlined />
+              </IconButton>
+            </Box>
           </Stack>
           {repo && (
             <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
