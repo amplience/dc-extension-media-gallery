@@ -227,6 +227,7 @@ function TitlebarBelowImageList() {
         <IconButton
           sx={{ color: "white" }}
           aria-label={`sync`}
+          onClick={() => setImportDrawerOpen(true)}
         >
           <CachedOutlined />
         </IconButton>
