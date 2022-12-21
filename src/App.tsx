@@ -13,9 +13,11 @@ import {
   AddPhotoAlternateOutlined,
   VisibilityOutlined,
   ArrowDownwardOutlined,
-  ArrowUpwardOutlined
+  ArrowUpwardOutlined,
+  PermMediaOutlined
 } from "@mui/icons-material";
 import {
+  AppBar,
   ListItemIcon,
   ListItemText,
   ListSubheader,
@@ -28,6 +30,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Toolbar,
+  Typography,
   useMediaQuery,
   useTheme
 } from "@mui/material"
@@ -64,6 +68,7 @@ import { ExtensionContextProvider } from "./extension-context";
 import { ChApi, Folder, EnrichedRepository } from "./ch-api";
 import credentials from "./credentials";
 import { convertToEntry, defaultExifMap } from "./model/conversion";
+import { Box } from "@mui/system";
 
 const itemData = [
   {
@@ -233,266 +238,278 @@ function TitlebarBelowImageList() {
 
   return (
     <ExtensionContextProvider>
-      <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
-        <IconButton
-          sx={{ color: "white" }}
-          aria-label={`import`}
-          onClick={() => setImportDrawerOpen(true)}
-        >
-          <AddPhotoAlternateOutlined />
-        </IconButton>
-        <IconButton
-          sx={{ color: "white" }}
-          aria-label={`sync`}
-          onClick={() => setImportDrawerOpen(true)}
-        >
-          <CachedOutlined />
-        </IconButton>
-        <IconButton
-          sx={{ color: "white" }}
-          aria-label={`sort`}
-          onClick={handleClick}
-        >
-          <SortOutlined />
-        </IconButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={sortOpen}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <ListSubheader>Sort By</ListSubheader> 
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
-            <ListItemText>Date Modified Asc</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
-            <ListItemText>Date Modified Desc</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
-            Author Asc
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
-            Author Desc
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
-            Name Asc
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
-            Name Desc
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
-            Caption Asc
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
-            Caption Desc
-          </MenuItem>
-        </Menu>
-        {
-          gridMode &&
-          <IconButton
-            sx={{ color: "white" }}
-            aria-label={`list mode`}
-            onClick={() => setGridMode(false)}
-          >
-            <ViewHeadlineOutlined />
-          </IconButton>
-        }
-        {!gridMode &&
-          <IconButton
-            sx={{ color: "white" }}
-            aria-label={`grid mode`}
-            onClick={() => setGridMode(true)}
-          >
-            <AppsOutlined />
-          </IconButton>
-        }
-      </Stack>
-      {gridMode ? (
-        <ImageList cols={cols} gap={8}>
+      <Box style={{width: '100%'}}>
+        <AppBar position="sticky">
+          <Toolbar variant="dense">
+            <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+              <PermMediaOutlined />
+            </IconButton>
+            <Typography variant="h6" color="inherit" component="div">
+              Image Gallery
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`import`}
+              onClick={() => setImportDrawerOpen(true)}
+            >
+              <AddPhotoAlternateOutlined />
+            </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`sync`}
+              onClick={() => setImportDrawerOpen(true)}
+            >
+              <CachedOutlined />
+            </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`sort`}
+              onClick={handleClick}
+            >
+              <SortOutlined />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={sortOpen}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <ListSubheader>Sort By</ListSubheader>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                <ListItemText>Date Modified Asc</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                <ListItemText>Date Modified Desc</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                Author Asc
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                Author Desc
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                Name Asc
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                Name Desc
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                Caption Asc
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                Caption Desc
+              </MenuItem>
+            </Menu>
+            {
+              gridMode &&
+              <IconButton
+                sx={{ color: "white" }}
+                aria-label={`list mode`}
+                onClick={() => setGridMode(false)}
+              >
+                <ViewHeadlineOutlined />
+              </IconButton>
+            }
+            {!gridMode &&
+              <IconButton
+                sx={{ color: "white" }}
+                aria-label={`grid mode`}
+                onClick={() => setGridMode(true)}
+              >
+                <AppsOutlined />
+              </IconButton>
+            }
+          </Toolbar>
+        </AppBar>
+        {gridMode ? (
+          <ImageList cols={cols} gap={8}>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={dragEnd}
+              modifiers={[restrictToWindowEdges, restrictToParentElement]}
+            >
+              <SortableContext items={items} strategy={rectSortingStrategy}>
+                {items.map((item, index) => (
+                  <SortableListItem
+                    key={item.img}
+                    id={item.id}
+                    style={{ position: "relative" }}
+                  >
+                    <img
+                      src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
+                      srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
+                      alt={item.title}
+                      loading="lazy"
+                      style={{ display: "block" }}
+                    />
+                    <IconButton
+                      sx={{
+                        color: "white",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                      }}
+                      aria-label={`edit`}
+                      onClick={() => setDetailDrawerOpen(true)}
+                    >
+                      <EditOutlined />
+                    </IconButton>
+                    <IconButton
+                      sx={{
+                        color: "white",
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                      }}
+                      aria-label={`delete`}
+                      onClick={() => removeItem(index)}
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                    <ImageListItemBar
+                      title={item.title}
+                      subtitle={<span>by: {item.author}</span>}
+                      position="below"
+                      actionIcon={
+                        <IconButton
+                          sx={{ color: "white" }}
+                          aria-label={`select ${item.title}`}
+                        >
+                          <CheckBoxOutlineBlank />
+                        </IconButton>
+                      }
+                      actionPosition="left"
+                    />
+                  </SortableListItem>
+                ))}
+              </SortableContext>
+            </DndContext>
+          </ImageList>
+        ) : (
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={dragEnd}
-            modifiers={[restrictToWindowEdges, restrictToParentElement]}
+            modifiers={[
+              restrictToVerticalAxis,
+              restrictToWindowEdges,
+              restrictToParentElement,
+            ]}
           >
-            <SortableContext items={items} strategy={rectSortingStrategy}>
-              {items.map((item, index) => (
-                <SortableListItem
-                  key={item.img}
-                  id={item.id}
-                  style={{ position: "relative" }}
-                >
-                  <img
-                    src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
-                    srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
-                    alt={item.title}
-                    loading="lazy"
-                    style={{ display: "block" }}
-                  />
-                  <IconButton
-                    sx={{
-                      color: "white",
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                    }}
-                    aria-label={`edit`}
-                    onClick={() => setDetailDrawerOpen(true)}
-                  >
-                    <EditOutlined />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      color: "white",
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                    }}
-                    aria-label={`delete`}
-                    onClick={() => removeItem(index)}
-                  >
-                    <DeleteOutline />
-                  </IconButton>
-                  <ImageListItemBar
-                    title={item.title}
-                    subtitle={<span>by: {item.author}</span>}
-                    position="below"
-                    actionIcon={
+            <SortableContext items={items} strategy={verticalListSortingStrategy}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell component="th">
                       <IconButton
                         sx={{ color: "white" }}
-                        aria-label={`select ${item.title}`}
+                        aria-label={`select all`}
                       >
                         <CheckBoxOutlineBlank />
                       </IconButton>
-                    }
-                    actionPosition="left"
-                  />
-                </SortableListItem>
-              ))}
+                    </TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
+                    <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {items.map((item: any, index: number) => (
+                    <SortableTableRow
+                      key={item.img}
+                      id={item.id}>
+                      <TableCell>
+                        <IconButton
+                          sx={{ color: "white" }}
+                          aria-label={`select`}
+                        >
+                          <CheckBoxOutlineBlank />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>
+                        <img
+                          src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
+                          srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
+                          alt={item.title}
+                          loading="lazy"
+                        />
+                      </TableCell>
+                      <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
+                      <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
+                      <TableCell align="left">
+                        <IconButton
+                          sx={{ color: "white" }}
+                          aria-label={`edit`}
+                          onClick={() => setDetailDrawerOpen(true)}
+                        >
+                          <VisibilityOutlined />
+                        </IconButton>
+                        <IconButton
+                          sx={{ color: "white" }}
+                          aria-label={`edit`}
+                          onClick={() => setDetailDrawerOpen(true)}
+                        >
+                          <EditOutlined />
+                        </IconButton>
+                        <IconButton
+                          sx={{ color: "white" }}
+                          aria-label={`delete`}
+                          onClick={() => removeItem(index)}
+                        >
+                          <DeleteOutline />
+                        </IconButton>
+                      </TableCell>
+                    </SortableTableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </SortableContext>
           </DndContext>
-        </ImageList>
-      ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={dragEnd}
-          modifiers={[
-            restrictToVerticalAxis,
-            restrictToWindowEdges,
-            restrictToParentElement,
-          ]}
+        )}
+        <SwipeableDrawer
+          PaperProps={{
+            sx: { width: "90%" },
+          }}
+          anchor={'left'}
+          open={detailDrawerOpen}
+          onClose={() => setDetailDrawerOpen(false)}
+          onOpen={() => setDetailDrawerOpen(true)}
         >
-          <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell component="th">
-                    <IconButton
-                      sx={{ color: "white" }}
-                      aria-label={`select all`}
-                    >
-                      <CheckBoxOutlineBlank />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {items.map((item: any, index: number) => (
-                  <SortableTableRow
-                    key={item.img}
-                    id={item.id}>
-                    <TableCell>
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`select`}
-                      >
-                        <CheckBoxOutlineBlank />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell>
-                      <img
-                        src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
-                        srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
-                        alt={item.title}
-                        loading="lazy"
-                      />
-                    </TableCell>
-                    <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
-                    <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
-                    <TableCell align="left">
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`edit`}
-                        onClick={() => setDetailDrawerOpen(true)}
-                      >
-                        <VisibilityOutlined />
-                      </IconButton>
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`edit`}
-                        onClick={() => setDetailDrawerOpen(true)}
-                      >
-                        <EditOutlined />
-                      </IconButton>
-                      <IconButton
-                        sx={{ color: "white" }}
-                        aria-label={`delete`}
-                        onClick={() => removeItem(index)}
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-                    </TableCell>
-                  </SortableTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </SortableContext>
-        </DndContext>
-      )}
-      <SwipeableDrawer 
-        PaperProps={{
-          sx: { width: "90%" },
-        }}
-        anchor={'left'} 
-        open={detailDrawerOpen} 
-        onClose={() => setDetailDrawerOpen(false)} 
-        onOpen={() => setDetailDrawerOpen(true)}
-      >
-        <div>
-          Media Detail Drawer
-        </div>
-      </SwipeableDrawer>
-      <SwipeableDrawer 
-        PaperProps={{
-          sx: { width: "90%" },
-        }}
-        anchor={'right'} 
-        open={importDrawerOpen} 
-        onClose={() => setImportDrawerOpen(false)} 
-        onOpen={() => setImportDrawerOpen(true)}>
-        <div style={{width: 500}}>
-          Import Drawer
-          {repo && (
-            <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
-          )}
-        </div>
-      </SwipeableDrawer>
+          <div>
+            Media Detail Drawer
+          </div>
+        </SwipeableDrawer>
+        <SwipeableDrawer
+          PaperProps={{
+            sx: { width: "90%" },
+          }}
+          anchor={'right'}
+          open={importDrawerOpen}
+          onClose={() => setImportDrawerOpen(false)}
+          onOpen={() => setImportDrawerOpen(true)}>
+          <div style={{ width: 500 }}>
+            Import Drawer
+            {repo && (
+              <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
+            )}
+          </div>
+        </SwipeableDrawer>
+      </Box>
+      <Box sx={{ flexGrow: 1 }} />
     </ExtensionContextProvider>
   );
 }
