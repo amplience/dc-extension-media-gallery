@@ -15,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import {
   Stack,
+  SwipeableDrawer,
   Table,
   TableBody,
   TableCell,
@@ -149,6 +150,8 @@ function TitlebarBelowImageList() {
   const [gridMode, setGridMode] = useState(true);
   const [repo, setRepo] = useState<EnrichedRepository>();
   const [chApi, setChApi] = useState<ChApi>();
+  const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
+  const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -216,7 +219,8 @@ function TitlebarBelowImageList() {
       <Stack alignSelf={"end"} direction="row" spacing={2} mr={2} mt={2}>
         <IconButton
           sx={{ color: "white" }}
-          aria-label={`sort`}
+          aria-label={`import`}
+          onClick={() => setImportDrawerOpen(true)}
         >
           <AddPhotoAlternateOutlined />
         </IconButton>
@@ -282,6 +286,7 @@ function TitlebarBelowImageList() {
                       left: 0,
                     }}
                     aria-label={`edit`}
+                    onClick={() => setDetailDrawerOpen(true)}
                   >
                     <EditOutlined />
                   </IconButton>
@@ -372,12 +377,14 @@ function TitlebarBelowImageList() {
                       <IconButton
                         sx={{ color: "white" }}
                         aria-label={`edit`}
+                        onClick={() => setDetailDrawerOpen(true)}
                       >
                         <VisibilityOutlined />
                       </IconButton>
                       <IconButton
                         sx={{ color: "white" }}
                         aria-label={`edit`}
+                        onClick={() => setDetailDrawerOpen(true)}
                       >
                         <EditOutlined />
                       </IconButton>
@@ -396,9 +403,28 @@ function TitlebarBelowImageList() {
           </SortableContext>
         </DndContext>
       )}
-      {repo && (
-        <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
-      )}
+      <SwipeableDrawer 
+        anchor={"right"} 
+        open={detailDrawerOpen} 
+        onClose={() => setDetailDrawerOpen(false)} 
+        onOpen={() => setDetailDrawerOpen(true)}
+      >
+        <div style={{width: 500}}>
+          Media Detail Drawer
+        </div>
+      </SwipeableDrawer>
+      <SwipeableDrawer 
+        anchor={"left"} 
+        open={importDrawerOpen} 
+        onClose={() => setImportDrawerOpen(false)} 
+        onOpen={() => setImportDrawerOpen(true)}>
+        <div style={{width: 500}}>
+          Import Drawer
+          {repo && (
+            <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
+          )}
+        </div>
+      </SwipeableDrawer>
     </ExtensionContextProvider>
   );
 }
