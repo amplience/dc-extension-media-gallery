@@ -547,16 +547,19 @@ function TitlebarBelowImageList() {
               />
               <Stack sx={{ w: '100%' }}>
                 <Stack sx={{ pb: 4 }} direction={"row"}>
-                  <Button
-                    sx={{ mr: 2 }}
-                    variant="outlined"
-                    startIcon={<GridViewSharp />}
-                  >Select all</Button>
-                  <Button
-                    sx={{ mr: 2 }}
-                    variant="outlined"
-                    startIcon={<GridViewOutlined />}
-                  >Select none</Button>
+                  <Box sx={{ flexGrow: 1 }} />
+                  <IconButton
+                    size="small"
+                    aria-label={`select all`}
+                  >
+                    <GridViewSharp />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    aria-label={`select none`}
+                  >
+                    <GridViewOutlined />
+                  </IconButton>
                 </Stack>
                 <ImageList cols={5} rowHeight={200}>
                   {itemData.map((item) => (
