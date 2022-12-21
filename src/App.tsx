@@ -16,7 +16,9 @@ import {
   ExpandMore,
   ChevronRight,
   CollectionsOutlined,
-  CloseOutlined
+  CloseOutlined,
+  GridViewSharp,
+  GridViewOutlined
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -265,28 +267,28 @@ function TitlebarBelowImageList() {
                 handleClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
-                Author Asc
+                <ListItemText>Author Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
                 setItems(items.slice().sort((a, b) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
-                Author Desc
+                <ListItemText>Author Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
                 setItems(items.slice().sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
-                Caption Asc
+                <ListItemText>Caption Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
                 setItems(items.slice().sort((a, b) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
-                Caption Desc
+                <ListItemText>Caption Desc</ListItemText>
               </MenuItem>
             </Menu>
             <Divider
@@ -490,6 +492,7 @@ function TitlebarBelowImageList() {
               alt={itemData[0].title}
               loading="lazy"
             />
+            <TextField id="dateModified" label="Date modified" variant="standard" InputProps={{ readOnly: true }} />
             <TextField id="author" label="Author" variant="standard" />
             <TextField multiline rows={4} id="caption" label="Caption" variant="standard" />
             <Stack sx={{ pb: 4 }} direction={"row"}>
@@ -532,31 +535,45 @@ function TitlebarBelowImageList() {
               {repo && (
                 <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
               )}
-              <ImageList sx={{ width: '70%' }} cols={5} rowHeight={200}>
-                {itemData.map((item) => (
-                  <ImageListItem key={item.img}>
-                    <img
-                      src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
-                      srcSet={`${item.img}?w=150&h=100&fit=crop&auto=format&dpr=2 2x`}
-                      alt={item.title}
-                      loading="lazy"
-                    />
-                    <ImageListItemBar
-                      title={item.title}
-                      subtitle={<span>by: {item.author} {item.id}</span>}
-                      position="below"
-                      actionIcon={
-                        <IconButton
-                          aria-label={`select ${item.title}`}
-                        >
-                          <CheckBoxOutlineBlank />
-                        </IconButton>
-                      }
-                      actionPosition="left"
-                    />
-                  </ImageListItem>
-                ))}
-              </ImageList>
+              <Stack sx={{ w: '100%' }}>
+                <Stack sx={{ pb: 4 }} direction={"row"}>
+                  <Button
+                    sx={{ mr: 2 }}
+                    variant="outlined"
+                    startIcon={<GridViewSharp />}
+                  >Select all</Button>
+                  <Button
+                    sx={{ mr: 2 }}
+                    variant="outlined"
+                    startIcon={<GridViewOutlined />}
+                  >Select none</Button>
+                </Stack>
+                <ImageList cols={5} rowHeight={200}>
+                  {itemData.map((item) => (
+                    <ImageListItem key={item.img}>
+                      <img
+                        src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
+                        srcSet={`${item.img}?w=150&h=100&fit=crop&auto=format&dpr=2 2x`}
+                        alt={item.title}
+                        loading="lazy"
+                      />
+                      <ImageListItemBar
+                        title={item.title}
+                        subtitle={<span>by: {item.author} {item.id}</span>}
+                        position="below"
+                        actionIcon={
+                          <IconButton
+                            aria-label={`select ${item.title}`}
+                          >
+                            <CheckBoxOutlineBlank />
+                          </IconButton>
+                        }
+                        actionPosition="left"
+                      />
+                    </ImageListItem>
+                  ))}
+                </ImageList>
+              </Stack>
             </Stack>
             <Stack sx={{ pb: 4 }} direction={"row"}>
               <Box sx={{ flexGrow: 1 }} />
