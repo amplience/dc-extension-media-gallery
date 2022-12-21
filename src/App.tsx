@@ -11,9 +11,16 @@ import {
   SortOutlined,
   CachedOutlined,
   AddPhotoAlternateOutlined,
-  VisibilityOutlined
+  VisibilityOutlined,
+  ArrowDownwardOutlined,
+  ArrowUpwardOutlined
 } from "@mui/icons-material";
 import {
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Menu,
+  MenuItem,
   Stack,
   SwipeableDrawer,
   Table,
@@ -152,6 +159,16 @@ function TitlebarBelowImageList() {
   const [chApi, setChApi] = useState<ChApi>();
   const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
   const [importDrawerOpen, setImportDrawerOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const sortOpen = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -234,9 +251,53 @@ function TitlebarBelowImageList() {
         <IconButton
           sx={{ color: "white" }}
           aria-label={`sort`}
+          onClick={handleClick}
         >
           <SortOutlined />
         </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={sortOpen}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <ListSubheader>Sort By</ListSubheader> 
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
+            <ListItemText>Date Modified Asc</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
+            <ListItemText>Date Modified Desc</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
+            Author Asc
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
+            Author Desc
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
+            Name Asc
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
+            Name Desc
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowUpwardOutlined/></ListItemIcon>
+            Caption Asc
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon><ArrowDownwardOutlined/></ListItemIcon>
+            Caption Desc
+          </MenuItem>
+        </Menu>
         {
           gridMode &&
           <IconButton
@@ -405,17 +466,23 @@ function TitlebarBelowImageList() {
         </DndContext>
       )}
       <SwipeableDrawer 
-        anchor={"right"} 
+        PaperProps={{
+          sx: { width: "90%" },
+        }}
+        anchor={'left'} 
         open={detailDrawerOpen} 
         onClose={() => setDetailDrawerOpen(false)} 
         onOpen={() => setDetailDrawerOpen(true)}
       >
-        <div style={{width: 500}}>
+        <div>
           Media Detail Drawer
         </div>
       </SwipeableDrawer>
       <SwipeableDrawer 
-        anchor={"left"} 
+        PaperProps={{
+          sx: { width: "90%" },
+        }}
+        anchor={'right'} 
         open={importDrawerOpen} 
         onClose={() => setImportDrawerOpen(false)} 
         onOpen={() => setImportDrawerOpen(true)}>
