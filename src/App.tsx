@@ -259,27 +259,31 @@ function TitlebarBelowImageList() {
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={() => {
+                setItems((prevState) => prevState.sort((a,b) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
+                handleClose()
+              }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Author Asc
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={() => {
+                setItems((prevState) => prevState.sort((a,b) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
+                handleClose()
+              }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 Author Desc
               </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
-                Name Asc
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
-                Name Desc
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={() => {
+                setItems((prevState) => prevState.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
+                handleClose()
+              }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Caption Asc
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={() => {
+                setItems((prevState) => prevState.sort((a,b) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
+                handleClose()
+              }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 Caption Desc
               </MenuItem>
@@ -354,7 +358,7 @@ function TitlebarBelowImageList() {
                     </IconButton>
                     <ImageListItemBar
                       title={item.title}
-                      subtitle={<span>by: {item.author}</span>}
+                      subtitle={<span>by: {item.author} {item.id}</span>}
                       position="below"
                       actionIcon={
                         <IconButton
