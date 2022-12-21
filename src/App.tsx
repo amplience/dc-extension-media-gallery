@@ -15,7 +15,8 @@ import {
   ArrowUpwardOutlined,
   ExpandMore,
   ChevronRight,
-  CollectionsOutlined
+  CollectionsOutlined,
+  CloseOutlined
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -68,6 +69,7 @@ import { ChApi, Folder, EnrichedRepository } from "./ch-api";
 import credentials from "./credentials";
 import { convertToEntry, defaultExifMap } from "./model/conversion";
 import { Box } from "@mui/material";
+import { Stack } from "@mui/system";
 
 const itemData = [
   { id: 1, img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
@@ -443,31 +445,47 @@ function TitlebarBelowImageList() {
         )}
         <SwipeableDrawer
           PaperProps={{
-            sx: { width: "90%" },
+            sx: { width: "90%", p: 2 },
           }}
           anchor={'left'}
           open={detailDrawerOpen}
           onClose={() => setDetailDrawerOpen(false)}
           onOpen={() => setDetailDrawerOpen(true)}
         >
-          <div>
-            Media Detail Drawer
-          </div>
+          <Stack direction={"row"}>
+            <Typography sx={{pb: 2}} variant="h5" component="h5">Media Details</Typography>
+            <Box sx={{ flexGrow: 1 }} />
+              <IconButton
+                aria-label={`close detail drawer`}
+                size="small"
+                onClick={() => setDetailDrawerOpen(false)}
+              >
+              <CloseOutlined />
+            </IconButton>
+          </Stack>
         </SwipeableDrawer>
         <SwipeableDrawer
           PaperProps={{
-            sx: { width: "90%" },
+            sx: { width: "90%", p: 2 },
           }}
-          anchor={'right'}
+          anchor={'left'}
           open={importDrawerOpen}
           onClose={() => setImportDrawerOpen(false)}
           onOpen={() => setImportDrawerOpen(true)}>
-          <div style={{ width: 500 }}>
-            Import Drawer
-            {repo && (
-              <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
-            )}
-          </div>
+          <Stack direction={"row"}>
+            <Typography sx={{pb: 2}} variant="h5" component="h5">Import Media</Typography>
+            <Box sx={{ flexGrow: 1 }} />
+              <IconButton
+                aria-label={`close import drawer`}
+                size="small"
+                onClick={() => setImportDrawerOpen(false)}
+              >
+              <CloseOutlined />
+            </IconButton>
+          </Stack>
+          {repo && (
+            <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
+          )}
         </SwipeableDrawer>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
