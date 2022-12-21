@@ -11,20 +11,20 @@ import {
   SortOutlined,
   CachedOutlined,
   AddPhotoAlternateOutlined,
-  VisibilityOutlined,
   ArrowDownwardOutlined,
   ArrowUpwardOutlined,
-  PermMediaOutlined,
-  CheckBoxOutlined
+  ExpandMore,
+  ChevronRight,
+  CollectionsOutlined
 } from "@mui/icons-material";
 import {
   AppBar,
+  Divider,
   ListItemIcon,
   ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
-  Stack,
   SwipeableDrawer,
   Table,
   TableBody,
@@ -60,8 +60,6 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import TreeView from "@mui/lab/TreeView";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 
 import { useEffect, useState } from "react";
@@ -69,81 +67,23 @@ import { ExtensionContextProvider } from "./extension-context";
 import { ChApi, Folder, EnrichedRepository } from "./ch-api";
 import credentials from "./credentials";
 import { convertToEntry, defaultExifMap } from "./model/conversion";
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 
 const itemData = [
-  {
-    id: 12,
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-    author: "@bkristastucchio",
-  },
-  {
-    id: 1,
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-    author: "@rollelflex_graphy726",
-  },
-  {
-    id: 2,
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-    author: "@helloimnik",
-  },
-  {
-    id: 3,
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee",
-    author: "@nolanissac",
-  },
-  {
-    id: 4,
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    title: "Hats",
-    author: "@hjrc33",
-  },
-  {
-    id: 5,
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey",
-    author: "@arwinneil",
-  },
-  {
-    id: 6,
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    title: "Basketball",
-    author: "@tjdragotta",
-  },
-  {
-    id: 7,
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    title: "Fern",
-    author: "@katie_wasserman",
-  },
-  {
-    id: 8,
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    title: "Mushrooms",
-    author: "@silverdalex",
-  },
-  {
-    id: 9,
-    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil",
-    author: "@shelleypauls",
-  },
-  {
-    id: 10,
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    title: "Sea star",
-    author: "@peterlaster",
-  },
-  {
-    id: 11,
-    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-    title: "Bike",
-    author: "@southside_customs",
-  },
+  { id: 1, img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
+  { id: 2, img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
+  { id: 3, img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c", title: "Coffee", author: "@nolanissac", },
+  { id: 4, img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8", title: "Hats", author: "@hjrc33", },
+  { id: 5, img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62", title: "Honey", author: "@arwinneil", },
+  { id: 6, img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6", title: "Basketball", author: "@tjdragotta", },
+  { id: 7, img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f", title: "Fern", author: "@katie_wasserman", },
+  { id: 8, img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25", title: "Mushrooms", author: "@silverdalex", },
+  { id: 9, img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af", title: "Tomato basil", author: "@shelleypauls", },
+  { id: 10, img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1", title: "Sea star", author: "@peterlaster", },
+  { id: 11, img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6", title: "Bike", author: "@southside_customs", },
+  { id: 12, img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e", title: "Breakfast", author: "@bkristastucchio", },
+  { id: 13, img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3", title: "Concert crowd", author: "@silverdalex", },
+  { id: 14, img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
 ];
 
 function TitlebarBelowImageList() {
@@ -243,7 +183,7 @@ function TitlebarBelowImageList() {
         <AppBar position="sticky">
           <Toolbar variant="dense">
             <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-              <PermMediaOutlined />
+              <CollectionsOutlined />
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
               Image Gallery
@@ -251,19 +191,8 @@ function TitlebarBelowImageList() {
             <Box sx={{ flexGrow: 1 }} />
             <IconButton
               sx={{ color: "white" }}
-              aria-label={`select all`}
-            >
-              <CheckBoxOutlineBlank />
-            </IconButton>
-            <IconButton
-              sx={{ color: "white" }}
-              aria-label={`delete selected`}
-            >
-              <DeleteOutline/>
-            </IconButton>
-            <IconButton
-              sx={{ color: "white" }}
               aria-label={`import`}
+              size="small"
               onClick={() => setImportDrawerOpen(true)}
             >
               <AddPhotoAlternateOutlined />
@@ -271,14 +200,40 @@ function TitlebarBelowImageList() {
             <IconButton
               sx={{ color: "white" }}
               aria-label={`sync`}
+              size="small"
               onClick={() => setImportDrawerOpen(true)}
             >
               <CachedOutlined />
             </IconButton>
+            <Divider 
+              orientation="vertical" 
+              variant="middle" 
+              sx={{ml: 1, mr: 1}}
+              flexItem />
+            <IconButton
+              sx={{ color: "white" }}
+              size="small"
+              aria-label={`select all`}
+            >
+              <CheckBoxOutlineBlank />
+            </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`delete selected`}
+              size="small"
+            >
+              <DeleteOutline/>
+            </IconButton>
+            <Divider 
+              orientation="vertical" 
+              variant="middle" 
+              sx={{ml: 1, mr: 1}}
+              flexItem />
             <IconButton
               sx={{ color: "white" }}
               aria-label={`sort`}
               onClick={handleClick}
+              size="small"
             >
               <SortOutlined />
             </IconButton>
@@ -293,35 +248,35 @@ function TitlebarBelowImageList() {
             >
               <ListSubheader>Sort By</ListSubheader>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
                 <ListItemText>Date Modified Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
                 Author Asc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
                 Author Desc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
                 Name Asc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
                 Name Desc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
                 Caption Asc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined /></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
                 Caption Desc
               </MenuItem>
             </Menu>
@@ -469,13 +424,6 @@ function TitlebarBelowImageList() {
                           aria-label={`edit`}
                           onClick={() => setDetailDrawerOpen(true)}
                         >
-                          <VisibilityOutlined />
-                        </IconButton>
-                        <IconButton
-                          sx={{ color: "white" }}
-                          aria-label={`edit`}
-                          onClick={() => setDetailDrawerOpen(true)}
-                        >
                           <EditOutlined />
                         </IconButton>
                         <IconButton
@@ -538,9 +486,9 @@ function RichObjectTreeView(props: any) {
   return (
     <TreeView
       aria-label="rich object"
-      defaultCollapseIcon={<ExpandMoreIcon />}
+      defaultCollapseIcon={<ExpandMore />}
       defaultExpanded={["root"]}
-      defaultExpandIcon={<ChevronRightIcon />}
+      defaultExpandIcon={<ChevronRight />}
       style={{ flexGrow: 1 }}
       onNodeSelect={(event: React.SyntheticEvent, nodeId: string) => {
         if (props.onChange) {
