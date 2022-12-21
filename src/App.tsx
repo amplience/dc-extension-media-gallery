@@ -14,7 +14,8 @@ import {
   VisibilityOutlined,
   ArrowDownwardOutlined,
   ArrowUpwardOutlined,
-  PermMediaOutlined
+  PermMediaOutlined,
+  CheckBoxOutlined
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -248,6 +249,18 @@ function TitlebarBelowImageList() {
               Image Gallery
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`select all`}
+            >
+              <CheckBoxOutlineBlank />
+            </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`delete selected`}
+            >
+              <DeleteOutline/>
+            </IconButton>
             <IconButton
               sx={{ color: "white" }}
               aria-label={`import`}
