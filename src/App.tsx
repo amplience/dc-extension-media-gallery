@@ -214,8 +214,20 @@ function TitlebarBelowImageList() {
               size="small"
               aria-label={`select all`}
             >
-              <CheckBoxOutlineBlank />
+              <GridViewSharp />
             </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              size="small"
+              aria-label={`select none`}
+            >
+              <GridViewOutlined />
+            </IconButton>
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              sx={{ ml: 1, mr: 1 }}
+              flexItem />
             <IconButton
               sx={{ color: "white" }}
               aria-label={`delete selected`}
@@ -223,11 +235,6 @@ function TitlebarBelowImageList() {
             >
               <DeleteOutline />
             </IconButton>
-            <Divider
-              orientation="vertical"
-              variant="middle"
-              sx={{ ml: 1, mr: 1 }}
-              flexItem />
             <IconButton
               sx={{ color: "white" }}
               aria-label={`reset`}
@@ -535,6 +542,9 @@ function TitlebarBelowImageList() {
               {repo && (
                 <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
               )}
+              <Divider
+                orientation="vertical"
+              />
               <Stack sx={{ w: '100%' }}>
                 <Stack sx={{ pb: 4 }} direction={"row"}>
                   <Button
