@@ -201,14 +201,6 @@ function TitlebarBelowImageList() {
             >
               <AddPhotoAlternateOutlined />
             </IconButton>
-            <IconButton
-              sx={{ color: "white" }}
-              aria-label={`sync`}
-              size="small"
-              onClick={() => setImportDrawerOpen(true)}
-            >
-              <CachedOutlined />
-            </IconButton>
             <Divider
               orientation="vertical"
               variant="middle"
@@ -233,6 +225,14 @@ function TitlebarBelowImageList() {
               variant="middle"
               sx={{ ml: 1, mr: 1 }}
               flexItem />
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`reset`}
+              size="small"
+              onClick={() => setItems(itemData)}
+            >
+              <CachedOutlined />
+            </IconButton>
             <IconButton
               sx={{ color: "white" }}
               aria-label={`sort`}
@@ -288,6 +288,11 @@ function TitlebarBelowImageList() {
                 Caption Desc
               </MenuItem>
             </Menu>
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              sx={{ ml: 1, mr: 1 }}
+              flexItem />
             {
               gridMode &&
               <IconButton
