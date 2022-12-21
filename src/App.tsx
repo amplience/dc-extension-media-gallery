@@ -237,19 +237,19 @@ function TitlebarBelowImageList() {
             </IconButton>
             <IconButton
               sx={{ color: "white" }}
-              aria-label={`reset`}
-              size="small"
-              onClick={() => setItems(itemData)}
-            >
-              <CachedOutlined />
-            </IconButton>
-            <IconButton
-              sx={{ color: "white" }}
               aria-label={`sort`}
               onClick={handleClick}
               size="small"
             >
               <SortOutlined />
+            </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`reset`}
+              size="small"
+              onClick={() => setItems(itemData)}
+            >
+              <CachedOutlined />
             </IconButton>
             <Menu
               id="basic-menu"
