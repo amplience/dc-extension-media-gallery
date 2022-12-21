@@ -260,28 +260,28 @@ function TitlebarBelowImageList() {
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems((prevState) => prevState.sort((a,b) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
+                setItems(items.slice().sort((a,b) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Author Asc
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems((prevState) => prevState.sort((a,b) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
+                setItems(items.slice().sort((a,b) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 Author Desc
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems((prevState) => prevState.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
+                setItems(items.slice().sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Caption Asc
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems((prevState) => prevState.sort((a,b) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
+                setItems(items.slice().sort((a,b) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
                 handleClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
