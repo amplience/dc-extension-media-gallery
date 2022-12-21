@@ -20,6 +20,7 @@ import {
 } from "@mui/icons-material";
 import {
   AppBar,
+  Button,
   Divider,
   ListItemIcon,
   ListItemText,
@@ -32,6 +33,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -181,7 +183,7 @@ function TitlebarBelowImageList() {
 
   return (
     <ExtensionContextProvider>
-      <Box style={{width: '100%'}}>
+      <Box style={{ width: '100%' }}>
         <AppBar position="sticky">
           <Toolbar variant="dense">
             <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -207,10 +209,10 @@ function TitlebarBelowImageList() {
             >
               <CachedOutlined />
             </IconButton>
-            <Divider 
-              orientation="vertical" 
-              variant="middle" 
-              sx={{ml: 1, mr: 1}}
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              sx={{ ml: 1, mr: 1 }}
               flexItem />
             <IconButton
               sx={{ color: "white" }}
@@ -224,12 +226,12 @@ function TitlebarBelowImageList() {
               aria-label={`delete selected`}
               size="small"
             >
-              <DeleteOutline/>
+              <DeleteOutline />
             </IconButton>
-            <Divider 
-              orientation="vertical" 
-              variant="middle" 
-              sx={{ml: 1, mr: 1}}
+            <Divider
+              orientation="vertical"
+              variant="middle"
+              sx={{ ml: 1, mr: 1 }}
               flexItem />
             <IconButton
               sx={{ color: "white" }}
@@ -250,35 +252,35 @@ function TitlebarBelowImageList() {
             >
               <ListSubheader>Sort By</ListSubheader>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Author Asc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 Author Desc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Name Asc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 Name Desc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 Caption Asc
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small"/></ListItemIcon>
+                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 Caption Desc
               </MenuItem>
             </Menu>
@@ -324,6 +326,7 @@ function TitlebarBelowImageList() {
                       alt={item.title}
                       loading="lazy"
                       style={{ display: "block" }}
+                      onClick={() => setDetailDrawerOpen(true)}
                     />
                     <IconButton
                       sx={{
@@ -415,6 +418,7 @@ function TitlebarBelowImageList() {
                           src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
                           srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
                           alt={item.title}
+                          onClick={() => setDetailDrawerOpen(true)}
                           loading="lazy"
                         />
                       </TableCell>
@@ -445,25 +449,53 @@ function TitlebarBelowImageList() {
         )}
         <SwipeableDrawer
           PaperProps={{
-            sx: { width: "90%", p: 2 },
+            sx: { width: "50%", p: 2 },
           }}
           anchor={'left'}
           open={detailDrawerOpen}
           onClose={() => setDetailDrawerOpen(false)}
           onOpen={() => setDetailDrawerOpen(true)}
+          variant="temporary"
+          ModalProps={{
+            keepMounted: false,
+          }}
         >
-          <Stack direction={"row"}>
-            <Typography sx={{pb: 2}} variant="h5" component="h5">Media Details</Typography>
+          <Stack spacing={2} sx={{ h: '100%' }}>
+            <Stack direction={"row"}>
+              <Typography sx={{ pb: 2 }} variant="h5" component="h5">Media Details</Typography>
+              <Box sx={{ flexGrow: 1 }} />
+              <Box>
+                <IconButton
+                  aria-label={`close detail drawer`}
+                  size="small"
+                  onClick={() => setDetailDrawerOpen(false)}
+                >
+                  <CloseOutlined />
+                </IconButton>
+              </Box>
+            </Stack>
+            <img
+              src={`${itemData[0].img}?auto=format`}
+              srcSet={`${itemData[0].img}?auto=format&dpr=2 2x`}
+              alt={itemData[0].title}
+              loading="lazy"
+              style={{ display: "block" }}
+            />
+            <TextField id="author" label="Author" variant="standard" />
+            <TextField multiline rows={4} id="caption" label="Caption" variant="standard" />
             <Box sx={{ flexGrow: 1 }} />
-            <Box>
-              <IconButton
-                aria-label={`close detail drawer`}
-                size="small"
+            <Stack sx={{ pb: 4 }} direction={"row"}>
+              <Box sx={{ flexGrow: 1 }} />
+              <Button
+                sx={{ mr: 2 }}
+                variant="contained"
                 onClick={() => setDetailDrawerOpen(false)}
-              >
-                <CloseOutlined />
-              </IconButton>
-            </Box>
+              >Save</Button>
+              <Button
+                variant="outlined"
+                onClick={() => setDetailDrawerOpen(false)}
+              >Cancel</Button>
+            </Stack>
           </Stack>
         </SwipeableDrawer>
         <SwipeableDrawer
@@ -475,7 +507,7 @@ function TitlebarBelowImageList() {
           onClose={() => setImportDrawerOpen(false)}
           onOpen={() => setImportDrawerOpen(true)}>
           <Stack direction={"row"}>
-            <Typography sx={{pb: 2}} variant="h5" component="h5">Import Media</Typography>
+            <Typography sx={{ pb: 2 }} variant="h5" component="h5">Import Media</Typography>
             <Box sx={{ flexGrow: 1 }} />
             <Box>
               <IconButton
