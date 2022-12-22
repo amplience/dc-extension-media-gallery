@@ -301,6 +301,7 @@ function TitlebarBelowImageList() {
               sx={{ color: "white" }}
               aria-label={`import`}
               size="small"
+              title="Import"
               onClick={() => setImportDrawerOpen(true)}
             >
               <AddPhotoAlternateOutlined />
@@ -314,6 +315,7 @@ function TitlebarBelowImageList() {
               sx={{ color: "white" }}
               size="small"
               aria-label={`select all`}
+              title="Select all"
             >
               <GridViewSharp />
             </IconButton>
@@ -321,6 +323,7 @@ function TitlebarBelowImageList() {
               sx={{ color: "white" }}
               size="small"
               aria-label={`select none`}
+              title="Select none"
             >
               <GridViewOutlined />
             </IconButton>
@@ -332,6 +335,7 @@ function TitlebarBelowImageList() {
             <IconButton
               sx={{ color: "white" }}
               aria-label={`delete selected`}
+              title="Remove selected"
               size="small"
             >
               <DeleteOutline />
@@ -339,6 +343,7 @@ function TitlebarBelowImageList() {
             <IconButton
               sx={{ color: "white" }}
               aria-label={`sort`}
+              title="Sort by"
               onClick={handleSortClick}
               size="small"
             >
@@ -348,6 +353,7 @@ function TitlebarBelowImageList() {
               sx={{ color: "white" }}
               aria-label={`reset`}
               size="small"
+              title="Reset"
               onClick={() => setItems(itemData)}
             >
               <CachedOutlined />
@@ -417,6 +423,7 @@ function TitlebarBelowImageList() {
               <IconButton
                 sx={{ color: "white" }}
                 aria-label={`list mode`}
+                title="List view"
                 onClick={() => setGridMode(false)}
               >
                 <ViewHeadlineOutlined />
@@ -426,6 +433,7 @@ function TitlebarBelowImageList() {
               <IconButton
                 sx={{ color: "white" }}
                 aria-label={`grid mode`}
+                title="Grid view"
                 onClick={() => setGridMode(true)}
               >
                 <AppsOutlined />
@@ -470,6 +478,7 @@ function TitlebarBelowImageList() {
                           left: 0,
                         }}
                         aria-label={`edit`}
+                        title="Edit"
                         onClick={() => handleDetailView(item)}
                       >
                         <EditOutlined />
@@ -481,6 +490,7 @@ function TitlebarBelowImageList() {
                           top: 0,
                           right: 0,
                         }}
+                        title="Remove"
                         aria-label={`delete`}
                         onClick={() => removeItem(index)}
                       >
@@ -494,6 +504,7 @@ function TitlebarBelowImageList() {
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`select ${item.title}`}
+                            title="Select"
                           >
                             <CheckBoxOutlineBlank />
                           </IconButton>
@@ -525,6 +536,7 @@ function TitlebarBelowImageList() {
                         <IconButton
                           sx={{ color: "white" }}
                           aria-label={`select all`}
+                          title="Select all"
                         >
                           <CheckBoxOutlineBlank />
                         </IconButton>
@@ -544,6 +556,7 @@ function TitlebarBelowImageList() {
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`select`}
+                            title="Select"
                           >
                             <CheckBoxOutlineBlank />
                           </IconButton>
@@ -564,6 +577,7 @@ function TitlebarBelowImageList() {
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`edit`}
+                            title="Edit"
                             onClick={() => handleDetailView(item)}
                           >
                             <EditOutlined />
@@ -571,6 +585,7 @@ function TitlebarBelowImageList() {
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`delete`}
+                            title="Remove"
                             onClick={() => removeItem(index)}
                           >
                             <DeleteOutline />
@@ -649,7 +664,7 @@ function TitlebarBelowImageList() {
                 variant="contained"
                 onClick={() => {
                   setDetailDrawerOpen(false)
-                  handleSnackOpen()
+                  setTimeout(() => {handleSnackOpen()}, 500)
                 }}
               >Save</Button>
               <Button
@@ -696,12 +711,14 @@ function TitlebarBelowImageList() {
                   <IconButton
                     size="small"
                     aria-label={`select all`}
+                    title="Select all"
                   >
                     <GridViewSharp />
                   </IconButton>
                   <IconButton
                     size="small"
                     aria-label={`select none`}
+                    title="Select none"
                   >
                     <GridViewOutlined />
                   </IconButton>
@@ -726,6 +743,7 @@ function TitlebarBelowImageList() {
                         actionIcon={
                           <IconButton
                             aria-label={`select ${item.title}`}
+                            title="Select"
                           >
                             <CheckBoxOutlineBlank />
                           </IconButton>
@@ -755,7 +773,16 @@ function TitlebarBelowImageList() {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* Snack Bar for alerts */}
-      <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose} TransitionComponent={SlideTransition}>
+      <Snackbar 
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        open={snackOpen} 
+        autoHideDuration={2000} 
+        onClose={handleSnackClose} 
+        TransitionComponent={SlideTransition}
+      >
         <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
           Media details successfully saved!
         </Alert>
