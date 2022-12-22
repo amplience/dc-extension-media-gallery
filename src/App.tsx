@@ -19,7 +19,8 @@ import {
   CloseOutlined,
   GridViewSharp,
   GridViewOutlined,
-  InfoOutlined
+  InfoOutlined,
+  CheckBoxOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -84,20 +85,20 @@ import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
 
 const itemData = [
-  { id: 1, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
-  { id: 2, dateModified: "2022-11-20T19:25:20.379Z", img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
-  { id: 3, dateModified: "2022-11-20T19:15:20.379Z", img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c", title: "Coffee", author: "@nolanissac", },
-  { id: 4, dateModified: "2022-12-30T18:25:20.379Z", img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8", title: "Hats", author: "@hjrc33", },
-  { id: 5, dateModified: "2022-11-20T19:35:20.379Z", img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62", title: "Honey", author: "@arwinneil", },
-  { id: 6, dateModified: "2022-12-30T17:25:20.379Z", img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6", title: "Basketball", author: "@tjdragotta", },
-  { id: 7, dateModified: "2022-11-20T19:45:20.379Z", img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f", title: "Fern", author: "@katie_wasserman", },
-  { id: 8, dateModified: "2022-12-30T16:25:20.379Z", img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25", title: "Mushrooms", author: "@silverdalex", },
-  { id: 9, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af", title: "Tomato basil", author: "@shelleypauls", },
-  { id: 10, dateModified: "2022-12-30T15:25:20.379Z", img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1", title: "Sea star", author: "@peterlaster", },
-  { id: 11, dateModified: "2022-12-30T14:25:20.379Z", img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6", title: "Bike", author: "@southside_customs", },
-  { id: 12, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e", title: "Breakfast", author: "@bkristastucchio", },
-  { id: 13, dateModified: "2021-12-30T13:25:20.379Z", img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3", title: "Concert crowd", author: "@silverdalex", },
-  { id: 14, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
+  { id: 1, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
+  { id: 2, selected: false, dateModified: "2022-11-20T19:25:20.379Z", img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
+  { id: 3, selected: false, dateModified: "2022-11-20T19:15:20.379Z", img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c", title: "Coffee", author: "@nolanissac", },
+  { id: 4, selected: false, dateModified: "2022-12-30T18:25:20.379Z", img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8", title: "Hats", author: "@hjrc33", },
+  { id: 5, selected: false, dateModified: "2022-11-20T19:35:20.379Z", img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62", title: "Honey", author: "@arwinneil", },
+  { id: 6, selected: false, dateModified: "2022-12-30T17:25:20.379Z", img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6", title: "Basketball", author: "@tjdragotta", },
+  { id: 7, selected: false, dateModified: "2022-11-20T19:45:20.379Z", img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f", title: "Fern", author: "@katie_wasserman", },
+  { id: 8, selected: false, dateModified: "2022-12-30T16:25:20.379Z", img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25", title: "Mushrooms", author: "@silverdalex", },
+  { id: 9, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af", title: "Tomato basil", author: "@shelleypauls", },
+  { id: 10, selected: false, dateModified: "2022-12-30T15:25:20.379Z", img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1", title: "Sea star", author: "@peterlaster", },
+  { id: 11, selected: false, dateModified: "2022-12-30T14:25:20.379Z", img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6", title: "Bike", author: "@southside_customs", },
+  { id: 12, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e", title: "Breakfast", author: "@bkristastucchio", },
+  { id: 13, selected: false, dateModified: "2021-12-30T13:25:20.379Z", img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3", title: "Concert crowd", author: "@silverdalex", },
+  { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
 ];
 
 function TitlebarBelowImageList() {
@@ -331,6 +332,14 @@ function TitlebarBelowImageList() {
               size="small"
               aria-label={`select all`}
               title="Select all"
+              onClick={() => {
+                const newItems = items.slice()
+                newItems.map(element => {
+                  element.selected = true
+                  return element
+                })
+                setItems(newItems)
+              }}
             >
               <GridViewSharp />
             </IconButton>
@@ -339,6 +348,14 @@ function TitlebarBelowImageList() {
               size="small"
               aria-label={`select none`}
               title="Select none"
+              onClick={() => {
+                const newItems = items.slice()
+                newItems.map(element => {
+                  element.selected = false
+                  return element
+                })
+                setItems(newItems)
+              }}
             >
               <GridViewOutlined />
             </IconButton>
@@ -352,7 +369,10 @@ function TitlebarBelowImageList() {
               aria-label={`delete selected`}
               title="Remove selected"
               size="small"
-            >
+              onClick={() => {
+                setItems((prev) => prev.filter((item) => !item.selected))
+              }}
+            > 
               <DeleteOutline />
             </IconButton>
             <IconButton
@@ -520,8 +540,18 @@ function TitlebarBelowImageList() {
                             sx={{ color: "white" }}
                             aria-label={`select ${item.title}`}
                             title="Select"
+                            onClick={() => {
+                              const newItems = items.slice()
+                              const itemToUpdate = newItems.find((element) => element.id === item.id)
+                              if (itemToUpdate) {
+                                itemToUpdate.selected = !itemToUpdate.selected
+                                setItems(newItems)
+                              }
+                            }}
                           >
-                            <CheckBoxOutlineBlank />
+                            {
+                              item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                            }
                           </IconButton>
                         }
                         actionPosition="left"
@@ -572,8 +602,18 @@ function TitlebarBelowImageList() {
                             sx={{ color: "white" }}
                             aria-label={`select`}
                             title="Select"
+                            onClick={() => {
+                              const newItems = items.slice()
+                              const itemToUpdate = newItems.find((element) => element.id === item.id)
+                              if (itemToUpdate) {
+                                itemToUpdate.selected = !itemToUpdate.selected
+                                setItems(newItems)
+                              }
+                            }}
                           >
-                            <CheckBoxOutlineBlank />
+                            {
+                              item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                            }
                           </IconButton>
                         </TableCell>
                         <TableCell>
