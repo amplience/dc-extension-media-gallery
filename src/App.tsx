@@ -21,6 +21,7 @@ import {
   GridViewOutlined
 } from "@mui/icons-material";
 import {
+  Alert,
   AppBar,
   Button,
   Dialog,
@@ -31,6 +32,7 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
+  Snackbar,
   SwipeableDrawer,
   Table,
   TableBody,
@@ -117,6 +119,19 @@ function TitlebarBelowImageList() {
   const sortOpen = Boolean(anchorEl);
   const [fullscreenView, setFullscreenView] = useState(false)
   const [currentImageId, setCurrentImageId] = useState(1)
+  const [snackOpen, setSnackOpen] = useState(false);
+
+  const handleSnackOpen = () => {
+    setSnackOpen(true);
+  };
+
+  const handleSnackClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackOpen(false);
+  };
 
   const handleSortClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -199,7 +214,7 @@ function TitlebarBelowImageList() {
 
   return (
     <ExtensionContextProvider>
-      
+
       {/* Image full screen view */}
       <Dialog
         fullScreen
@@ -212,9 +227,10 @@ function TitlebarBelowImageList() {
         <Box sx={{ p: 4 }}>
           <Box sx={{ position: 'relative' }}>
             <img
-              src={`${items.find((item)=>item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${items.find((item)=>item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={items.find((item)=>item.id === currentImageId)?.title}
+              src={`${items.find((item) => item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${items.find((item) => item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={items.find((item) => item.id === currentImageId)?.title}
+              onClick={() => setFullscreenView(false)}
               loading="lazy"
               width={'100%'}
             />
@@ -377,7 +393,7 @@ function TitlebarBelowImageList() {
             }
           </Toolbar>
         </AppBar>
-        
+
         {/* Main view */}
         <Box sx={{ w: '100%', pr: 2, pl: 2 }}>
           {gridMode ? (
@@ -558,40 +574,43 @@ function TitlebarBelowImageList() {
               </Box>
             </Stack>
             <img
-              src={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={items.find((item)=>item.id === currentImageId)?.title}
+              src={`${items.find((item) => item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${items.find((item) => item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={items.find((item) => item.id === currentImageId)?.title}
               title="Click to zoom"
               onClick={() => { handleFullScreenView(currentImageId) }}
               loading="lazy"
             />
-            <TextField 
-              id="dateModified" 
-              label="Date modified" 
-              variant="standard" 
+            <TextField
+              id="dateModified"
+              label="Date modified"
+              variant="standard"
               InputProps={{ readOnly: true }}
-              defaultValue={items.find((item)=>item.id === currentImageId)?.dateModified}
+              defaultValue={items.find((item) => item.id === currentImageId)?.dateModified}
             />
-            <TextField 
-              id="author" 
-              label="Author" 
-              variant="standard" 
-              defaultValue={items.find((item)=>item.id === currentImageId)?.author}
+            <TextField
+              id="author"
+              label="Author"
+              variant="standard"
+              defaultValue={items.find((item) => item.id === currentImageId)?.author}
             />
-            <TextField 
-              multiline 
-              rows={4} 
-              id="caption" 
-              label="Caption" 
-              variant="standard" 
-              defaultValue={items.find((item)=>item.id === currentImageId)?.title}
+            <TextField
+              multiline
+              rows={4}
+              id="caption"
+              label="Caption"
+              variant="standard"
+              defaultValue={items.find((item) => item.id === currentImageId)?.title}
             />
             <Stack sx={{ pb: 4 }} direction={"row"}>
               <Box sx={{ flexGrow: 1 }} />
               <Button
                 sx={{ mr: 2 }}
                 variant="contained"
-                onClick={() => setDetailDrawerOpen(false)}
+                onClick={() => {
+                  setDetailDrawerOpen(false)
+                  handleSnackOpen()
+                }}
               >Save</Button>
               <Button
                 variant="outlined"
@@ -649,14 +668,14 @@ function TitlebarBelowImageList() {
                 </Stack>
                 <ImageList cols={5} rowHeight={200}>
                   {itemData.map((item) => (
-                    <ImageListItem 
+                    <ImageListItem
                       key={item.img}
                     >
                       <img
                         src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
                         srcSet={`${item.img}?w=150&h=100&fit=crop&auto=format&dpr=2 2x`}
                         alt={item.title}
-                        onClick={() => handleFullScreenView(item.id)}  
+                        onClick={() => handleFullScreenView(item.id)}
                         title="Click to zoom"
                         loading="lazy"
                       />
@@ -694,6 +713,11 @@ function TitlebarBelowImageList() {
         </SwipeableDrawer>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
+      <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
     </ExtensionContextProvider>
   );
 }
