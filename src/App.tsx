@@ -116,10 +116,16 @@ function TitlebarBelowImageList() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const sortOpen = Boolean(anchorEl);
   const [fullscreenView, setFullscreenView] = useState(false)
+  const [currentImageId, setCurrentImageId] = useState(1)
 
   const handleSortClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleFullscreenview = (imageId: number) => {
+    setCurrentImageId(imageId)
+    setFullscreenView(true)
+  }
 
   const handleSortClose = () => {
     setAnchorEl(null);
@@ -201,9 +207,9 @@ function TitlebarBelowImageList() {
         <Box sx={{ p: 4 }}>
           <Box sx={{ position: 'relative' }}>
             <img
-              src={`${itemData[0].img}?auto=format`}
-              srcSet={`${itemData[0].img}?auto=format&dpr=2 2x`}
-              alt={itemData[0].title}
+              src={`${itemData[currentImageId - 1].img}??w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${itemData[currentImageId - 1].img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={itemData[currentImageId - 1].title}
               loading="lazy"
               width={'100%'}
             />
@@ -392,7 +398,7 @@ function TitlebarBelowImageList() {
                         alt={item.title}
                         loading="lazy"
                         style={{ display: "block" }}
-                        onClick={() => setFullscreenView(true)}
+                        onClick={() => handleFullscreenview(item.id)}
                       />
                       <IconButton
                         sx={{
@@ -618,7 +624,7 @@ function TitlebarBelowImageList() {
                   {itemData.map((item) => (
                     <ImageListItem 
                       key={item.img}
-                      onClick={() => setFullscreenView(true)}  
+                      onClick={() => handleFullscreenview(item.id)}  
                     >
                       <img
                         src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
