@@ -101,6 +101,23 @@ const itemData = [
   { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
 ];
 
+const importItemData = [
+  { id: 1, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
+  { id: 2, selected: false, dateModified: "2022-11-20T19:25:20.379Z", img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
+  { id: 3, selected: false, dateModified: "2022-11-20T19:15:20.379Z", img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c", title: "Coffee", author: "@nolanissac", },
+  { id: 4, selected: false, dateModified: "2022-12-30T18:25:20.379Z", img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8", title: "Hats", author: "@hjrc33", },
+  { id: 5, selected: false, dateModified: "2022-11-20T19:35:20.379Z", img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62", title: "Honey", author: "@arwinneil", },
+  { id: 6, selected: false, dateModified: "2022-12-30T17:25:20.379Z", img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6", title: "Basketball", author: "@tjdragotta", },
+  { id: 7, selected: false, dateModified: "2022-11-20T19:45:20.379Z", img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f", title: "Fern", author: "@katie_wasserman", },
+  { id: 8, selected: false, dateModified: "2022-12-30T16:25:20.379Z", img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25", title: "Mushrooms", author: "@silverdalex", },
+  { id: 9, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af", title: "Tomato basil", author: "@shelleypauls", },
+  { id: 10, selected: false, dateModified: "2022-12-30T15:25:20.379Z", img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1", title: "Sea star", author: "@peterlaster", },
+  { id: 11, selected: false, dateModified: "2022-12-30T14:25:20.379Z", img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6", title: "Bike", author: "@southside_customs", },
+  { id: 12, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e", title: "Breakfast", author: "@bkristastucchio", },
+  { id: 13, selected: false, dateModified: "2021-12-30T13:25:20.379Z", img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3", title: "Concert crowd", author: "@silverdalex", },
+  { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
+];
+
 function TitlebarBelowImageList() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -115,6 +132,7 @@ function TitlebarBelowImageList() {
   if (isMobile) cols = 2;
 
   const [items, setItems] = useState(itemData);
+  const [importItems, setImportItems] = useState(importItemData);
   const [gridMode, setGridMode] = useState(true);
   const [repo, setRepo] = useState<EnrichedRepository>();
   const [chApi, setChApi] = useState<ChApi>();
@@ -318,7 +336,15 @@ function TitlebarBelowImageList() {
               aria-label={`import`}
               size="small"
               title="Import"
-              onClick={() => setImportDrawerOpen(true)}
+              onClick={() => {
+                const newItems = importItems.slice()
+                newItems.map(element => {
+                  element.selected = false
+                  return element
+                })
+                setImportItems(newItems)
+                setImportDrawerOpen(true)
+              }}
             >
               <AddPhotoAlternateOutlined />
             </IconButton>
@@ -577,15 +603,7 @@ function TitlebarBelowImageList() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell component="th">
-                        <IconButton
-                          sx={{ color: "white" }}
-                          aria-label={`select all`}
-                          title="Select all"
-                        >
-                          <CheckBoxOutlineBlank />
-                        </IconButton>
-                      </TableCell>
+                      <TableCell component="th" />
                       <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
                       <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
                       <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
@@ -771,6 +789,14 @@ function TitlebarBelowImageList() {
                     size="small"
                     aria-label={`select all`}
                     title="Select all"
+                    onClick={() => {
+                      const newItems = importItems.slice()
+                      newItems.map(element => {
+                        element.selected = true
+                        return element
+                      })
+                      setImportItems(newItems)
+                    }}
                   >
                     <GridViewSharp />
                   </IconButton>
@@ -778,12 +804,20 @@ function TitlebarBelowImageList() {
                     size="small"
                     aria-label={`select none`}
                     title="Select none"
+                    onClick={() => {
+                      const newItems = importItems.slice()
+                      newItems.map(element => {
+                        element.selected = false
+                        return element
+                      })
+                      setImportItems(newItems)
+                    }}
                   >
                     <GridViewOutlined />
                   </IconButton>
                 </Stack>
                 <ImageList cols={5} rowHeight={200}>
-                  {itemData.map((item) => (
+                  {importItems.map((item) => (
                     <ImageListItem
                       key={item.img}
                     >
@@ -803,8 +837,18 @@ function TitlebarBelowImageList() {
                           <IconButton
                             aria-label={`select ${item.title}`}
                             title="Select"
+                            onClick={() => {
+                              const newImportItems = importItems.slice()
+                              const itemToUpdate = newImportItems.find((element) => element.id === item.id)
+                              if (itemToUpdate) {
+                                itemToUpdate.selected = !itemToUpdate.selected
+                                setImportItems(newImportItems)
+                              }
+                            }}
                           >
-                            <CheckBoxOutlineBlank />
+                            {
+                              item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                            }
                           </IconButton>
                         }
                         actionPosition="left"
@@ -821,11 +865,20 @@ function TitlebarBelowImageList() {
                 variant="contained"
                 onClick={() => {
                   setImportDrawerOpen(false)
+                  const newItems = items.slice()
+                  setTimeout(() => {setItems(newItems.concat(
+                    importItems.filter(item => {
+                      return item.selected && items.filter(item2 => item2.id === item.id).length === 0
+                    }).map(item =>  { 
+                      item.selected = false 
+                      return item
+                    })
+                  ))}, 500)
                   setCurrentAlert({
                     severity: "success",
                     message: "Media files successful imported!"
                   })
-                  setTimeout(() => {handleSnackOpen()}, 500)
+                  setTimeout(() => {handleSnackOpen()}, 1000)
                 }}
               >Import</Button>
               <Button
