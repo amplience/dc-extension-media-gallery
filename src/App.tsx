@@ -281,7 +281,7 @@ function TitlebarBelowImageList() {
               </Box>
             }
             <IconButton
-              aria-label={`close import drawer`}
+              aria-label={`close fullscreen view`}
               size="small"
               sx={{ color: 'white', position: 'absolute', top: 8, right: 8 }}
               onClick={() => setFullscreenView(false)}
@@ -289,6 +289,10 @@ function TitlebarBelowImageList() {
               <CloseOutlined />
             </IconButton>
           </Box>
+          <Box 
+            sx={{height: '1000%'}}
+            onClick={() => setFullscreenView(false)}
+          />
         </Box>
       </Dialog>
       <Box style={{ width: '100%' }}>
