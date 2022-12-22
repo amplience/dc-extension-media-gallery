@@ -37,7 +37,7 @@
   }
 }
 
-.dragHandle:focus {
+.dragHandle:focus, .gridItem:focus {
   outline: none !important;
   outline-offset: none !important;
 }
