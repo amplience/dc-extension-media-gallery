@@ -18,7 +18,8 @@ import {
   CollectionsOutlined,
   CloseOutlined,
   GridViewSharp,
-  GridViewOutlined
+  GridViewOutlined,
+  InfoOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -32,6 +33,7 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
+  Slide,
   Snackbar,
   SwipeableDrawer,
   Table,
@@ -78,6 +80,7 @@ import credentials from "./credentials";
 import { convertToEntry, defaultExifMap } from "./model/conversion";
 import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
+import { SlideProps } from '@mui/material/Slide';
 
 const itemData = [
   { id: 1, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
@@ -118,8 +121,9 @@ function TitlebarBelowImageList() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const sortOpen = Boolean(anchorEl);
   const [fullscreenView, setFullscreenView] = useState(false)
-  const [currentImageId, setCurrentImageId] = useState(1)
+  const [currentMedia, setCurrentMedia] = useState(itemData[0])
   const [snackOpen, setSnackOpen] = useState(false);
+  const [infoPanelOpen, setInfoPanelOpen] = useState(false)
 
   const handleSnackOpen = () => {
     setSnackOpen(true);
@@ -137,13 +141,13 @@ function TitlebarBelowImageList() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleFullScreenView = (imageId: number) => {
-    setCurrentImageId(imageId)
+  const handleFullScreenView = (media: any) => {
+    setCurrentMedia(media)
     setFullscreenView(true)
   }
 
-  const handleDetailView = (imageId: number) => {
-    setCurrentImageId(imageId)
+  const handleDetailView = (media: any) => {
+    setCurrentMedia(media)
     setDetailDrawerOpen(true)
   }
 
@@ -227,13 +231,49 @@ function TitlebarBelowImageList() {
         <Box sx={{ p: 4 }}>
           <Box sx={{ position: 'relative' }}>
             <img
-              src={`${items.find((item) => item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${items.find((item) => item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={items.find((item) => item.id === currentImageId)?.title}
+              src={`${currentMedia.img}??w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${currentMedia.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={currentMedia.title}
               onClick={() => setFullscreenView(false)}
               loading="lazy"
               width={'100%'}
             />
+            <IconButton
+              aria-label={`close import drawer`}
+              size="small"
+              sx={{ color: 'white', position: 'absolute', top: 8, left: 8 }}
+              onClick={() => setInfoPanelOpen(!infoPanelOpen) }
+            >
+              <InfoOutlined />
+            </IconButton>
+            {
+              infoPanelOpen &&
+              <Box
+                sx={{ 
+                  position: 'absolute', 
+                  top: 50, 
+                  p: 2, 
+                  left: 16, 
+                  minWidth: '450px', 
+                  borderRadius: 1, 
+                  background: 'rgba(255, 255, 255, 0.6)' 
+                }} 
+                >
+                  <Typography variant="h6" component="h6">Media Details</Typography>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Author</TableCell>
+                        <TableCell>{currentMedia.author}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Caption</TableCell>
+                        <TableCell>{currentMedia.title}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+              </Box>
+            }
             <IconButton
               aria-label={`close import drawer`}
               size="small"
@@ -420,7 +460,7 @@ function TitlebarBelowImageList() {
                         loading="lazy"
                         style={{ display: "block" }}
                         title="Click to zoom"
-                        onClick={() => handleFullScreenView(item.id)}
+                        onClick={() => handleFullScreenView(item)}
                       />
                       <IconButton
                         sx={{
@@ -430,7 +470,7 @@ function TitlebarBelowImageList() {
                           left: 0,
                         }}
                         aria-label={`edit`}
-                        onClick={() => handleDetailView(item.id)}
+                        onClick={() => handleDetailView(item)}
                       >
                         <EditOutlined />
                       </IconButton>
@@ -514,7 +554,7 @@ function TitlebarBelowImageList() {
                             srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
                             alt={item.title}
                             title="Click to zoom"
-                            onClick={() => handleFullScreenView(item.id)}
+                            onClick={() => handleFullScreenView(item)}
                             loading="lazy"
                           />
                         </TableCell>
@@ -524,7 +564,7 @@ function TitlebarBelowImageList() {
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`edit`}
-                            onClick={() => handleDetailView(item.id)}
+                            onClick={() => handleDetailView(item)}
                           >
                             <EditOutlined />
                           </IconButton>
@@ -574,11 +614,11 @@ function TitlebarBelowImageList() {
               </Box>
             </Stack>
             <img
-              src={`${items.find((item) => item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${items.find((item) => item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={items.find((item) => item.id === currentImageId)?.title}
+              src={`${currentMedia.img}?w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${currentMedia.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={currentMedia.title}
               title="Click to zoom"
-              onClick={() => { handleFullScreenView(currentImageId) }}
+              onClick={() => { handleFullScreenView(currentMedia) }}
               loading="lazy"
             />
             <TextField
@@ -586,13 +626,13 @@ function TitlebarBelowImageList() {
               label="Date modified"
               variant="standard"
               InputProps={{ readOnly: true }}
-              defaultValue={items.find((item) => item.id === currentImageId)?.dateModified}
+              defaultValue={currentMedia.dateModified}
             />
             <TextField
               id="author"
               label="Author"
               variant="standard"
-              defaultValue={items.find((item) => item.id === currentImageId)?.author}
+              defaultValue={currentMedia.author}
             />
             <TextField
               multiline
@@ -600,7 +640,7 @@ function TitlebarBelowImageList() {
               id="caption"
               label="Caption"
               variant="standard"
-              defaultValue={items.find((item) => item.id === currentImageId)?.title}
+              defaultValue={currentMedia.title}
             />
             <Stack sx={{ pb: 4 }} direction={"row"}>
               <Box sx={{ flexGrow: 1 }} />
@@ -675,7 +715,7 @@ function TitlebarBelowImageList() {
                         src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
                         srcSet={`${item.img}?w=150&h=100&fit=crop&auto=format&dpr=2 2x`}
                         alt={item.title}
-                        onClick={() => handleFullScreenView(item.id)}
+                        onClick={() => handleFullScreenView(item)}
                         title="Click to zoom"
                         loading="lazy"
                       />
@@ -713,13 +753,24 @@ function TitlebarBelowImageList() {
         </SwipeableDrawer>
       </Box>
       <Box sx={{ flexGrow: 1 }} />
-      <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose}>
+
+      {/* Snack Bar for alerts */}
+      <Snackbar open={snackOpen} autoHideDuration={3000} onClose={handleSnackClose} TransitionComponent={SlideTransition}>
         <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
-          This is a success message!
+          Media details successfully saved!
         </Alert>
       </Snackbar>
     </ExtensionContextProvider>
   );
+}
+
+/**
+ * Slide transition for alerts
+ * @param props 
+ * @returns 
+ */
+function SlideTransition(props: SlideProps) {
+  return <Slide {...props} direction="up" />;
 }
 
 /**
