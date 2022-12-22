@@ -122,9 +122,14 @@ function TitlebarBelowImageList() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleFullscreenview = (imageId: number) => {
+  const handleFullScreenView = (imageId: number) => {
     setCurrentImageId(imageId)
     setFullscreenView(true)
+  }
+
+  const handleDetailView = (imageId: number) => {
+    setCurrentImageId(imageId)
+    setDetailDrawerOpen(true)
   }
 
   const handleSortClose = () => {
@@ -398,7 +403,7 @@ function TitlebarBelowImageList() {
                         alt={item.title}
                         loading="lazy"
                         style={{ display: "block" }}
-                        onClick={() => handleFullscreenview(item.id)}
+                        onClick={() => handleFullScreenView(item.id)}
                       />
                       <IconButton
                         sx={{
@@ -408,7 +413,7 @@ function TitlebarBelowImageList() {
                           left: 0,
                         }}
                         aria-label={`edit`}
-                        onClick={() => setDetailDrawerOpen(true)}
+                        onClick={() => handleDetailView(item.id)}
                       >
                         <EditOutlined />
                       </IconButton>
@@ -491,7 +496,7 @@ function TitlebarBelowImageList() {
                             src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
                             srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
                             alt={item.title}
-                            onClick={() => handleFullscreenview(item.id)}
+                            onClick={() => handleFullScreenView(item.id)}
                             loading="lazy"
                           />
                         </TableCell>
@@ -501,7 +506,7 @@ function TitlebarBelowImageList() {
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`edit`}
-                            onClick={() => setDetailDrawerOpen(true)}
+                            onClick={() => handleDetailView(item.id)}
                           >
                             <EditOutlined />
                           </IconButton>
@@ -551,14 +556,32 @@ function TitlebarBelowImageList() {
               </Box>
             </Stack>
             <img
-              src={`${itemData[0].img}?auto=format`}
-              srcSet={`${itemData[0].img}?auto=format&dpr=2 2x`}
-              alt={itemData[0].title}
+              src={`${itemData[currentImageId - 1].img}?w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${itemData[currentImageId - 1].img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={itemData[currentImageId - 1].title}
               loading="lazy"
             />
-            <TextField id="dateModified" label="Date modified" variant="standard" InputProps={{ readOnly: true }} />
-            <TextField id="author" label="Author" variant="standard" />
-            <TextField multiline rows={4} id="caption" label="Caption" variant="standard" />
+            <TextField 
+              id="dateModified" 
+              label="Date modified" 
+              variant="standard" 
+              InputProps={{ readOnly: true }}
+              defaultValue={items[currentImageId - 1].dateModified}
+            />
+            <TextField 
+              id="author" 
+              label="Author" 
+              variant="standard" 
+              defaultValue={items[currentImageId - 1].author}
+            />
+            <TextField 
+              multiline 
+              rows={4} 
+              id="caption" 
+              label="Caption" 
+              variant="standard" 
+              defaultValue={items[currentImageId - 1].title}
+            />
             <Stack sx={{ pb: 4 }} direction={"row"}>
               <Box sx={{ flexGrow: 1 }} />
               <Button
@@ -624,7 +647,7 @@ function TitlebarBelowImageList() {
                   {itemData.map((item) => (
                     <ImageListItem 
                       key={item.img}
-                      onClick={() => handleFullscreenview(item.id)}  
+                      onClick={() => handleFullScreenView(item.id)}  
                     >
                       <img
                         src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
