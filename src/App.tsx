@@ -559,6 +559,7 @@ function TitlebarBelowImageList() {
               src={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format`}
               srcSet={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
               alt={items.find((item)=>item.id === currentImageId)?.title}
+              onClick={() => { handleFullScreenView(currentImageId) }}
               loading="lazy"
             />
             <TextField 
