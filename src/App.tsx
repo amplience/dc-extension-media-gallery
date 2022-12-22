@@ -20,7 +20,10 @@ import {
   GridViewSharp,
   GridViewOutlined,
   InfoOutlined,
-  CheckBoxOutlined
+  CheckBoxOutlined,
+  CalendarMonthOutlined,
+  PhotoCameraFrontOutlined,
+  NotesOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -30,6 +33,7 @@ import {
   Dialog,
   Divider,
   ImageListItem,
+  InputAdornment,
   ListItemIcon,
   ListItemText,
   ListSubheader,
@@ -142,6 +146,7 @@ function TitlebarBelowImageList() {
   const sortOpen = Boolean(anchorEl);
   const [fullscreenView, setFullscreenView] = useState(false)
   const [currentMedia, setCurrentMedia] = useState(itemData[0])
+  const [tempMedia, setTempMedia] = useState(itemData[0])
   const [snackOpen, setSnackOpen] = useState(false);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false)
   const [currentAlert, setCurrentAlert] = useState({
@@ -172,6 +177,7 @@ function TitlebarBelowImageList() {
 
   const handleDetailView = (media: any) => {
     setCurrentMedia(media)
+    setTempMedia(media)
     setDetailDrawerOpen(true)
   }
 
@@ -559,7 +565,7 @@ function TitlebarBelowImageList() {
                       </IconButton>
                       <ImageListItemBar
                         title={item.title}
-                        subtitle={<span>by: {item.author} {item.id}</span>}
+                        subtitle={<span>by: {item.author}</span>}
                         position="below"
                         actionIcon={
                           <IconButton
@@ -713,7 +719,14 @@ function TitlebarBelowImageList() {
               id="dateModified"
               label="Date modified"
               variant="standard"
-              InputProps={{ readOnly: true }}
+              InputProps={{ 
+                readOnly: true,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarMonthOutlined />
+                  </InputAdornment>
+                )
+              }}
               defaultValue={new Date(currentMedia.dateModified).toLocaleString()}
             />
             <TextField
@@ -721,6 +734,16 @@ function TitlebarBelowImageList() {
               label="Author"
               variant="standard"
               defaultValue={currentMedia.author}
+              InputProps={{ 
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhotoCameraFrontOutlined />
+                  </InputAdornment>
+                )
+              }}
+              onChange={(event) => {
+                tempMedia.author = event.target.value
+              }}
             />
             <TextField
               multiline
@@ -729,6 +752,16 @@ function TitlebarBelowImageList() {
               label="Caption"
               variant="standard"
               defaultValue={currentMedia.title}
+              InputProps={{ 
+                startAdornment: (
+                  <InputAdornment style={{ display: 'flex', flexDirection: 'column-reverse'}} position="start" >
+                    <NotesOutlined />
+                  </InputAdornment>
+                )
+              }}
+              onChange={(event) => {
+                tempMedia.title = event.target.value
+              }}
             />
             <Stack sx={{ pb: 4 }} direction={"row"}>
               <Box sx={{ flexGrow: 1 }} />
@@ -737,6 +770,7 @@ function TitlebarBelowImageList() {
                 variant="contained"
                 onClick={() => {
                   setDetailDrawerOpen(false)
+                  setCurrentMedia(tempMedia)
                   setCurrentAlert({
                     severity: "success",
                     message: "Media details successfully saved!"
@@ -865,20 +899,28 @@ function TitlebarBelowImageList() {
                 variant="contained"
                 onClick={() => {
                   setImportDrawerOpen(false)
-                  const newItems = items.slice()
-                  setTimeout(() => {setItems(newItems.concat(
-                    importItems.filter(item => {
-                      return item.selected && items.filter(item2 => item2.id === item.id).length === 0
-                    }).map(item =>  { 
-                      item.selected = false 
-                      return item
+                  if (importItems.filter(item => item.selected).length === 0) {
+                    setCurrentAlert({
+                      severity: "info",
+                      message: "No media file selected for import"
                     })
-                  ))}, 500)
-                  setCurrentAlert({
-                    severity: "success",
-                    message: "Media files successful imported!"
-                  })
-                  setTimeout(() => {handleSnackOpen()}, 1000)
+                    setTimeout(() => {handleSnackOpen()}, 500)
+                  } else {
+                    const newItems = items.slice()
+                    setTimeout(() => {setItems(newItems.concat(
+                      importItems.filter(item => {
+                        return item.selected && items.filter(item2 => item2.id === item.id).length === 0
+                      }).map(item =>  { 
+                        item.selected = false 
+                        return item
+                      })
+                    ))}, 500)
+                    setCurrentAlert({
+                      severity: "success",
+                      message: "Media files successful imported!"
+                    })
+                    setTimeout(() => {handleSnackOpen()}, 1000)
+                  }
                 }}
               >Import</Button>
               <Button
