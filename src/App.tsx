@@ -246,6 +246,8 @@ function TitlebarBelowImageList() {
             >
               <InfoOutlined />
             </IconButton>
+
+            {/* Info Panel */}
             {
               infoPanelOpen &&
               <Box
@@ -260,7 +262,7 @@ function TitlebarBelowImageList() {
                 }} 
                 >
                   <Typography variant="h6" component="h6">Media Details</Typography>
-                  <Table>
+                  <Table size="small">
                     <TableBody>
                       <TableRow>
                         <TableCell>Author</TableCell>
