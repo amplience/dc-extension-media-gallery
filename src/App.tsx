@@ -265,6 +265,10 @@ function TitlebarBelowImageList() {
                   <Table size="small">
                     <TableBody>
                       <TableRow>
+                        <TableCell>Date modified</TableCell>
+                        <TableCell>{new Date(currentMedia.dateModified).toLocaleString()}</TableCell>
+                      </TableRow>
+                      <TableRow>
                         <TableCell>Author</TableCell>
                         <TableCell>{currentMedia.author}</TableCell>
                       </TableRow>
@@ -643,7 +647,7 @@ function TitlebarBelowImageList() {
               label="Date modified"
               variant="standard"
               InputProps={{ readOnly: true }}
-              defaultValue={currentMedia.dateModified}
+              defaultValue={new Date(currentMedia.dateModified).toLocaleString()}
             />
             <TextField
               id="author"
