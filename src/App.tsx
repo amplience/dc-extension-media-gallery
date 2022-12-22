@@ -23,6 +23,7 @@ import {
 } from "@mui/icons-material";
 import {
   Alert,
+  AlertColor,
   AppBar,
   Button,
   Dialog,
@@ -124,6 +125,10 @@ function TitlebarBelowImageList() {
   const [currentMedia, setCurrentMedia] = useState(itemData[0])
   const [snackOpen, setSnackOpen] = useState(false);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false)
+  const [currentAlert, setCurrentAlert] = useState({
+    message: "Sucess!",
+    severity: "success"
+  })
 
   const handleSnackOpen = () => {
     setSnackOpen(true);
@@ -674,6 +679,10 @@ function TitlebarBelowImageList() {
                 variant="contained"
                 onClick={() => {
                   setDetailDrawerOpen(false)
+                  setCurrentAlert({
+                    severity: "success",
+                    message: "Media details successfully saved!"
+                  })
                   setTimeout(() => {handleSnackOpen()}, 500)
                 }}
               >Save</Button>
@@ -770,7 +779,14 @@ function TitlebarBelowImageList() {
               <Button
                 sx={{ mr: 2 }}
                 variant="contained"
-                onClick={() => setImportDrawerOpen(false)}
+                onClick={() => {
+                  setImportDrawerOpen(false)
+                  setCurrentAlert({
+                    severity: "success",
+                    message: "Media files successful imported!"
+                  })
+                  setTimeout(() => {handleSnackOpen()}, 500)
+                }}
               >Import</Button>
               <Button
                 variant="outlined"
@@ -793,8 +809,8 @@ function TitlebarBelowImageList() {
         onClose={handleSnackClose} 
         TransitionComponent={SlideTransition}
       >
-        <Alert onClose={handleSnackClose} severity="success" sx={{ width: '100%' }}>
-          Media details successfully saved!
+        <Alert onClose={handleSnackClose} severity={currentAlert.severity as AlertColor} sx={{ width: '100%' }}>
+          {currentAlert.message}
         </Alert>
       </Snackbar>
     </ExtensionContextProvider>
