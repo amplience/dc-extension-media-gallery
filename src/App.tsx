@@ -491,7 +491,7 @@ function TitlebarBelowImageList() {
                             src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
                             srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
                             alt={item.title}
-                            onClick={() => setFullscreenView(true)}
+                            onClick={() => handleFullscreenview(item.id)}
                             loading="lazy"
                           />
                         </TableCell>
