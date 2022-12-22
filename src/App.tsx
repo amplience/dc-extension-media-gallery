@@ -212,9 +212,9 @@ function TitlebarBelowImageList() {
         <Box sx={{ p: 4 }}>
           <Box sx={{ position: 'relative' }}>
             <img
-              src={`${itemData[currentImageId - 1].img}??w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${itemData[currentImageId - 1].img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={itemData[currentImageId - 1].title}
+              src={`${items.find((item)=>item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${items.find((item)=>item.id === currentImageId)?.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={items.find((item)=>item.id === currentImageId)?.title}
               loading="lazy"
               width={'100%'}
             />
@@ -556,9 +556,9 @@ function TitlebarBelowImageList() {
               </Box>
             </Stack>
             <img
-              src={`${itemData[currentImageId - 1].img}?w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${itemData[currentImageId - 1].img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={itemData[currentImageId - 1].title}
+              src={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={items.find((item)=>item.id === currentImageId)?.title}
               loading="lazy"
             />
             <TextField 
@@ -566,13 +566,13 @@ function TitlebarBelowImageList() {
               label="Date modified" 
               variant="standard" 
               InputProps={{ readOnly: true }}
-              defaultValue={items[currentImageId - 1].dateModified}
+              defaultValue={items.find((item)=>item.id === currentImageId)?.dateModified}
             />
             <TextField 
               id="author" 
               label="Author" 
               variant="standard" 
-              defaultValue={items[currentImageId - 1].author}
+              defaultValue={items.find((item)=>item.id === currentImageId)?.author}
             />
             <TextField 
               multiline 
@@ -580,7 +580,7 @@ function TitlebarBelowImageList() {
               id="caption" 
               label="Caption" 
               variant="standard" 
-              defaultValue={items[currentImageId - 1].title}
+              defaultValue={items.find((item)=>item.id === currentImageId)?.title}
             />
             <Stack sx={{ pb: 4 }} direction={"row"}>
               <Box sx={{ flexGrow: 1 }} />
@@ -657,7 +657,7 @@ function TitlebarBelowImageList() {
                       />
                       <ImageListItemBar
                         title={item.title}
-                        subtitle={<span>by: {item.author} {item.id}</span>}
+                        subtitle={<span>by: {item.author}</span>}
                         position="below"
                         actionIcon={
                           <IconButton
