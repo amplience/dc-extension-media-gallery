@@ -403,6 +403,7 @@ function TitlebarBelowImageList() {
                         alt={item.title}
                         loading="lazy"
                         style={{ display: "block" }}
+                        title="Click to zoom"
                         onClick={() => handleFullScreenView(item.id)}
                       />
                       <IconButton
@@ -496,6 +497,7 @@ function TitlebarBelowImageList() {
                             src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
                             srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
                             alt={item.title}
+                            title="Click to zoom"
                             onClick={() => handleFullScreenView(item.id)}
                             loading="lazy"
                           />
@@ -559,6 +561,7 @@ function TitlebarBelowImageList() {
               src={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format`}
               srcSet={`${items.find((item)=>item.id === currentImageId)?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
               alt={items.find((item)=>item.id === currentImageId)?.title}
+              title="Click to zoom"
               onClick={() => { handleFullScreenView(currentImageId) }}
               loading="lazy"
             />
@@ -648,12 +651,13 @@ function TitlebarBelowImageList() {
                   {itemData.map((item) => (
                     <ImageListItem 
                       key={item.img}
-                      onClick={() => handleFullScreenView(item.id)}  
                     >
                       <img
                         src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
                         srcSet={`${item.img}?w=150&h=100&fit=crop&auto=format&dpr=2 2x`}
                         alt={item.title}
+                        onClick={() => handleFullScreenView(item.id)}  
+                        title="Click to zoom"
                         loading="lazy"
                       />
                       <ImageListItemBar
