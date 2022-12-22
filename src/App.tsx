@@ -616,7 +616,10 @@ function TitlebarBelowImageList() {
                 </Stack>
                 <ImageList cols={5} rowHeight={200}>
                   {itemData.map((item) => (
-                    <ImageListItem key={item.img}>
+                    <ImageListItem 
+                      key={item.img}
+                      onClick={() => setFullscreenView(true)}  
+                    >
                       <img
                         src={`${item.img}?w=150&h=100&fit=crop&auto=format`}
                         srcSet={`${item.img}?w=150&h=100&fit=crop&auto=format&dpr=2 2x`}
