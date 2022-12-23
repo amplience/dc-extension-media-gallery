@@ -944,7 +944,7 @@ function TitlebarBelowImageList() {
           horizontal: "right"
         }}
         open={snackOpen} 
-        autoHideDuration={2000} 
+        autoHideDuration={3000} 
         onClose={handleSnackClose} 
         TransitionComponent={SlideTransition}
       >
