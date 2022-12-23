@@ -23,7 +23,8 @@ import {
   CheckBoxOutlined,
   CalendarMonthOutlined,
   PhotoCameraFrontOutlined,
-  NotesOutlined
+  NotesOutlined,
+  LockOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -729,6 +730,11 @@ function TitlebarBelowImageList() {
                 startAdornment: (
                   <InputAdornment position="start">
                     <CalendarMonthOutlined />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <LockOutlined />
                   </InputAdornment>
                 )
               }}
