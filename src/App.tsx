@@ -105,23 +105,6 @@ const itemData = [
   { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
 ];
 
-const importItemData = [
-  { id: 1, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
-  { id: 2, selected: false, dateModified: "2022-11-20T19:25:20.379Z", img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
-  { id: 3, selected: false, dateModified: "2022-11-20T19:15:20.379Z", img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c", title: "Coffee", author: "@nolanissac", },
-  { id: 4, selected: false, dateModified: "2022-12-30T18:25:20.379Z", img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8", title: "Hats", author: "@hjrc33", },
-  { id: 5, selected: false, dateModified: "2022-11-20T19:35:20.379Z", img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62", title: "Honey", author: "@arwinneil", },
-  { id: 6, selected: false, dateModified: "2022-12-30T17:25:20.379Z", img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6", title: "Basketball", author: "@tjdragotta", },
-  { id: 7, selected: false, dateModified: "2022-11-20T19:45:20.379Z", img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f", title: "Fern", author: "@katie_wasserman", },
-  { id: 8, selected: false, dateModified: "2022-12-30T16:25:20.379Z", img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25", title: "Mushrooms", author: "@silverdalex", },
-  { id: 9, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af", title: "Tomato basil", author: "@shelleypauls", },
-  { id: 10, selected: false, dateModified: "2022-12-30T15:25:20.379Z", img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1", title: "Sea star", author: "@peterlaster", },
-  { id: 11, selected: false, dateModified: "2022-12-30T14:25:20.379Z", img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6", title: "Bike", author: "@southside_customs", },
-  { id: 12, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e", title: "Breakfast", author: "@bkristastucchio", },
-  { id: 13, selected: false, dateModified: "2021-12-30T13:25:20.379Z", img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3", title: "Concert crowd", author: "@silverdalex", },
-  { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
-];
-
 function TitlebarBelowImageList() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -135,8 +118,9 @@ function TitlebarBelowImageList() {
   if (isTablet) cols = 3;
   if (isMobile) cols = 2;
 
-  const [items, setItems] = useState(itemData);
-  const [importItems, setImportItems] = useState(importItemData);
+  const [items, setItems] = useState(structuredClone(itemData));
+  const [initialItems, seInitialItems] = useState(structuredClone(itemData));
+  const [importItems, setImportItems] = useState(structuredClone(itemData));
   const [gridMode, setGridMode] = useState(true);
   const [repo, setRepo] = useState<EnrichedRepository>();
   const [chApi, setChApi] = useState<ChApi>();
@@ -234,15 +218,15 @@ function TitlebarBelowImageList() {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex((item) => item.id === active.id);
-      const newIndex = items.findIndex((item) => item.id === over.id);
+      const oldIndex = items.findIndex((item: any) => item.id === active.id);
+      const newIndex = items.findIndex((item: any) => item.id === over.id);
 
       setItems(arrayMove(items, oldIndex, newIndex));
     }
   };
 
   const removeItem = (index: number) => {
-    const newItems = items.filter((_, i) => i !== index);
+    const newItems = items.filter((_: any, i: number) => i !== index);
     setItems(newItems);
   };
 
@@ -344,7 +328,7 @@ function TitlebarBelowImageList() {
               title="Import"
               onClick={() => {
                 const newItems = importItems.slice()
-                newItems.map(element => {
+                newItems.map((element: any) => {
                   element.selected = false
                   return element
                 })
@@ -366,7 +350,7 @@ function TitlebarBelowImageList() {
               title="Select all"
               onClick={() => {
                 const newItems = items.slice()
-                newItems.map(element => {
+                newItems.map((element: any) => {
                   element.selected = true
                   return element
                 })
@@ -382,7 +366,7 @@ function TitlebarBelowImageList() {
               title="Select none"
               onClick={() => {
                 const newItems = items.slice()
-                newItems.map(element => {
+                newItems.map((element: any) => {
                   element.selected = false
                   return element
                 })
@@ -402,7 +386,7 @@ function TitlebarBelowImageList() {
               title="Remove selected"
               size="small"
               onClick={() => {
-                setItems((prev) => prev.filter((item) => !item.selected))
+                setItems((prev: any) => prev.filter((item: any) => !item.selected))
               }}
             > 
               <DeleteOutline />
@@ -421,7 +405,7 @@ function TitlebarBelowImageList() {
               aria-label={`reset`}
               size="small"
               title="Reset"
-              onClick={() => setItems(itemData)}
+              onClick={() => setItems(structuredClone(itemData))}
             >
               <CachedOutlined />
             </IconButton>
@@ -438,42 +422,42 @@ function TitlebarBelowImageList() {
             >
               <ListSubheader>Sort By</ListSubheader>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a, b) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
+                setItems(items.slice().sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a, b) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
+                setItems(items.slice().sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a, b) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
+                setItems(items.slice().sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Author Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a, b) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
+                setItems(items.slice().sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Author Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
+                setItems(items.slice().sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Caption Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a, b) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
+                setItems(items.slice().sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
@@ -522,7 +506,7 @@ function TitlebarBelowImageList() {
                 modifiers={[restrictToWindowEdges, restrictToParentElement]}
               >
                 <SortableContext items={items} strategy={rectSortingStrategy}>
-                  {items.map((item, index) => (
+                  {items.map((item: any, index: number) => (
                     <SortableListItem
                       key={item.img}
                       id={item.id}
@@ -574,7 +558,7 @@ function TitlebarBelowImageList() {
                             title="Select"
                             onClick={() => {
                               const newItems = items.slice()
-                              const itemToUpdate = newItems.find((element) => element.id === item.id)
+                              const itemToUpdate = newItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
                                 itemToUpdate.selected = !itemToUpdate.selected
                                 setItems(newItems)
@@ -628,7 +612,7 @@ function TitlebarBelowImageList() {
                             title="Select"
                             onClick={() => {
                               const newItems = items.slice()
-                              const itemToUpdate = newItems.find((element) => element.id === item.id)
+                              const itemToUpdate = newItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
                                 itemToUpdate.selected = !itemToUpdate.selected
                                 setItems(newItems)
@@ -825,7 +809,7 @@ function TitlebarBelowImageList() {
                     title="Select all"
                     onClick={() => {
                       const newItems = importItems.slice()
-                      newItems.map(element => {
+                      newItems.map((element: any) => {
                         element.selected = true
                         return element
                       })
@@ -840,7 +824,7 @@ function TitlebarBelowImageList() {
                     title="Select none"
                     onClick={() => {
                       const newItems = importItems.slice()
-                      newItems.map(element => {
+                      newItems.map((element: any) => {
                         element.selected = false
                         return element
                       })
@@ -851,7 +835,7 @@ function TitlebarBelowImageList() {
                   </IconButton>
                 </Stack>
                 <ImageList cols={5} rowHeight={200}>
-                  {importItems.map((item) => (
+                  {importItems.map((item: any) => (
                     <ImageListItem
                       key={item.img}
                     >
@@ -873,7 +857,7 @@ function TitlebarBelowImageList() {
                             title="Select"
                             onClick={() => {
                               const newImportItems = importItems.slice()
-                              const itemToUpdate = newImportItems.find((element) => element.id === item.id)
+                              const itemToUpdate = newImportItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
                                 itemToUpdate.selected = !itemToUpdate.selected
                                 setImportItems(newImportItems)
@@ -899,7 +883,7 @@ function TitlebarBelowImageList() {
                 variant="contained"
                 onClick={() => {
                   setImportDrawerOpen(false)
-                  if (importItems.filter(item => item.selected).length === 0) {
+                  if (importItems.filter((item: any) => item.selected).length === 0) {
                     setCurrentAlert({
                       severity: "info",
                       message: "No media file selected for import"
@@ -908,9 +892,9 @@ function TitlebarBelowImageList() {
                   } else {
                     const newItems = items.slice()
                     setTimeout(() => {setItems(newItems.concat(
-                      importItems.filter(item => {
-                        return item.selected && items.filter(item2 => item2.id === item.id).length === 0
-                      }).map(item =>  { 
+                      importItems.filter((item: any) => {
+                        return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
+                      }).map((item: any) =>  { 
                         item.selected = false 
                         return item
                       })
