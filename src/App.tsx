@@ -405,7 +405,14 @@ function TitlebarBelowImageList() {
               aria-label={`reset`}
               size="small"
               title="Reset"
-              onClick={() => setItems(structuredClone(itemData))}
+              onClick={() => {
+                setItems(structuredClone(itemData))
+                setCurrentAlert({
+                  severity: "success",
+                  message: "Collection reset successfully!"
+                })
+                setTimeout(() => {handleSnackOpen()}, 500)
+              }}
             >
               <CachedOutlined />
             </IconButton>
@@ -595,9 +602,9 @@ function TitlebarBelowImageList() {
                     <TableRow>
                       <TableCell component="th" />
                       <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+                      <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
                       <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
                       <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
-                      <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -634,8 +641,6 @@ function TitlebarBelowImageList() {
                             loading="lazy"
                           />
                         </TableCell>
-                        <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
-                        <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
                         <TableCell align="left">
                           <IconButton
                             sx={{ color: "white" }}
@@ -654,6 +659,8 @@ function TitlebarBelowImageList() {
                             <DeleteOutline />
                           </IconButton>
                         </TableCell>
+                        <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
+                        <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
                       </SortableTableRow>
                     ))}
                   </TableBody>
