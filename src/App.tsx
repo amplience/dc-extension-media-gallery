@@ -905,18 +905,24 @@ function TitlebarBelowImageList() {
                     setTimeout(() => {handleSnackOpen()}, 500)
                   } else {
                     const newItems = items.slice()
-                    setTimeout(() => {setItems(newItems.concat(
-                      importItems.filter((item: any) => {
-                        return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
-                      }).map((item: any) =>  { 
-                        item.selected = false 
-                        return item
-                      })
-                    ))}, 500)
-                    setCurrentAlert({
-                      severity: "success",
-                      message: "Media files successful imported!"
+                    const newSelectedItems = importItems.filter((item: any) => {
+                      return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
+                    }).map((item: any) =>  { 
+                      item.selected = false 
+                      return item
                     })
+                    setTimeout(() => {setItems(newItems.concat(newSelectedItems))}, 500)
+                    if (newSelectedItems.length > 0) {
+                      setCurrentAlert({
+                        severity: "success",
+                        message: `${newSelectedItems.length} new media file${newSelectedItems.length > 1 ? 's' : ''} successful imported!`
+                      })
+                    } else {
+                      setCurrentAlert({
+                        severity: "info",
+                        message: `No new media file was imported`
+                      })
+                    }
                     setTimeout(() => {handleSnackOpen()}, 1000)
                   }
                 }}
