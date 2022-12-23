@@ -382,11 +382,18 @@ function TitlebarBelowImageList() {
               flexItem />
             <IconButton
               sx={{ color: "white" }}
-              aria-label={`delete selected`}
+              aria-label={`remove selected`}
               title="Remove selected"
               size="small"
               onClick={() => {
+                const itemsToDelete = items.filter((item: any) => item.selected)
+                const numChanges = itemsToDelete.length
                 setItems((prev: any) => prev.filter((item: any) => !item.selected))
+                setCurrentAlert({
+                  severity: "success",
+                  message: `${numChanges} item${numChanges > 1 ? 's' : ''} removed successfully!`
+                })
+                setTimeout(() => {handleSnackOpen()}, 500)
               }}
             > 
               <DeleteOutline />
