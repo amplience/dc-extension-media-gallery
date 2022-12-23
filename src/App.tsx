@@ -561,6 +561,7 @@ function TitlebarBelowImageList() {
 
             // Grid view
             <Stack direction={'row'}>
+            <Box sx={{flexGrow: 1}} />
             <ImageList cols={cols} gap={8}>
               <DndContext
                 sensors={sensors}
