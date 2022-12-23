@@ -112,10 +112,9 @@ function TitlebarBelowImageList() {
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
   const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
-  let cols = 8;
-  if (isXLarge) cols = 7;
-  if (isLarge) cols = 5;
-  if (isLarge) cols = 5;
+  let cols = 7;
+  if (isXLarge) cols = 5;
+  if (isLarge) cols = 4;
   if (isTablet) cols = 3;
   if (isMobile) cols = 2;
 
@@ -561,6 +560,7 @@ function TitlebarBelowImageList() {
           {gridMode ? (
 
             // Grid view
+            <Stack direction={'row'}>
             <ImageList cols={cols} gap={8}>
               <DndContext
                 sensors={sensors}
@@ -611,8 +611,8 @@ function TitlebarBelowImageList() {
                         <DeleteOutline />
                       </IconButton>
                       <ImageListItemBar
-                        title={item.title}
-                        subtitle={<span>by: {item.author}</span>}
+                        title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
+                        subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
                         position="below"
                         actionIcon={
                           <IconButton
@@ -640,6 +640,8 @@ function TitlebarBelowImageList() {
                 </SortableContext>
               </DndContext>
             </ImageList>
+            <Box sx={{flexGrow: 1}} />
+            </Stack>
           ) : (
             // List view
             <DndContext
