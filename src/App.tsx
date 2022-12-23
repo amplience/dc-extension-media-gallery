@@ -139,37 +139,63 @@ function TitlebarBelowImageList() {
     severity: "success"
   })
 
+  /**
+   * Opening alert
+   */
   const handleSnackOpen = () => {
     setSnackOpen(true);
   };
 
+  /**
+   * Closing alert
+   * @param event 
+   * @param reason 
+   * @returns 
+   */
   const handleSnackClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setSnackOpen(false);
   };
 
+  /**
+   * Opening sort menu
+   * @param event 
+   */
   const handleSortClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+  /**
+   * Opening fullscreen view
+   * @param media 
+   */
   const handleFullScreenView = (media: any) => {
     setCurrentMedia(media)
     setFullscreenView(true)
   }
 
+  /**
+   * Opening media details view
+   * @param media 
+   */
   const handleDetailView = (media: any) => {
     setCurrentMedia(media)
     setTempMedia(media)
     setDetailDrawerOpen(true)
   }
 
+  /**
+   * Closing sort menu
+   */
   const handleSortClose = () => {
     setAnchorEl(null);
   };
 
+  /**
+   * 
+   */
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -181,6 +207,10 @@ function TitlebarBelowImageList() {
     })
   );
 
+  /**
+   * 
+   * @param id 
+   */
   const getEntries = async (id: string) => {
     if (chApi && repo) {
       const assets = await chApi.getExifByFolder(repo.id, id);
@@ -196,6 +226,9 @@ function TitlebarBelowImageList() {
     }
   };
 
+  /**
+   * 
+   */
   useEffect(() => {
     (async () => {
       const { clientId, clientSecret } = credentials;
@@ -215,6 +248,10 @@ function TitlebarBelowImageList() {
     })();
   }, []);
 
+  /**
+   * 
+   * @param event 
+   */
   const dragEnd = (event: any) => {
     const { active, over } = event;
 
@@ -226,6 +263,10 @@ function TitlebarBelowImageList() {
     }
   };
 
+  /**
+   * 
+   * @param index 
+   */
   const removeItem = (index: number) => {
     const newItems = items.filter((_: any, i: number) => i !== index);
     setItems(newItems);
@@ -276,20 +317,20 @@ function TitlebarBelowImageList() {
                   background: 'rgba(255, 255, 255, 0.6)' 
                 }} 
                 >
-                  <Typography variant="h6" component="h6">Media Details</Typography>
+                  <Typography variant="subtitle2">Media Details</Typography>
                   <Table size="small">
                     <TableBody>
                       <TableRow>
-                        <TableCell>Date modified</TableCell>
-                        <TableCell>{new Date(currentMedia.dateModified).toLocaleString()}</TableCell>
+                        <TableCell sx={{p: '1px'}}><Typography variant="caption">Date modified</Typography></TableCell>
+                        <TableCell sx={{p: '1px'}}><Typography variant="caption">{new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Author</TableCell>
-                        <TableCell>{currentMedia.author}</TableCell>
+                        <TableCell sx={{p: '1px'}}><Typography variant="caption">Author</Typography></TableCell>
+                        <TableCell sx={{p: '1px'}}><Typography variant="caption">{currentMedia.author}</Typography></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Caption</TableCell>
-                        <TableCell>{currentMedia.title}</TableCell>
+                        <TableCell sx={{p: '1px'}}><Typography variant="caption">Caption</Typography></TableCell>
+                        <TableCell sx={{p: '1px'}}><Typography variant="caption">{currentMedia.title}</Typography></TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
