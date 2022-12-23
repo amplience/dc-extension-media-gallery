@@ -327,7 +327,7 @@ function TitlebarBelowImageList() {
               size="small"
               title="Import"
               onClick={() => {
-                const newItems = importItems.slice()
+                const newItems = structuredClone(importItems)
                 newItems.map((element: any) => {
                   element.selected = false
                   return element
@@ -349,7 +349,7 @@ function TitlebarBelowImageList() {
               aria-label={`select all`}
               title="Select all"
               onClick={() => {
-                const newItems = items.slice()
+                const newItems = structuredClone(items)
                 newItems.map((element: any) => {
                   element.selected = true
                   return element
@@ -365,7 +365,7 @@ function TitlebarBelowImageList() {
               aria-label={`select none`}
               title="Select none"
               onClick={() => {
-                const newItems = items.slice()
+                const newItems = structuredClone(items)
                 newItems.map((element: any) => {
                   element.selected = false
                   return element
@@ -388,11 +388,18 @@ function TitlebarBelowImageList() {
               onClick={() => {
                 const itemsToDelete = items.filter((item: any) => item.selected)
                 const numChanges = itemsToDelete.length
-                setItems((prev: any) => prev.filter((item: any) => !item.selected))
-                setCurrentAlert({
-                  severity: "success",
-                  message: `${numChanges} item${numChanges > 1 ? 's' : ''} removed successfully!`
-                })
+                if (numChanges > 0) {
+                  setItems((prev: any) => prev.filter((item: any) => !item.selected))
+                  setCurrentAlert({
+                    severity: "success",
+                    message: `${numChanges} item${numChanges > 1 ? 's' : ''} removed successfully!`
+                  })
+                } else {
+                  setCurrentAlert({
+                    severity: "info",
+                    message: `No item selected`
+                  })
+                }
                 setTimeout(() => {handleSnackOpen()}, 500)
               }}
             > 
@@ -436,42 +443,42 @@ function TitlebarBelowImageList() {
             >
               <ListSubheader>Sort By</ListSubheader>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
+                setItems(structuredClone(items).sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
+                setItems(structuredClone(items).sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
+                setItems(structuredClone(items).sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Author Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
+                setItems(structuredClone(items).sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Author Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
+                setItems(structuredClone(items).sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                 <ListItemText>Caption Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
-                setItems(items.slice().sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
+                setItems(structuredClone(items).sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
                 handleSortClose()
               }}>
                 <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
@@ -904,14 +911,14 @@ function TitlebarBelowImageList() {
                     })
                     setTimeout(() => {handleSnackOpen()}, 500)
                   } else {
-                    const newItems = items.slice()
+                    const newItems = structuredClone(items)
                     const newSelectedItems = importItems.filter((item: any) => {
                       return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
                     }).map((item: any) =>  { 
                       item.selected = false 
                       return item
                     })
-                    setTimeout(() => {setItems(newItems.concat(newSelectedItems))}, 500)
+                    setTimeout(() => {setItems(newItems.concat(structuredClone(newSelectedItems)))}, 500)
                     if (newSelectedItems.length > 0) {
                       setCurrentAlert({
                         severity: "success",
