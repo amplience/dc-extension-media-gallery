@@ -614,6 +614,7 @@ function TitlebarBelowImageList() {
                       <ImageListItemBar
                         title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
                         subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
+                        sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
                         position="below"
                         actionIcon={
                           <IconButton
@@ -671,7 +672,9 @@ function TitlebarBelowImageList() {
                       <SortableTableRow
                         key={item.img}
                         id={item.id}>
-                        <TableCell>
+                        <TableCell
+                          sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                        >
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`select`}
@@ -690,7 +693,9 @@ function TitlebarBelowImageList() {
                             }
                           </IconButton>
                         </TableCell>
-                        <TableCell>
+                        <TableCell
+                          sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                        >
                           <img
                             src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
                             srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
@@ -700,7 +705,9 @@ function TitlebarBelowImageList() {
                             loading="lazy"
                           />
                         </TableCell>
-                        <TableCell align="left">
+                        <TableCell align="left"
+                          sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                        >
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`edit`}
@@ -718,8 +725,8 @@ function TitlebarBelowImageList() {
                             <DeleteOutline />
                           </IconButton>
                         </TableCell>
-                        <TableCell sx={{ color: "white" }} align="left">{item.title}</TableCell>
-                        <TableCell sx={{ color: "white" }} align="left">{item.author}</TableCell>
+                        <TableCell sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} align="left">{item.title}</TableCell>
+                        <TableCell sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} align="left">{item.author}</TableCell>
                       </SortableTableRow>
                     ))}
                   </TableBody>
