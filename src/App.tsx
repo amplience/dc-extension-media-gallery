@@ -316,20 +316,20 @@ function TitlebarBelowImageList() {
                   background: 'rgba(255, 255, 255, 0.6)' 
                 }} 
                 >
-                  <Typography variant="subtitle2">Media Details</Typography>
+                  <Typography variant="subtitle1">Media Details</Typography>
                   <Table size="small">
                     <TableBody>
                       <TableRow>
-                        <TableCell sx={{p: '1px'}}><Typography variant="caption">Date modified</Typography></TableCell>
-                        <TableCell sx={{p: '1px'}}><Typography variant="caption">{new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
+                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">Date modified</Typography></TableCell>
+                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">{new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{p: '1px'}}><Typography variant="caption">Author</Typography></TableCell>
-                        <TableCell sx={{p: '1px'}}><Typography variant="caption">{currentMedia.author}</Typography></TableCell>
+                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">Author</Typography></TableCell>
+                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">{currentMedia.author}</Typography></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell sx={{p: '1px'}}><Typography variant="caption">Caption</Typography></TableCell>
-                        <TableCell sx={{p: '1px'}}><Typography variant="caption">{currentMedia.title}</Typography></TableCell>
+                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">Caption</Typography></TableCell>
+                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">{currentMedia.title}</Typography></TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
