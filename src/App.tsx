@@ -1060,7 +1060,7 @@ function MediaGalleryApp() {
                           //     }
                           //   </IconButton>
                           // }
-                          actionPosition="left"
+                          // actionPosition="left"
                         />
                       </SortableListItem>
                     ))}
