@@ -37,10 +37,12 @@
   }
 }
 
-.dragHandle:focus, .gridItem:focus {
+/*
+  .gridItem:focus {
   outline: none !important;
   outline-offset: none !important;
-}
+} 
+*/
 
 .gridItem {
   width: 210px
