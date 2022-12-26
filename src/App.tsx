@@ -1298,7 +1298,7 @@ function MediaGalleryApp() {
                 onClick={() => {
                   // TODO: move to function
                   setDetailDrawerOpen(false)
-                  setCurrentMedia(tempMedia)
+                  setCurrentMedia(tempMedia) // TODO: not working
                   setCurrentAlert({
                     severity: "success",
                     message: "Media details successfully saved!"
