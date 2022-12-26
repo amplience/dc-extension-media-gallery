@@ -1003,8 +1003,8 @@ function TitlebarBelowImageList() {
       {/* Snack Bar for alerts */}
       <Snackbar 
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
+          vertical: "top",
+          horizontal: "left"
         }}
         open={snackOpen} 
         autoHideDuration={3000} 
@@ -1025,7 +1025,7 @@ function TitlebarBelowImageList() {
  * @returns 
  */
 function SlideTransition(props: SlideProps) {
-  return <Slide {...props} direction="up" />;
+  return <Slide {...props} direction="down" />;
 }
 
 /**
