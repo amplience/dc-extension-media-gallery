@@ -313,7 +313,7 @@ function TitlebarBelowImageList() {
                   left: 16, 
                   minWidth: '450px', 
                   borderRadius: 1, 
-                  background: 'rgba(255, 255, 255, 0.6)' 
+                  background: 'rgba(255, 255, 255, 0.4)' 
                 }} 
                 >
                   <Typography variant="subtitle1">Media Details</Typography>
