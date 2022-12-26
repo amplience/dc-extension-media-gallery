@@ -19,7 +19,14 @@ export default function SortableTableRow(props: any) {
   };
   
   return (
-    <TableRow ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <TableRow ref={setNodeRef} 
+      sx={{'&:focus': {
+        border: "1px blue solid",
+        outline: "1px white solid",
+        outlineOffset: '1px',
+        borderRadius: '4px'
+      }}}   
+    style={style} {...listeners} {...attributes}>
       {props.children}
     </TableRow>
   );

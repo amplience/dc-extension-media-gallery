@@ -1087,21 +1087,22 @@ function MediaGalleryApp() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell component="th" />
-                      <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
-                      <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
-                      <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
-                      <TableCell sx={{ color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
+                      <TableCell sx={{ borderBottom: "none" }} component="th" />
+                      <TableCell sx={{ borderBottom: "none", color: "white", fontWeight: "bold" }} component="th">Media</TableCell>
+                      <TableCell sx={{ borderBottom: "none", color: "white", fontWeight: "bold" }} component="th" align="left">Actions</TableCell>
+                      <TableCell sx={{ borderBottom: "none", color: "white", fontWeight: "bold" }} component="th" align="left">Title</TableCell>
+                      <TableCell sx={{ borderBottom: "none", color: "white", fontWeight: "bold" }} component="th" align="left">Author</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {items.map((item: any, index: number) => (
                       <SortableTableRow
                         key={item.img}
-                        id={item.id}>
+                        id={item.id}
+                      >
                         <TableCell
                           id={item.id}
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
+                          sx={{borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <IconButton
                             sx={{ color: "white" }}
@@ -1124,7 +1125,7 @@ function MediaGalleryApp() {
                         </TableCell>
                         <TableCell
                           id={item.id}
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
+                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <img
                             src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
@@ -1138,7 +1139,7 @@ function MediaGalleryApp() {
                         </TableCell>
                         <TableCell align="left"
                           id={item.id}
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
+                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <IconButton
                             sx={{ color: "white" }}
@@ -1166,13 +1167,13 @@ function MediaGalleryApp() {
                           </IconButton>
                         </TableCell>
                         <TableCell
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
+                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
                           id={item.id}
                           align="left">
                           {item.title}
                         </TableCell>
                         <TableCell
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
+                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
                           id={item.id}
                           align="left">
                           {item.author}
