@@ -593,7 +593,7 @@ function MediaGalleryApp() {
             // TODO: move to components
             <Stack direction={'row'}>
             <Box sx={{flexGrow: 1}} />
-            <ImageList cols={cols} gap={8}>
+            <ImageList cols={cols} gap={8} sx={{p: '2px'}}>
               <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
