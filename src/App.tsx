@@ -92,8 +92,17 @@ import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
 
+interface MediaItem {
+  id: number;
+  selected: boolean;
+  dateModified: string;
+  img: string;
+  title: string;
+  author: string;
+}
+
 // TODO: get assets from Content Hub
-const itemData = [
+const itemData: MediaItem[] = [
   { id: 1, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
   { id: 2, selected: false, dateModified: "2022-11-20T19:25:20.379Z", img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
   { id: 3, selected: false, dateModified: "2022-11-20T19:15:20.379Z", img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c", title: "Coffee", author: "@nolanissac", },
@@ -130,8 +139,8 @@ function MediaGalleryApp() {
   const [dragging, setDragging] = useState(false)
   const [fullscreenView, setFullscreenView] = useState(false)
   const [contextMedia, setContextMedia] = useState<any | null>(null)
-  const [currentMedia, setCurrentMedia] = useState(itemData[0])
-  const [tempMedia, setTempMedia] = useState(itemData[0])
+  const [currentMedia, setCurrentMedia] = useState<MediaItem | null>(null)
+  const [tempMedia, setTempMedia] = useState<MediaItem | null>(null)
   const [snackOpen, setSnackOpen] = useState(false);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false)
   const [currentAlert, setCurrentAlert] = useState({
@@ -166,6 +175,7 @@ function MediaGalleryApp() {
     if (event.target instanceof HTMLElement) {
       if (event.target.id) {
         const filteredItems = items.filter((element: any) => ((event.target as HTMLElement).id === element.id))
+        console.log(filteredItems)
         if (filteredItems.length > 0) {
           setContextMedia(filteredItems[0])
         }
@@ -239,7 +249,7 @@ function MediaGalleryApp() {
    */
   const handleDetailView = (media: any) => {
     setCurrentMedia(media)
-    setTempMedia(media)
+    setTempMedia(structuredClone(media))
     setDetailDrawerOpen(true)
   }
 
@@ -297,21 +307,22 @@ function MediaGalleryApp() {
    */
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === 'i') {
-        handleImport()
-      } else if (event.key.toLowerCase() === 'a') {
-        handleSelectAll()
-      } else if (event.key.toLowerCase() === 'n') {
-        handleSelectNone()
-      } else if (event.key.toLowerCase() === 'z') {
-        handleResetItems()
-      } else if (event.key.toLowerCase() === 'r') {
-        handleRemoveSelected()
-      } else if (event.key.toLowerCase() === 'g') {
-        setGridMode(true)
-      } else if (event.key.toLowerCase() === 'l') {
-        setGridMode(false)
-      } else if (event.key === 'ArrowRight' && !dragging) {
+      // if (event.key.toLowerCase() === 'i') {
+      //   handleImport()
+      // } else if (event.key.toLowerCase() === 'a') {
+      //   handleSelectAll()
+      // } else if (event.key.toLowerCase() === 'n') {
+      //   handleSelectNone()
+      // } else if (event.key.toLowerCase() === 'z') {
+      //   handleResetItems()
+      // } else if (event.key.toLowerCase() === 'r') {
+      //   handleRemoveSelected()
+      // } else if (event.key.toLowerCase() === 'g') {
+      //   setGridMode(true)
+      // } else if (event.key.toLowerCase() === 'l') {
+      //   setGridMode(false)
+      // } else 
+      if (event.key === 'ArrowRight' && !dragging) {
         const element: Element | null= document.activeElement
         if (element) {
           const parent: HTMLElement | null= element.parentElement
@@ -573,9 +584,9 @@ function MediaGalleryApp() {
         <Box sx={{ p: 4 }}>
           <Box sx={{ position: 'relative' }}>
             <img
-              src={`${currentMedia.img}??w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${currentMedia.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={currentMedia.title}
+              src={`${currentMedia?.img}??w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${currentMedia?.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={currentMedia?.title}
               onClick={() => setFullscreenView(false)}
               loading="lazy"
               width={'100%'}
@@ -609,15 +620,15 @@ function MediaGalleryApp() {
                   <TableBody>
                     <TableRow>
                       <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">Date modified</Typography></TableCell>
-                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia?.dateModified && new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">Author</Typography></TableCell>
-                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia.author}</Typography></TableCell>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia?.author}</Typography></TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">Caption</Typography></TableCell>
-                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia.title}</Typography></TableCell>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia?.title}</Typography></TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -1217,9 +1228,9 @@ function MediaGalleryApp() {
               </Box>
             </Stack>
             <img
-              src={`${currentMedia.img}?w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${currentMedia.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-              alt={currentMedia.title}
+              src={`${currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format`}
+              srcSet={`${currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              alt={currentMedia?.title}
               title="Click to zoom"
               onClick={() => { handleFullScreenView(currentMedia) }}
               loading="lazy"
@@ -1241,13 +1252,13 @@ function MediaGalleryApp() {
                   </InputAdornment>
                 )
               }}
-              defaultValue={new Date(currentMedia.dateModified).toLocaleString()}
+              defaultValue={currentMedia?.dateModified && new Date(currentMedia.dateModified).toLocaleString()}
             />
             <TextField
               id="author"
               label="Author"
               variant="standard"
-              defaultValue={currentMedia.author}
+              defaultValue={currentMedia?.author}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -1256,7 +1267,7 @@ function MediaGalleryApp() {
                 )
               }}
               onChange={(event) => {
-                tempMedia.author = event.target.value
+                tempMedia && (tempMedia.author = event.target.value)
               }}
             />
             <TextField
@@ -1265,7 +1276,7 @@ function MediaGalleryApp() {
               id="caption"
               label="Caption"
               variant="standard"
-              defaultValue={currentMedia.title}
+              defaultValue={currentMedia?.title}
               InputProps={{
                 startAdornment: (
                   <InputAdornment style={{ display: 'flex', flexDirection: 'column-reverse' }} position="start" >
@@ -1274,7 +1285,7 @@ function MediaGalleryApp() {
                 )
               }}
               onChange={(event) => {
-                tempMedia.title = event.target.value
+                tempMedia && (tempMedia.title = event.target.value)
               }}
             />
             <Stack sx={{ pb: 4 }} direction={"row"}>
