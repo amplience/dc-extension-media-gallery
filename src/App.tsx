@@ -397,7 +397,7 @@ function MediaGalleryApp() {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [dragging, cols]);
+  }, [dragging, cols, gridMode]);
 
   /** 
    * Getting folders from Content Hub
