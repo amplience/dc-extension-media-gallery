@@ -320,6 +320,15 @@ function MediaGalleryApp() {
     setItems(newItems);
   };
 
+  const handleSelectAll = () => {
+    const newItems = structuredClone(items)
+    newItems.map((element: any) => {
+      element.selected = true
+      return element
+    })
+    setItems(newItems)
+  }
+
   return (
     <ExtensionContextProvider>
 
@@ -443,15 +452,7 @@ function MediaGalleryApp() {
               size="small"
               aria-label={`select all`}
               title="Select all"
-              onClick={() => {
-                // TODO: move to function
-                const newItems = structuredClone(items)
-                newItems.map((element: any) => {
-                  element.selected = true
-                  return element
-                })
-                setItems(newItems)
-              }}
+              onClick={handleSelectAll}
             >
               <GridViewSharp />
             </IconButton>
@@ -650,7 +651,10 @@ function MediaGalleryApp() {
             </>
           }
           <MenuItem onClick={handleContextClose}>Import</MenuItem>
-          <MenuItem onClick={handleContextClose}>Select all</MenuItem>
+          <MenuItem onClick={() => {
+            handleContextClose()
+            handleSelectAll()
+          }}>Select all</MenuItem>
           <MenuItem onClick={handleContextClose}>Select none</MenuItem>
           <MenuItem onClick={handleContextClose}>Remove selected</MenuItem>
           <MenuItem onClick={handleContextClose}>Sort by</MenuItem>
