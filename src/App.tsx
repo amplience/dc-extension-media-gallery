@@ -654,6 +654,9 @@ function MediaGalleryApp() {
             {
               contextMedia != null &&
               <>
+                <ListSubheader style={{width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                  {contextMedia.title}
+                </ListSubheader>
                 <MenuItem onClick={() => {
                   handleContextClose()
                   handleFullScreenView(contextMedia)
@@ -684,6 +687,7 @@ function MediaGalleryApp() {
                 <Divider />
               </>
             }
+            <ListSubheader>Global</ListSubheader>
             <MenuItem onClick={() => {
               handleContextClose()
               handleImport()
