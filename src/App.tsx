@@ -391,6 +391,46 @@ function MediaGalleryApp() {
             }
           }
         }
+      } else if (event.key === 'ArrowDown' && !dragging && !gridMode) {
+        const element: Element | null= document.activeElement
+        if (element) {
+          const parent: HTMLElement | null= element.parentElement
+          if (parent) {
+            const children: HTMLCollection = parent.children
+            if (children) {
+              let found = -1
+              for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) {
+                  found = i
+                  break
+                }
+              }
+              if (found < children.length - 1) {
+                (children.item(found + 1) as HTMLElement).focus()
+              }
+            }
+          }
+        }
+      } else if (event.key === 'ArrowUp' && !dragging && !gridMode) {
+        const element: Element | null= document.activeElement
+        if (element) {
+          const parent: HTMLElement | null= element.parentElement
+          if (parent) {
+            const children: HTMLCollection = parent.children
+            if (children) {
+              let found = -1
+              for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) {
+                  found = i
+                  break
+                }
+              }
+              if (found -1 >= 0) {
+                (children.item(found - 1) as HTMLElement).focus()
+              }
+            }
+          }
+        }
       }
     };
     document.addEventListener('keydown', keyDownHandler);
