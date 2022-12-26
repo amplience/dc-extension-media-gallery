@@ -206,12 +206,15 @@ function MediaGalleryApp() {
       activationConstraint: {
         distance: 8,
       },
+    }),
+    useSensor(KeyboardSensor, {
+      keyboardCodes: {
+        start: ['Enter'],
+        cancel: ['Escape'],
+        end: ['Enter']
+      },
+      coordinateGetter: sortableKeyboardCoordinates,
     })
-    // TODO: disabling keyboard sensor for now as it prevents image icon buttons to work
-    // ,
-    // useSensor(KeyboardSensor, {
-    //   coordinateGetter: sortableKeyboardCoordinates,
-    // })
   );
 
   /**
