@@ -351,7 +351,7 @@ function MediaGalleryApp() {
             }
           }
         }
-      } else if (event.key === 'ArrowDown' && !dragging) {
+      } else if (event.key === 'ArrowDown' && !dragging && gridMode) {
         const element: Element | null= document.activeElement
         if (element) {
           const parent: HTMLElement | null= element.parentElement
@@ -371,7 +371,7 @@ function MediaGalleryApp() {
             }
           }
         }
-      } else if (event.key === 'ArrowUp' && !dragging) {
+      } else if (event.key === 'ArrowUp' && !dragging && gridMode) {
         const element: Element | null= document.activeElement
         if (element) {
           const parent: HTMLElement | null= element.parentElement
