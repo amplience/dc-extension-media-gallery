@@ -160,13 +160,13 @@ function MediaGalleryApp() {
     setContextMenu(
       contextMenu === null
         ? {
-            mouseX: event.clientX + 2,
-            mouseY: event.clientY - 6,
-          }
+          mouseX: event.clientX + 2,
+          mouseY: event.clientY - 6,
+        }
         : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
-          // Other native context menus might behave different.
-          // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
-          null,
+        // Other native context menus might behave different.
+        // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
+        null,
     );
   };
 
@@ -363,7 +363,7 @@ function MediaGalleryApp() {
         message: `No item selected`
       })
     }
-    setTimeout(() => {handleSnackOpen()}, 500)
+    setTimeout(() => { handleSnackOpen() }, 500)
   }
 
   const handleResetItems = () => {
@@ -372,7 +372,7 @@ function MediaGalleryApp() {
       severity: "success",
       message: "Collection reset successfully!"
     })
-    setTimeout(() => {handleSnackOpen()}, 500)
+    setTimeout(() => { handleSnackOpen() }, 500)
   }
 
   const handleImport = () => {
@@ -413,7 +413,7 @@ function MediaGalleryApp() {
               aria-label={`close import drawer`}
               size="small"
               sx={{ color: 'white', position: 'absolute', top: 8, left: 8 }}
-              onClick={() => setInfoPanelOpen(!infoPanelOpen) }
+              onClick={() => setInfoPanelOpen(!infoPanelOpen)}
             >
               <InfoOutlined />
             </IconButton>
@@ -423,33 +423,33 @@ function MediaGalleryApp() {
             {
               infoPanelOpen &&
               <Box
-                sx={{ 
-                  position: 'absolute', 
-                  top: 50, 
-                  p: 2, 
-                  left: 16, 
-                  minWidth: '450px', 
-                  borderRadius: 1, 
-                  background: 'rgba(255, 255, 255, 0.4)' 
-                }} 
-                >
-                  <Typography variant="subtitle1">Media Details</Typography>
-                  <Table size="small">
-                    <TableBody>
-                      <TableRow>
-                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">Date modified</Typography></TableCell>
-                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">{new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">Author</Typography></TableCell>
-                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">{currentMedia.author}</Typography></TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">Caption</Typography></TableCell>
-                        <TableCell sx={{p: 0, borderBottom: "none"}}><Typography variant="caption">{currentMedia.title}</Typography></TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+                sx={{
+                  position: 'absolute',
+                  top: 50,
+                  p: 2,
+                  left: 16,
+                  minWidth: '450px',
+                  borderRadius: 1,
+                  background: 'rgba(255, 255, 255, 0.4)'
+                }}
+              >
+                <Typography variant="subtitle1">Media Details</Typography>
+                <Table size="small">
+                  <TableBody>
+                    <TableRow>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">Date modified</Typography></TableCell>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{new Date(currentMedia.dateModified).toLocaleString()}</Typography></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">Author</Typography></TableCell>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia.author}</Typography></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">Caption</Typography></TableCell>
+                      <TableCell sx={{ p: 0, borderBottom: "none" }}><Typography variant="caption">{currentMedia.title}</Typography></TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </Box>
             }
             <IconButton
@@ -461,8 +461,8 @@ function MediaGalleryApp() {
               <CloseOutlined />
             </IconButton>
           </Box>
-          <Box 
-            sx={{height: '1000%'}}
+          <Box
+            sx={{ height: '1000%' }}
             onClick={() => setFullscreenView(false)}
           />
         </Box>
@@ -523,7 +523,7 @@ function MediaGalleryApp() {
               title="Remove selected"
               size="small"
               onClick={handleRemoveSelected}
-            > 
+            >
               <Badge badgeContent={items.filter((item: any) => item.selected).length} color="secondary">
                 <DeleteOutline />
               </Badge>
@@ -558,55 +558,57 @@ function MediaGalleryApp() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <ListSubheader>Sort By</ListSubheader>
-              <MenuItem onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(items).sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
-                handleSortClose()
-              }}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
-                <ListItemText>Date Modified Asc</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(items).sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
-                handleSortClose()
-              }}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
-                <ListItemText>Date Modified Desc</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(items).sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
-                handleSortClose()
-              }}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
-                <ListItemText>Author Asc</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(items).sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
-                handleSortClose()
-              }}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
-                <ListItemText>Author Desc</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(items).sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
-                handleSortClose()
-              }}>
-                <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
-                <ListItemText>Caption Asc</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(items).sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
-                handleSortClose()
-              }}>
-                <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
-                <ListItemText>Caption Desc</ListItemText>
-              </MenuItem>
+              <MenuList sx={{ width: '250px' }} dense>
+                <ListSubheader>Sort By</ListSubheader>
+                <MenuItem onClick={() => {
+                  // TODO: move to function
+                  setItems(structuredClone(items).sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
+                  handleSortClose()
+                }}>
+                  <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
+                  <ListItemText>Date Modified Asc</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  // TODO: move to function
+                  setItems(structuredClone(items).sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
+                  handleSortClose()
+                }}>
+                  <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
+                  <ListItemText>Date Modified Desc</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  // TODO: move to function
+                  setItems(structuredClone(items).sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
+                  handleSortClose()
+                }}>
+                  <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
+                  <ListItemText>Author Asc</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  // TODO: move to function
+                  setItems(structuredClone(items).sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
+                  handleSortClose()
+                }}>
+                  <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
+                  <ListItemText>Author Desc</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  // TODO: move to function
+                  setItems(structuredClone(items).sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
+                  handleSortClose()
+                }}>
+                  <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
+                  <ListItemText>Caption Asc</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  // TODO: move to function
+                  setItems(structuredClone(items).sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
+                  handleSortClose()
+                }}>
+                  <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
+                  <ListItemText>Caption Desc</ListItemText>
+                </MenuItem>
+              </MenuList>
             </Menu>
             <Divider
               orientation="vertical"
@@ -648,111 +650,115 @@ function MediaGalleryApp() {
               : undefined
           }
         >
-          <MenuList sx={{width: '300px'}} dense>
-          {
-            contextMedia != null &&
-            <>
-              <MenuItem onClick={() => {
-                handleContextClose()
-                handleFullScreenView(contextMedia)
-              }}>
-                <ListItemIcon>
-                  <VisibilityOutlined fontSize="small" />
-                </ListItemIcon> 
-                <ListItemText>View</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                handleContextClose()
-                handleDetailView(contextMedia)
-              }}>
-                <ListItemIcon>
-                  <EditOutlined fontSize="small" />
-                </ListItemIcon> 
-                <ListItemText>Edit</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={() => {
-                handleContextClose()
-                removeItem(contextMedia.id)
-              }}>
-                <ListItemIcon>
-                  <DeleteOutline fontSize="small" />
-                </ListItemIcon> 
-                <ListItemText>Remove</ListItemText>
-              </MenuItem>
-              <Divider/>
-            </>
-          }
-          <MenuItem onClick={() => {
-            handleContextClose()
-            handleImport()
-          }}>
-            <ListItemIcon>
-              <AddPhotoAlternateOutlined fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Import</ListItemText>
-          </MenuItem>
-          <Divider/>
-          <MenuItem onClick={() => {
-            handleContextClose()
-            handleSelectAll()
-          }}>
-            <ListItemIcon>
-              <GridViewSharp fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Select all</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={() => {
-            handleContextClose()
-            handleSelectNone()
-          }}>
-            <ListItemIcon>
-              <GridViewOutlined fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Select none</ListItemText>
-          </MenuItem>
-          <Divider/>
-          <MenuItem onClick={() => {
-            handleContextClose()
-            handleRemoveSelected()
-          }}>
-            <ListItemIcon>
-              <DeleteOutline fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Remove selected ({items.filter((item: any) => item.selected).length})</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={(event) => {
-            handleSortClick(event)
-            handleContextClose()
-          }}>
-            <ListItemIcon>
-              <SortOutlined fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Sort by</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={() => {
-            handleContextClose()
-            handleResetItems()
-          }}>
-            <ListItemIcon>
-              <CachedOutlined fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Reset</ListItemText>
-          </MenuItem>
-          <Divider/>
-          <MenuItem onClick={() => {
-            handleContextClose()
-            gridMode ? setGridMode(false) : setGridMode(true)
-          }}>
-            <ListItemIcon>
-              { gridMode ? <ViewHeadlineOutlined fontSize="small" /> : <AppsOutlined fontSize="small" />}
-            </ListItemIcon>
-            <ListItemText>{ gridMode ? 'List view' : 'Grid view'}</ListItemText>
-          </MenuItem>
+          <MenuList sx={{ width: '300px' }} dense>
+            {
+              contextMedia != null &&
+              <>
+                <MenuItem onClick={() => {
+                  handleContextClose()
+                  handleFullScreenView(contextMedia)
+                }}>
+                  <ListItemIcon>
+                    <VisibilityOutlined fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>View</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  handleContextClose()
+                  handleDetailView(contextMedia)
+                }}>
+                  <ListItemIcon>
+                    <EditOutlined fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Edit</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  handleContextClose()
+                  removeItem(contextMedia.id)
+                }}>
+                  <ListItemIcon>
+                    <DeleteOutline fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Remove</ListItemText>
+                </MenuItem>
+                <Divider />
+              </>
+            }
+            <MenuItem onClick={() => {
+              handleContextClose()
+              handleImport()
+            }}>
+              <ListItemIcon>
+                <AddPhotoAlternateOutlined fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Import</ListItemText>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={() => {
+              handleContextClose()
+              handleSelectAll()
+            }}>
+              <ListItemIcon>
+                <GridViewSharp fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Select all</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => {
+              handleContextClose()
+              handleSelectNone()
+            }}>
+              <ListItemIcon>
+                <GridViewOutlined fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Select none</ListItemText>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={() => {
+              handleContextClose()
+              handleRemoveSelected()
+            }}>
+              <ListItemIcon>
+                <DeleteOutline fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Badge badgeContent={items.filter((item: any) => item.selected).length} color="secondary">
+                  Remove selected<Box style={{width: '10px'}} />
+                </Badge>
+              </ListItemText>
+            </MenuItem>
+            <MenuItem onClick={(event) => {
+              handleSortClick(event)
+              handleContextClose()
+            }}>
+              <ListItemIcon>
+                <SortOutlined fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Sort by</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => {
+              handleContextClose()
+              handleResetItems()
+            }}>
+              <ListItemIcon>
+                <CachedOutlined fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Reset</ListItemText>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={() => {
+              handleContextClose()
+              gridMode ? setGridMode(false) : setGridMode(true)
+            }}>
+              <ListItemIcon>
+                {gridMode ? <ViewHeadlineOutlined fontSize="small" /> : <AppsOutlined fontSize="small" />}
+              </ListItemIcon>
+              <ListItemText>{gridMode ? 'List view' : 'Grid view'}</ListItemText>
+            </MenuItem>
           </MenuList>
         </Menu>
 
         {/* Main view */}
-        <Box 
+        <Box
           sx={{ w: '100%', pr: 2, pl: 2 }}
           onContextMenu={handleContextMenu}
         >
@@ -761,60 +767,60 @@ function MediaGalleryApp() {
             // Grid view
             // TODO: move to components
             <Stack direction={'row'}>
-            <Box sx={{flexGrow: 1}} />
-            <ImageList cols={cols} gap={8} sx={{p: '2px'}}>
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={dragEnd}
-                modifiers={[restrictToWindowEdges, restrictToParentElement]}
-              >
-                <SortableContext items={items} strategy={rectSortingStrategy}>
-                  {items.map((item: any, index: number) => (
-                    <SortableListItem
-                      key={item.img}
-                      id={item.id}
-                    >
-                      <Box style={{position: "relative" }}>
-                        <img
-                          src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
-                          srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
-                          alt={item.title}
-                          loading="lazy"
-                          style={{ display: "block", width: '100%' }}
-                          title="Click to zoom"
-                          id={item.id}                      
-                          onClick={() => handleFullScreenView(item)}
-                        />
-                        <IconButton
-                          size="small"
-                          sx={{
-                            color: "white",
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                          }}
-                          aria-label={`view fullscreen`}
-                          title="Click to zoom"
-                          onClick={() => handleFullScreenView(item)}
-                        >
-                          <VisibilityOutlined />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          sx={{
-                            color: "white",
-                            position: "absolute",
-                            top: 0,
-                            right: 0,
-                          }}
-                          aria-label={`edit`}
-                          title="Edit"
-                          onClick={() => handleDetailView(item)}
-                        >
-                          <EditOutlined />
-                        </IconButton>
-                        <IconButton
+              <Box sx={{ flexGrow: 1 }} />
+              <ImageList cols={cols} gap={8} sx={{ p: '2px' }}>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={dragEnd}
+                  modifiers={[restrictToWindowEdges, restrictToParentElement]}
+                >
+                  <SortableContext items={items} strategy={rectSortingStrategy}>
+                    {items.map((item: any, index: number) => (
+                      <SortableListItem
+                        key={item.img}
+                        id={item.id}
+                      >
+                        <Box style={{ position: "relative" }}>
+                          <img
+                            src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
+                            srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
+                            alt={item.title}
+                            loading="lazy"
+                            style={{ display: "block", width: '100%' }}
+                            title="Click to zoom"
+                            id={item.id}
+                            onClick={() => handleFullScreenView(item)}
+                          />
+                          <IconButton
+                            size="small"
+                            sx={{
+                              color: "white",
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                            }}
+                            aria-label={`view fullscreen`}
+                            title="Click to zoom"
+                            onClick={() => handleFullScreenView(item)}
+                          >
+                            <VisibilityOutlined />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            sx={{
+                              color: "white",
+                              position: "absolute",
+                              top: 0,
+                              right: 0,
+                            }}
+                            aria-label={`edit`}
+                            title="Edit"
+                            onClick={() => handleDetailView(item)}
+                          >
+                            <EditOutlined />
+                          </IconButton>
+                          <IconButton
                             size="small"
                             sx={{
                               color: "white",
@@ -835,7 +841,7 @@ function MediaGalleryApp() {
                             }}
                           >
                             {
-                              item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                              item.selected ? <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
                             }
                           </IconButton>
                           <IconButton
@@ -852,40 +858,40 @@ function MediaGalleryApp() {
                           >
                             <DeleteOutline />
                           </IconButton>
-                      </Box>
-                      <ImageListItemBar
-                        title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
-                        subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
-                        sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
-                        position="below"
-                        // actionIcon={
-                        //   <IconButton
-                        //     sx={{ color: "white" }}
-                        //     aria-label={`select ${item.title}`}
-                        //     title="Select"
-                        //     onClick={() => {
-                        //       // TODO: move to function
-                        //       const newItems = items.slice()
-                        //       const itemToUpdate = newItems.find((element: any) => element.id === item.id)
-                        //       if (itemToUpdate) {
-                        //         itemToUpdate.selected = !itemToUpdate.selected
-                        //         setItems(newItems)
-                        //       }
-                        //     }}
-                        //   >
-                        //     {
-                        //       item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
-                        //     }
-                        //   </IconButton>
-                        // }
-                        actionPosition="left"
-                      />
-                    </SortableListItem>
-                  ))}
-                </SortableContext>
-              </DndContext>
-            </ImageList>
-            <Box sx={{flexGrow: 1}} />
+                        </Box>
+                        <ImageListItemBar
+                          title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
+                          subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
+                          position="below"
+                          // actionIcon={
+                          //   <IconButton
+                          //     sx={{ color: "white" }}
+                          //     aria-label={`select ${item.title}`}
+                          //     title="Select"
+                          //     onClick={() => {
+                          //       // TODO: move to function
+                          //       const newItems = items.slice()
+                          //       const itemToUpdate = newItems.find((element: any) => element.id === item.id)
+                          //       if (itemToUpdate) {
+                          //         itemToUpdate.selected = !itemToUpdate.selected
+                          //         setItems(newItems)
+                          //       }
+                          //     }}
+                          //   >
+                          //     {
+                          //       item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                          //     }
+                          //   </IconButton>
+                          // }
+                          actionPosition="left"
+                        />
+                      </SortableListItem>
+                    ))}
+                  </SortableContext>
+                </DndContext>
+              </ImageList>
+              <Box sx={{ flexGrow: 1 }} />
             </Stack>
           ) : (
             // List view
@@ -918,7 +924,7 @@ function MediaGalleryApp() {
                         id={item.id}>
                         <TableCell
                           id={item.id}
-                          sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <IconButton
                             sx={{ color: "white" }}
@@ -935,13 +941,13 @@ function MediaGalleryApp() {
                             }}
                           >
                             {
-                              item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                              item.selected ? <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
                             }
                           </IconButton>
                         </TableCell>
                         <TableCell
                           id={item.id}
-                          sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <img
                             src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
@@ -955,14 +961,14 @@ function MediaGalleryApp() {
                         </TableCell>
                         <TableCell align="left"
                           id={item.id}
-                          sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <IconButton
-                          sx={{color: "white"}}
-                          aria-label={`view fullscreen`}
-                          title="Click to zoom"
-                          onClick={() => handleFullScreenView(item)}
-                        >
+                            sx={{ color: "white" }}
+                            aria-label={`view fullscreen`}
+                            title="Click to zoom"
+                            onClick={() => handleFullScreenView(item)}
+                          >
                             <VisibilityOutlined />
                           </IconButton>
                           <IconButton
@@ -982,14 +988,14 @@ function MediaGalleryApp() {
                             <DeleteOutline />
                           </IconButton>
                         </TableCell>
-                        <TableCell 
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} 
+                        <TableCell
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
                           id={item.id}
                           align="left">
                           {item.title}
-                          </TableCell>
-                        <TableCell 
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} 
+                        </TableCell>
+                        <TableCell
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
                           id={item.id}
                           align="left">
                           {item.author}
@@ -1044,7 +1050,7 @@ function MediaGalleryApp() {
               id="dateModified"
               label="Date modified"
               variant="standard"
-              InputProps={{ 
+              InputProps={{
                 readOnly: true,
                 startAdornment: (
                   <InputAdornment position="start">
@@ -1064,7 +1070,7 @@ function MediaGalleryApp() {
               label="Author"
               variant="standard"
               defaultValue={currentMedia.author}
-              InputProps={{ 
+              InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <PhotoCameraFrontOutlined />
@@ -1082,9 +1088,9 @@ function MediaGalleryApp() {
               label="Caption"
               variant="standard"
               defaultValue={currentMedia.title}
-              InputProps={{ 
+              InputProps={{
                 startAdornment: (
-                  <InputAdornment style={{ display: 'flex', flexDirection: 'column-reverse'}} position="start" >
+                  <InputAdornment style={{ display: 'flex', flexDirection: 'column-reverse' }} position="start" >
                     <NotesOutlined />
                   </InputAdornment>
                 )
@@ -1106,7 +1112,7 @@ function MediaGalleryApp() {
                     severity: "success",
                     message: "Media details successfully saved!"
                   })
-                  setTimeout(() => {handleSnackOpen()}, 500)
+                  setTimeout(() => { handleSnackOpen() }, 500)
                 }}
               >Save</Button>
               <Button
@@ -1216,7 +1222,7 @@ function MediaGalleryApp() {
                             }}
                           >
                             {
-                              item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                              item.selected ? <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
                             }
                           </IconButton>
                         }
@@ -1240,16 +1246,16 @@ function MediaGalleryApp() {
                       severity: "info",
                       message: "No media file selected for import"
                     })
-                    setTimeout(() => {handleSnackOpen()}, 500)
+                    setTimeout(() => { handleSnackOpen() }, 500)
                   } else {
                     const newItems = structuredClone(items)
                     const newSelectedItems = importItems.filter((item: any) => {
                       return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
-                    }).map((item: any) =>  { 
-                      item.selected = false 
+                    }).map((item: any) => {
+                      item.selected = false
                       return item
                     })
-                    setTimeout(() => {setItems(newItems.concat(structuredClone(newSelectedItems)))}, 500)
+                    setTimeout(() => { setItems(newItems.concat(structuredClone(newSelectedItems))) }, 500)
                     if (newSelectedItems.length > 0) {
                       setCurrentAlert({
                         severity: "success",
@@ -1261,7 +1267,7 @@ function MediaGalleryApp() {
                         message: `No new media file was imported`
                       })
                     }
-                    setTimeout(() => {handleSnackOpen()}, 1000)
+                    setTimeout(() => { handleSnackOpen() }, 1000)
                   }
                 }}
               >Import</Button>
@@ -1276,21 +1282,21 @@ function MediaGalleryApp() {
           </Stack>
         </SwipeableDrawer>
       </Box>
-      <Box 
-        sx={{ width: '100%', flexGrow: 1 }} 
+      <Box
+        sx={{ width: '100%', flexGrow: 1 }}
         onContextMenu={handleContextMenu}
       />
 
       {/* Snack Bar for alerts */}
       {/* TODO: move to components */}
-      <Snackbar 
+      <Snackbar
         anchorOrigin={{
           vertical: "top",
           horizontal: "left"
         }}
-        open={snackOpen} 
-        autoHideDuration={3000} 
-        onClose={handleSnackClose} 
+        open={snackOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackClose}
         TransitionComponent={SlideTransition}
       >
         <Alert onClose={handleSnackClose} severity={currentAlert.severity as AlertColor} sx={{ width: '100%' }}>
