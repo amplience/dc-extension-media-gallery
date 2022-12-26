@@ -41,6 +41,7 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
+  MenuList,
   Slide,
   Snackbar,
   SwipeableDrawer,
@@ -644,55 +645,107 @@ function MediaGalleryApp() {
               : undefined
           }
         >
+          <MenuList sx={{width: '300px'}} dense>
           {
             contextMedia != null &&
             <>
               <MenuItem onClick={() => {
                 handleContextClose()
                 handleFullScreenView(contextMedia)
-              }}>View</MenuItem>
+              }}>
+                <ListItemIcon>
+                  <VisibilityOutlined fontSize="small" />
+                </ListItemIcon> 
+                <ListItemText>View</ListItemText>
+              </MenuItem>
               <MenuItem onClick={() => {
                 handleContextClose()
                 handleDetailView(contextMedia)
-              }}>Edit</MenuItem>
+              }}>
+                <ListItemIcon>
+                  <EditOutlined fontSize="small" />
+                </ListItemIcon> 
+                <ListItemText>Edit</ListItemText>
+              </MenuItem>
               <MenuItem onClick={() => {
                 handleContextClose()
                 removeItem(contextMedia.id)
-              }}>Remove</MenuItem>
+              }}>
+                <ListItemIcon>
+                  <DeleteOutline fontSize="small" />
+                </ListItemIcon> 
+                <ListItemText>Remove</ListItemText>
+              </MenuItem>
               <Divider/>
             </>
           }
           <MenuItem onClick={() => {
             handleContextClose()
             handleImport()
-          }}>Import</MenuItem>
+          }}>
+            <ListItemIcon>
+              <AddPhotoAlternateOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Import</ListItemText>
+          </MenuItem>
           <Divider/>
           <MenuItem onClick={() => {
             handleContextClose()
             handleSelectAll()
-          }}>Select all</MenuItem>
+          }}>
+            <ListItemIcon>
+              <GridViewSharp fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Select all</ListItemText>
+          </MenuItem>
           <MenuItem onClick={() => {
             handleContextClose()
             handleSelectNone()
-          }}>Select none</MenuItem>
+          }}>
+            <ListItemIcon>
+              <GridViewOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Select none</ListItemText>
+          </MenuItem>
           <Divider/>
           <MenuItem onClick={() => {
             handleContextClose()
             handleRemoveSelected()
-          }}>Remove selected</MenuItem>
+          }}>
+            <ListItemIcon>
+              <DeleteOutline fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Remove selected</ListItemText>
+          </MenuItem>
           <MenuItem onClick={(event) => {
             handleSortClick(event)
             handleContextClose()
-          }}>Sort by</MenuItem>
+          }}>
+            <ListItemIcon>
+              <SortOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Sort by</ListItemText>
+          </MenuItem>
           <MenuItem onClick={() => {
             handleContextClose()
             handleResetItems()
-          }}>Reset</MenuItem>
+          }}>
+            <ListItemIcon>
+              <CachedOutlined fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Reset</ListItemText>
+          </MenuItem>
           <Divider/>
           <MenuItem onClick={() => {
             handleContextClose()
             gridMode ? setGridMode(false) : setGridMode(true)
-          }}>{ gridMode ? 'List view' : 'Grid view'}</MenuItem>
+          }}>
+            <ListItemIcon>
+              { gridMode ? <ViewHeadlineOutlined fontSize="small" /> : <AppsOutlined fontSize="small" />}
+            </ListItemIcon>
+            <ListItemText>{ gridMode ? 'List view' : 'Grid view'}</ListItemText>
+          </MenuItem>
+          </MenuList>
         </Menu>
 
         {/* Main view */}
@@ -1220,7 +1273,10 @@ function MediaGalleryApp() {
           </Stack>
         </SwipeableDrawer>
       </Box>
-      <Box sx={{ flexGrow: 1 }} />
+      <Box 
+        sx={{ width: '100%', flexGrow: 1 }} 
+        onContextMenu={handleContextMenu}
+      />
 
       {/* Snack Bar for alerts */}
       {/* TODO: move to components */}
