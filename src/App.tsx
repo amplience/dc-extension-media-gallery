@@ -200,6 +200,9 @@ function MediaGalleryApp() {
 
   /**
    * Drag-and-drop sensors setup
+   * Using distance to enable icon buttons on images
+   * Using "Enter" key only to start and end drag-end-drop
+   * for the same reason
    */
   const sensors = useSensors(
     useSensor(PointerSensor, {
