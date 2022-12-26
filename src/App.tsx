@@ -307,21 +307,23 @@ function MediaGalleryApp() {
    */
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      // if (event.key.toLowerCase() === 'i') {
-      //   handleImport()
-      // } else if (event.key.toLowerCase() === 'a') {
-      //   handleSelectAll()
-      // } else if (event.key.toLowerCase() === 'n') {
-      //   handleSelectNone()
-      // } else if (event.key.toLowerCase() === 'z') {
-      //   handleResetItems()
-      // } else if (event.key.toLowerCase() === 'r') {
-      //   handleRemoveSelected()
-      // } else if (event.key.toLowerCase() === 'g') {
-      //   setGridMode(true)
-      // } else if (event.key.toLowerCase() === 'l') {
-      //   setGridMode(false)
-      // } else 
+      if (!importDrawerOpen && !detailDrawerOpen ) {
+        if (event.key.toLowerCase() === 'i') {
+          handleImport()
+        } else if (event.key.toLowerCase() === 'a') {
+          handleSelectAll()
+        } else if (event.key.toLowerCase() === 'n') {
+          handleSelectNone()
+        } else if (event.key.toLowerCase() === 'z') {
+          handleResetItems()
+        } else if (event.key.toLowerCase() === 'r') {
+          handleRemoveSelected()
+        } else if (event.key.toLowerCase() === 'g') {
+          setGridMode(true)
+        } else if (event.key.toLowerCase() === 'l') {
+          setGridMode(false)
+        }
+      }
       if (event.key === 'ArrowRight' && !dragging) {
         const element: Element | null= document.activeElement
         if (element) {
@@ -448,7 +450,7 @@ function MediaGalleryApp() {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [dragging, cols, gridMode]);
+  }, [dragging, cols, gridMode, importDrawerOpen, detailDrawerOpen]);
 
   /** 
    * Getting folders from Content Hub
