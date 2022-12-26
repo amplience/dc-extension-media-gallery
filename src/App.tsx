@@ -130,6 +130,7 @@ function MediaGalleryApp() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const sortOpen = Boolean(anchorEl);
   const [fullscreenView, setFullscreenView] = useState(false)
+  const [contextMedia, setContextMedia] = useState<any | null>(null)
   const [currentMedia, setCurrentMedia] = useState(itemData[0])
   const [tempMedia, setTempMedia] = useState(itemData[0])
   const [snackOpen, setSnackOpen] = useState(false);
@@ -138,6 +139,39 @@ function MediaGalleryApp() {
     message: "Sucess!",
     severity: "success"
   })
+  const [contextMenu, setContextMenu] = useState<{
+    mouseX: number;
+    mouseY: number;
+  } | null>(null);
+
+  const handleContextMenu = (event: React.MouseEvent) => {
+    setContextMedia(null)
+    event.preventDefault();
+    if (event.target instanceof HTMLElement) {
+      if (event.target.id) {
+        const filteredItems = items.filter((element: any) => ((event.target as HTMLElement).id == element.id))
+        if (filteredItems.length > 0) {
+          setContextMedia(filteredItems[0])
+        }
+      }
+    }
+    setContextMenu(
+      contextMenu === null
+        ? {
+            mouseX: event.clientX + 2,
+            mouseY: event.clientY - 6,
+          }
+        : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
+          // Other native context menus might behave different.
+          // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
+          null,
+    );
+  };
+
+  const handleContextClose = () => {
+    setContextMenu(null);
+  };
+
 
   /**
    * Opening alert
@@ -281,8 +315,8 @@ function MediaGalleryApp() {
    * Removing an item from the collection
    * @param index 
    */
-  const removeItem = (index: number) => {
-    const newItems = items.filter((_: any, i: number) => i !== index);
+  const removeItem = (id: number) => {
+    const newItems = items.filter((item: any) => id !== item.id);
     setItems(newItems);
   };
 
@@ -586,8 +620,48 @@ function MediaGalleryApp() {
           </Toolbar>
         </AppBar>
 
+        {/* Context Menu */}
+        <Menu
+          open={contextMenu !== null}
+          onClose={handleContextClose}
+          anchorReference="anchorPosition"
+          anchorPosition={
+            contextMenu !== null
+              ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+              : undefined
+          }
+        >
+          {
+            contextMedia != null &&
+            <>
+              <MenuItem onClick={() => {
+                handleContextClose()
+                handleFullScreenView(contextMedia)
+              }}>View</MenuItem>
+              <MenuItem onClick={() => {
+                handleContextClose()
+                handleDetailView(contextMedia)
+              }}>Edit</MenuItem>
+              <MenuItem onClick={() => {
+                handleContextClose()
+                removeItem(contextMedia.id)
+              }}>Remove</MenuItem>
+              <Divider/>
+            </>
+          }
+          <MenuItem onClick={handleContextClose}>Import</MenuItem>
+          <MenuItem onClick={handleContextClose}>Select all</MenuItem>
+          <MenuItem onClick={handleContextClose}>Select none</MenuItem>
+          <MenuItem onClick={handleContextClose}>Remove selected</MenuItem>
+          <MenuItem onClick={handleContextClose}>Sort by</MenuItem>
+          <MenuItem onClick={handleContextClose}>{ gridMode ? 'List view' : 'Grid view'}</MenuItem>
+        </Menu>
+
         {/* Main view */}
-        <Box sx={{ w: '100%', pr: 2, pl: 2 }}>
+        <Box 
+          sx={{ w: '100%', pr: 2, pl: 2 }}
+          onContextMenu={handleContextMenu}
+        >
           {gridMode ? (
 
             // Grid view
@@ -606,7 +680,6 @@ function MediaGalleryApp() {
                     <SortableListItem
                       key={item.img}
                       id={item.id}
-                      
                     >
                       <Box style={{position: "relative" }}>
                         <img
@@ -616,6 +689,7 @@ function MediaGalleryApp() {
                           loading="lazy"
                           style={{ display: "block", width: '100%' }}
                           title="Click to zoom"
+                          id={item.id}                      
                           onClick={() => handleFullScreenView(item)}
                         />
                         <IconButton
@@ -680,7 +754,7 @@ function MediaGalleryApp() {
                             }}
                             title="Remove"
                             aria-label={`delete`}
-                            onClick={() => removeItem(index)}
+                            onClick={() => removeItem(item.id)}
                           >
                             <DeleteOutline />
                           </IconButton>
@@ -805,7 +879,7 @@ function MediaGalleryApp() {
                             sx={{ color: "white" }}
                             aria-label={`delete`}
                             title="Remove"
-                            onClick={() => removeItem(index)}
+                            onClick={() => removeItem(item.id)}
                           >
                             <DeleteOutline />
                           </IconButton>
