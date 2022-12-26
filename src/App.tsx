@@ -89,6 +89,7 @@ import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
 
+// TODO: get assets from Content Hub
 const itemData = [
   { id: 1, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
   { id: 2, selected: false, dateModified: "2022-11-20T19:25:20.379Z", img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45", title: "Camera", author: "@helloimnik", },
@@ -106,7 +107,7 @@ const itemData = [
   { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
 ];
 
-function TitlebarBelowImageList() {
+function MediaGalleryApp() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
@@ -1103,7 +1104,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <TitlebarBelowImageList />
+        <MediaGalleryApp />
       </header>
     </div>
   );
