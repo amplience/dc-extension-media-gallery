@@ -16,6 +16,7 @@ export default function SortableListItem(props: any) {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? "100" : "auto",
+    opacity: isDragging ? 0.5 : 1
   };
   
   return (
