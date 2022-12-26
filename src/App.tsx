@@ -139,6 +139,7 @@ function TitlebarBelowImageList() {
 
   /**
    * Opening alert
+   * TODO: move to components
    */
   const handleSnackOpen = () => {
     setSnackOpen(true);
@@ -146,6 +147,7 @@ function TitlebarBelowImageList() {
 
   /**
    * Closing alert
+   * TODO: move to components
    * @param event 
    * @param reason 
    * @returns 
@@ -159,6 +161,7 @@ function TitlebarBelowImageList() {
 
   /**
    * Opening sort menu
+   * TODO: move to components
    * @param event 
    */
   const handleSortClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -167,6 +170,7 @@ function TitlebarBelowImageList() {
 
   /**
    * Opening fullscreen view
+   * TODO: move to components
    * @param media 
    */
   const handleFullScreenView = (media: any) => {
@@ -176,6 +180,7 @@ function TitlebarBelowImageList() {
 
   /**
    * Opening media details view
+   * TODO: move to components
    * @param media 
    */
   const handleDetailView = (media: any) => {
@@ -186,6 +191,7 @@ function TitlebarBelowImageList() {
 
   /**
    * Closing sort menu
+   * TODO: move to components
    */
   const handleSortClose = () => {
     setAnchorEl(null);
@@ -274,6 +280,7 @@ function TitlebarBelowImageList() {
     <ExtensionContextProvider>
 
       {/* Image full screen view */}
+      {/* TODO: move to components */}
       <Dialog
         fullScreen
         open={fullscreenView}
@@ -302,6 +309,7 @@ function TitlebarBelowImageList() {
             </IconButton>
 
             {/* Info Panel */}
+            {/* TODO: move to components */}
             {
               infoPanelOpen &&
               <Box
@@ -352,6 +360,7 @@ function TitlebarBelowImageList() {
       <Box style={{ width: '100%' }}>
 
         {/* Toolbar */}
+        {/* TODO: move to components */}
         <AppBar position="sticky">
           <Toolbar variant="dense">
             <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -367,6 +376,7 @@ function TitlebarBelowImageList() {
               size="small"
               title="Import"
               onClick={() => {
+                // TODO: move to function
                 const newItems = structuredClone(importItems)
                 newItems.map((element: any) => {
                   element.selected = false
@@ -389,6 +399,7 @@ function TitlebarBelowImageList() {
               aria-label={`select all`}
               title="Select all"
               onClick={() => {
+                // TODO: move to function
                 const newItems = structuredClone(items)
                 newItems.map((element: any) => {
                   element.selected = true
@@ -405,6 +416,7 @@ function TitlebarBelowImageList() {
               aria-label={`select none`}
               title="Select none"
               onClick={() => {
+                // TODO: move to function
                 const newItems = structuredClone(items)
                 newItems.map((element: any) => {
                   element.selected = false
@@ -426,6 +438,7 @@ function TitlebarBelowImageList() {
               title="Remove selected"
               size="small"
               onClick={() => {
+                // TODO: move to function
                 const itemsToDelete = items.filter((item: any) => item.selected)
                 const numChanges = itemsToDelete.length
                 if (numChanges > 0) {
@@ -460,6 +473,7 @@ function TitlebarBelowImageList() {
               size="small"
               title="Reset"
               onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(itemData))
                 setCurrentAlert({
                   severity: "success",
@@ -472,6 +486,7 @@ function TitlebarBelowImageList() {
             </IconButton>
 
             {/* Sort menu */}
+            {/* TODO: move to components */}
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -483,6 +498,7 @@ function TitlebarBelowImageList() {
             >
               <ListSubheader>Sort By</ListSubheader>
               <MenuItem onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(items).sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
                 handleSortClose()
               }}>
@@ -490,6 +506,7 @@ function TitlebarBelowImageList() {
                 <ListItemText>Date Modified Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(items).sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
                 handleSortClose()
               }}>
@@ -497,6 +514,7 @@ function TitlebarBelowImageList() {
                 <ListItemText>Date Modified Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(items).sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
                 handleSortClose()
               }}>
@@ -504,6 +522,7 @@ function TitlebarBelowImageList() {
                 <ListItemText>Author Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(items).sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
                 handleSortClose()
               }}>
@@ -511,6 +530,7 @@ function TitlebarBelowImageList() {
                 <ListItemText>Author Desc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(items).sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                 handleSortClose()
               }}>
@@ -518,6 +538,7 @@ function TitlebarBelowImageList() {
                 <ListItemText>Caption Asc</ListItemText>
               </MenuItem>
               <MenuItem onClick={() => {
+                // TODO: move to function
                 setItems(structuredClone(items).sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
                 handleSortClose()
               }}>
@@ -559,6 +580,7 @@ function TitlebarBelowImageList() {
           {gridMode ? (
 
             // Grid view
+            // TODO: move to components
             <Stack direction={'row'}>
             <Box sx={{flexGrow: 1}} />
             <ImageList cols={cols} gap={8}>
@@ -621,6 +643,7 @@ function TitlebarBelowImageList() {
                             aria-label={`select ${item.title}`}
                             title="Select"
                             onClick={() => {
+                              // TODO: move to function
                               const newItems = items.slice()
                               const itemToUpdate = newItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
@@ -645,6 +668,7 @@ function TitlebarBelowImageList() {
             </Stack>
           ) : (
             // List view
+            // TODO: move to components
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -679,6 +703,7 @@ function TitlebarBelowImageList() {
                             aria-label={`select`}
                             title="Select"
                             onClick={() => {
+                              // TODO: move to function
                               const newItems = items.slice()
                               const itemToUpdate = newItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
@@ -736,6 +761,7 @@ function TitlebarBelowImageList() {
         </Box>
 
         {/* Image detail drawer */}
+        {/* TODO: move to components */}
         <SwipeableDrawer
           PaperProps={{
             sx: { width: "50%", p: 2 },
@@ -830,6 +856,7 @@ function TitlebarBelowImageList() {
                 sx={{ mr: 2 }}
                 variant="contained"
                 onClick={() => {
+                  // TODO: move to function
                   setDetailDrawerOpen(false)
                   setCurrentMedia(tempMedia)
                   setCurrentAlert({
@@ -848,6 +875,7 @@ function TitlebarBelowImageList() {
         </SwipeableDrawer>
 
         {/* Import media drawer */}
+        {/* TODO: move to components */}
         <SwipeableDrawer
           PaperProps={{
             sx: { width: "90%", p: 2 },
@@ -885,6 +913,7 @@ function TitlebarBelowImageList() {
                     aria-label={`select all`}
                     title="Select all"
                     onClick={() => {
+                      // TODO: move to function
                       const newItems = importItems.slice()
                       newItems.map((element: any) => {
                         element.selected = true
@@ -900,6 +929,7 @@ function TitlebarBelowImageList() {
                     aria-label={`select none`}
                     title="Select none"
                     onClick={() => {
+                      // TODO: move to function
                       const newItems = importItems.slice()
                       newItems.map((element: any) => {
                         element.selected = false
@@ -933,6 +963,7 @@ function TitlebarBelowImageList() {
                             aria-label={`select ${item.title}`}
                             title="Select"
                             onClick={() => {
+                              // TODO: move to function
                               const newImportItems = importItems.slice()
                               const itemToUpdate = newImportItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
@@ -959,6 +990,7 @@ function TitlebarBelowImageList() {
                 sx={{ mr: 2 }}
                 variant="contained"
                 onClick={() => {
+                  // TODO: move to function
                   setImportDrawerOpen(false)
                   if (importItems.filter((item: any) => item.selected).length === 0) {
                     setCurrentAlert({
@@ -992,7 +1024,10 @@ function TitlebarBelowImageList() {
               >Import</Button>
               <Button
                 variant="outlined"
-                onClick={() => setImportDrawerOpen(false)}
+                onClick={
+                  // TODO: move to function
+                  () => setImportDrawerOpen(false)
+                }
               >Cancel</Button>
             </Stack>
           </Stack>
@@ -1001,6 +1036,7 @@ function TitlebarBelowImageList() {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* Snack Bar for alerts */}
+      {/* TODO: move to components */}
       <Snackbar 
         anchorOrigin={{
           vertical: "top",
@@ -1021,6 +1057,7 @@ function TitlebarBelowImageList() {
 
 /**
  * Slide transition for alerts
+ * TODO: move to components
  * @param props 
  * @returns 
  */
@@ -1030,6 +1067,7 @@ function SlideTransition(props: SlideProps) {
 
 /**
  * Folders tree view
+ * TODO: move to components
  * @param props 
  * @returns 
  */
