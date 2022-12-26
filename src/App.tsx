@@ -24,7 +24,8 @@ import {
   CalendarMonthOutlined,
   PhotoCameraFrontOutlined,
   NotesOutlined,
-  LockOutlined
+  LockOutlined,
+  VisibilityOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -605,51 +606,54 @@ function MediaGalleryApp() {
                     <SortableListItem
                       key={item.img}
                       id={item.id}
-                      style={{ position: "relative" }}
+                      
                     >
-                      <img
-                        src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
-                        srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
-                        alt={item.title}
-                        loading="lazy"
-                        style={{ display: "block" }}
-                        title="Click to zoom"
-                        onClick={() => handleFullScreenView(item)}
-                      />
-                      <IconButton
-                        sx={{
-                          color: "white",
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                        }}
-                        aria-label={`edit`}
-                        title="Edit"
-                        onClick={() => handleDetailView(item)}
-                      >
-                        <EditOutlined />
-                      </IconButton>
-                      <IconButton
-                        sx={{
-                          color: "white",
-                          position: "absolute",
-                          top: 0,
-                          right: 0,
-                        }}
-                        title="Remove"
-                        aria-label={`delete`}
-                        onClick={() => removeItem(index)}
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-                      <ImageListItemBar
-                        title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
-                        subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
-                        sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
-                        position="below"
-                        actionIcon={
-                          <IconButton
-                            sx={{ color: "white" }}
+                      <Box style={{position: "relative" }}>
+                        <img
+                          src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
+                          srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
+                          alt={item.title}
+                          loading="lazy"
+                          style={{ display: "block", width: '100%' }}
+                          title="Click to zoom"
+                          onClick={() => handleFullScreenView(item)}
+                        />
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: "white",
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                          }}
+                          aria-label={`view fullscreen`}
+                          title="Click to zoom"
+                          onClick={() => handleFullScreenView(item)}
+                        >
+                          <VisibilityOutlined />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: "white",
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                          }}
+                          aria-label={`edit`}
+                          title="Edit"
+                          onClick={() => handleDetailView(item)}
+                        >
+                          <EditOutlined />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            sx={{
+                              color: "white",
+                              position: "absolute",
+                              bottom: 0,
+                              left: 0,
+                            }}
                             aria-label={`select ${item.title}`}
                             title="Select"
                             onClick={() => {
@@ -666,7 +670,46 @@ function MediaGalleryApp() {
                               item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
                             }
                           </IconButton>
-                        }
+                          <IconButton
+                            size="small"
+                            sx={{
+                              color: "white",
+                              position: "absolute",
+                              bottom: 0,
+                              right: 0,
+                            }}
+                            title="Remove"
+                            aria-label={`delete`}
+                            onClick={() => removeItem(index)}
+                          >
+                            <DeleteOutline />
+                          </IconButton>
+                      </Box>
+                      <ImageListItemBar
+                        title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
+                        subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
+                        sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
+                        position="below"
+                        // actionIcon={
+                        //   <IconButton
+                        //     sx={{ color: "white" }}
+                        //     aria-label={`select ${item.title}`}
+                        //     title="Select"
+                        //     onClick={() => {
+                        //       // TODO: move to function
+                        //       const newItems = items.slice()
+                        //       const itemToUpdate = newItems.find((element: any) => element.id === item.id)
+                        //       if (itemToUpdate) {
+                        //         itemToUpdate.selected = !itemToUpdate.selected
+                        //         setItems(newItems)
+                        //       }
+                        //     }}
+                        //   >
+                        //     {
+                        //       item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                        //     }
+                        //   </IconButton>
+                        // }
                         actionPosition="left"
                       />
                     </SortableListItem>
@@ -742,6 +785,14 @@ function MediaGalleryApp() {
                         <TableCell align="left"
                           sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
                         >
+                          <IconButton
+                          sx={{color: "white"}}
+                          aria-label={`view fullscreen`}
+                          title="Click to zoom"
+                          onClick={() => handleFullScreenView(item)}
+                        >
+                          <VisibilityOutlined />
+                        </IconButton>
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`edit`}
