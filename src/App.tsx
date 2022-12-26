@@ -151,7 +151,7 @@ function MediaGalleryApp() {
     event.preventDefault();
     if (event.target instanceof HTMLElement) {
       if (event.target.id) {
-        const filteredItems = items.filter((element: any) => ((event.target as HTMLElement).id == element.id))
+        const filteredItems = items.filter((element: any) => ((event.target as HTMLElement).id === element.id))
         if (filteredItems.length > 0) {
           setContextMedia(filteredItems[0])
         }
@@ -280,19 +280,19 @@ function MediaGalleryApp() {
    */
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() == 'i') {
+      if (event.key.toLowerCase() === 'i') {
         handleImport()
-      } else if (event.key.toLowerCase() == 'a') {
+      } else if (event.key.toLowerCase() === 'a') {
         handleSelectAll()
-      } else if (event.key.toLowerCase() == 'n') {
+      } else if (event.key.toLowerCase() === 'n') {
         handleSelectNone()
-      } else if (event.key.toLowerCase() == 'z') {
+      } else if (event.key.toLowerCase() === 'z') {
         handleResetItems()
-      } else if (event.key.toLowerCase() == 'r') {
+      } else if (event.key.toLowerCase() === 'r') {
         handleRemoveSelected()
-      } else if (event.key.toLowerCase() == 'g') {
+      } else if (event.key.toLowerCase() === 'g') {
         setGridMode(true)
-      } else if (event.key.toLowerCase() == 'l') {
+      } else if (event.key.toLowerCase() === 'l') {
         setGridMode(false)
       }
     };
