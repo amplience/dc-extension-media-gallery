@@ -116,12 +116,8 @@ function MediaGalleryApp() {
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
   const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
-  let cols = 7;
-  if (isXLarge) cols = 5;
-  if (isLarge) cols = 4;
-  if (isTablet) cols = 3;
-  if (isMobile) cols = 2;
 
+  const [cols, setCols] = useState(5);
   const [items, setItems] = useState(structuredClone(itemData));
   const [importItems, setImportItems] = useState(structuredClone(itemData));
   const [gridMode, setGridMode] = useState(true);
@@ -131,6 +127,7 @@ function MediaGalleryApp() {
   const [importDrawerOpen, setImportDrawerOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const sortOpen = Boolean(anchorEl);
+  const [dragging, setDragging] = useState(false)
   const [fullscreenView, setFullscreenView] = useState(false)
   const [contextMedia, setContextMedia] = useState<any | null>(null)
   const [currentMedia, setCurrentMedia] = useState(itemData[0])
@@ -146,6 +143,23 @@ function MediaGalleryApp() {
     mouseY: number;
   } | null>(null);
 
+  /**
+   * re-calculate cols
+   */
+  useEffect(() => {
+    function handleResize() {
+      if (isXLarge) setCols(5)
+      if (isLarge) setCols(4)
+      if (isTablet) setCols(3)
+      if (isMobile) setCols(2)
+    }
+    window.addEventListener('resize', handleResize)
+  })
+
+  /**
+   * Open context menu
+   * @param event 
+   */
   const handleContextMenu = (event: React.MouseEvent) => {
     setContextMedia(null)
     event.preventDefault();
@@ -170,6 +184,9 @@ function MediaGalleryApp() {
     );
   };
 
+  /**
+   * Close context menu
+   */
   const handleContextClose = () => {
     setContextMenu(null);
   };
@@ -294,13 +311,93 @@ function MediaGalleryApp() {
         setGridMode(true)
       } else if (event.key.toLowerCase() === 'l') {
         setGridMode(false)
+      } else if (event.key === 'ArrowRight' && !dragging) {
+        const element: Element | null= document.activeElement
+        if (element) {
+          const parent: HTMLElement | null= element.parentElement
+          if (parent) {
+            const children: HTMLCollection = parent.children
+            if (children) {
+              let found = -1
+              for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) {
+                  found = i
+                  break
+                }
+              }
+              if (found < children.length - 1) {
+                (children.item(found + 1) as HTMLElement).focus()
+              }
+            }
+          }
+        }
+      } else if (event.key === 'ArrowLeft' && !dragging) {
+        const element: Element | null= document.activeElement
+        if (element) {
+          const parent: HTMLElement | null= element.parentElement
+          if (parent) {
+            const children: HTMLCollection = parent.children
+            if (children) {
+              let found = -1
+              for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) {
+                  found = i
+                  break
+                }
+              }
+              if (found -1 >= 0) {
+                (children.item(found - 1) as HTMLElement).focus()
+              }
+            }
+          }
+        }
+      } else if (event.key === 'ArrowDown' && !dragging) {
+        const element: Element | null= document.activeElement
+        if (element) {
+          const parent: HTMLElement | null= element.parentElement
+          if (parent) {
+            const children: HTMLCollection = parent.children
+            if (children) {
+              let found = -1
+              for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) {
+                  found = i
+                  break
+                }
+              }
+              if (found + cols < children.length - 1) {
+                (children.item(found + cols) as HTMLElement).focus()
+              }
+            }
+          }
+        }
+      } else if (event.key === 'ArrowUp' && !dragging) {
+        const element: Element | null= document.activeElement
+        if (element) {
+          const parent: HTMLElement | null= element.parentElement
+          if (parent) {
+            const children: HTMLCollection = parent.children
+            if (children) {
+              let found = -1
+              for (let i = 0; i < children.length; i++) {
+                if (children[i] === element) {
+                  found = i
+                  break
+                }
+              }
+              if (found - cols >= 0) {
+                (children.item(found - cols) as HTMLElement).focus()
+              }
+            }
+          }
+        }
       }
     };
     document.addEventListener('keydown', keyDownHandler);
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, []);
+  }, [dragging, cols]);
 
   /** 
    * Getting folders from Content Hub
@@ -324,17 +421,24 @@ function MediaGalleryApp() {
     })();
   }, []);
 
+ /**
+   * Drag-end-Drop action start
+   * @param event 
+   */
+  const dragStart = (event: any) => {
+    setDragging(true)
+  }
+
   /**
    * Drag-end-Drop action end
    * @param event 
    */
   const dragEnd = (event: any) => {
+    setDragging(false)
     const { active, over } = event;
-
     if (active.id !== over.id) {
       const oldIndex = items.findIndex((item: any) => item.id === active.id);
       const newIndex = items.findIndex((item: any) => item.id === over.id);
-
       setItems(arrayMove(items, oldIndex, newIndex));
     }
   };
@@ -414,7 +518,7 @@ function MediaGalleryApp() {
 
   return (
     <ExtensionContextProvider>
-
+      
       {/* Image full screen view */}
       {/* TODO: move to components */}
       {/* TODO: mode styles for all components */}
@@ -803,6 +907,7 @@ function MediaGalleryApp() {
                 <DndContext
                   sensors={sensors}
                   collisionDetection={closestCenter}
+                  onDragStart={dragStart}
                   onDragEnd={dragEnd}
                   modifiers={[restrictToWindowEdges, restrictToParentElement]}
                 >
@@ -930,6 +1035,7 @@ function MediaGalleryApp() {
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
+              onDragStart={dragStart}
               onDragEnd={dragEnd}
               modifiers={[
                 restrictToVerticalAxis,
