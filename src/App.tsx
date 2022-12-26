@@ -311,7 +311,7 @@ function MediaGalleryApp() {
         setGridMode(true)
       } else if (event.key.toLowerCase() === 'l') {
         setGridMode(false)
-      } else if (event.key === 'ArrowRight' && !dragging) {
+      } else if (event.key === 'ArrowRight' && !dragging && gridMode) {
         const element: Element | null= document.activeElement
         if (element) {
           const parent: HTMLElement | null= element.parentElement
@@ -331,7 +331,7 @@ function MediaGalleryApp() {
             }
           }
         }
-      } else if (event.key === 'ArrowLeft' && !dragging) {
+      } else if (event.key === 'ArrowLeft' && !dragging && gridMode) {
         const element: Element | null= document.activeElement
         if (element) {
           const parent: HTMLElement | null= element.parentElement
