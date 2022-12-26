@@ -275,6 +275,33 @@ function MediaGalleryApp() {
     }
   };
 
+  /**
+   * Keyboard shortcuts
+   */
+  useEffect(() => {
+    const keyDownHandler = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() == 'i') {
+        handleImport()
+      } else if (event.key.toLowerCase() == 'a') {
+        handleSelectAll()
+      } else if (event.key.toLowerCase() == 'n') {
+        handleSelectNone()
+      } else if (event.key.toLowerCase() == 'z') {
+        handleResetItems()
+      } else if (event.key.toLowerCase() == 'r') {
+        handleRemoveSelected()
+      } else if (event.key.toLowerCase() == 'g') {
+        setGridMode(true)
+      } else if (event.key.toLowerCase() == 'l') {
+        setGridMode(false)
+      }
+    };
+    document.addEventListener('keydown', keyDownHandler);
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, []);
+
   /** 
    * Getting folders from Content Hub
    */
