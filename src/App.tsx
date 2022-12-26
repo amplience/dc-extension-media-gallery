@@ -192,7 +192,7 @@ function TitlebarBelowImageList() {
   };
 
   /**
-   * 
+   * Drag-and-drop sensors setup
    */
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -206,7 +206,7 @@ function TitlebarBelowImageList() {
   );
 
   /**
-   * 
+   * Getting assets from Content Hub
    * @param id 
    */
   const getEntries = async (id: string) => {
@@ -224,8 +224,8 @@ function TitlebarBelowImageList() {
     }
   };
 
-  /**
-   * 
+  /** 
+   * Getting folders from Content Hub
    */
   useEffect(() => {
     (async () => {
@@ -247,7 +247,7 @@ function TitlebarBelowImageList() {
   }, []);
 
   /**
-   * 
+   * Drag-end-Drop action end
    * @param event 
    */
   const dragEnd = (event: any) => {
@@ -262,7 +262,7 @@ function TitlebarBelowImageList() {
   };
 
   /**
-   * 
+   * Removing an item from the collection
    * @param index 
    */
   const removeItem = (index: number) => {
