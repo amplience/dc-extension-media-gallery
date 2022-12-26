@@ -282,6 +282,7 @@ function MediaGalleryApp() {
 
       {/* Image full screen view */}
       {/* TODO: move to components */}
+      {/* TODO: mode styles for all components */}
       <Dialog
         fullScreen
         open={fullscreenView}
