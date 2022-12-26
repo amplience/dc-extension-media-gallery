@@ -119,7 +119,6 @@ function TitlebarBelowImageList() {
   if (isMobile) cols = 2;
 
   const [items, setItems] = useState(structuredClone(itemData));
-  const [initialItems, seInitialItems] = useState(structuredClone(itemData));
   const [importItems, setImportItems] = useState(structuredClone(itemData));
   const [gridMode, setGridMode] = useState(true);
   const [repo, setRepo] = useState<EnrichedRepository>();
