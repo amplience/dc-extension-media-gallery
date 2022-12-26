@@ -31,6 +31,7 @@ import {
   Alert,
   AlertColor,
   AppBar,
+  Badge,
   Button,
   Dialog,
   Divider,
@@ -523,7 +524,9 @@ function MediaGalleryApp() {
               size="small"
               onClick={handleRemoveSelected}
             > 
-              <DeleteOutline />
+              <Badge badgeContent={items.filter((item: any) => item.selected).length} color="secondary">
+                <DeleteOutline />
+              </Badge>
             </IconButton>
             <IconButton
               sx={{ color: "white" }}
@@ -715,7 +718,7 @@ function MediaGalleryApp() {
             <ListItemIcon>
               <DeleteOutline fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Remove selected</ListItemText>
+            <ListItemText>Remove selected ({items.filter((item: any) => item.selected).length})</ListItemText>
           </MenuItem>
           <MenuItem onClick={(event) => {
             handleSortClick(event)
