@@ -172,7 +172,6 @@ function MediaGalleryApp() {
     setContextMenu(null);
   };
 
-
   /**
    * Opening alert
    * TODO: move to components
@@ -200,7 +199,7 @@ function MediaGalleryApp() {
    * TODO: move to components
    * @param event 
    */
-  const handleSortClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSortClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -320,6 +319,9 @@ function MediaGalleryApp() {
     setItems(newItems);
   };
 
+  /**
+   * Select all items
+   */
   const handleSelectAll = () => {
     const newItems = structuredClone(items)
     newItems.map((element: any) => {
@@ -327,6 +329,58 @@ function MediaGalleryApp() {
       return element
     })
     setItems(newItems)
+  }
+
+  /**
+   * Un-select all items
+   */
+  const handleSelectNone = () => {
+    const newItems = structuredClone(items)
+    newItems.map((element: any) => {
+      element.selected = false
+      return element
+    })
+    setItems(newItems)
+  }
+
+  /**
+   * Remove selected items
+   */
+  const handleRemoveSelected = () => {
+    const itemsToDelete = items.filter((item: any) => item.selected)
+    const numChanges = itemsToDelete.length
+    if (numChanges > 0) {
+      setItems((prev: any) => prev.filter((item: any) => !item.selected))
+      setCurrentAlert({
+        severity: "success",
+        message: `${numChanges} item${numChanges > 1 ? 's' : ''} removed successfully!`
+      })
+    } else {
+      setCurrentAlert({
+        severity: "info",
+        message: `No item selected`
+      })
+    }
+    setTimeout(() => {handleSnackOpen()}, 500)
+  }
+
+  const handleResetItems = () => {
+    setItems(structuredClone(itemData))
+    setCurrentAlert({
+      severity: "success",
+      message: "Collection reset successfully!"
+    })
+    setTimeout(() => {handleSnackOpen()}, 500)
+  }
+
+  const handleImport = () => {
+    const newItems = structuredClone(importItems)
+    newItems.map((element: any) => {
+      element.selected = false
+      return element
+    })
+    setImportItems(newItems)
+    setImportDrawerOpen(true)
   }
 
   return (
@@ -429,16 +483,7 @@ function MediaGalleryApp() {
               aria-label={`import`}
               size="small"
               title="Import"
-              onClick={() => {
-                // TODO: move to function
-                const newItems = structuredClone(importItems)
-                newItems.map((element: any) => {
-                  element.selected = false
-                  return element
-                })
-                setImportItems(newItems)
-                setImportDrawerOpen(true)
-              }}
+              onClick={handleImport}
             >
               <AddPhotoAlternateOutlined />
             </IconButton>
@@ -461,15 +506,7 @@ function MediaGalleryApp() {
               size="small"
               aria-label={`select none`}
               title="Select none"
-              onClick={() => {
-                // TODO: move to function
-                const newItems = structuredClone(items)
-                newItems.map((element: any) => {
-                  element.selected = false
-                  return element
-                })
-                setItems(newItems)
-              }}
+              onClick={handleSelectNone}
             >
               <GridViewOutlined />
             </IconButton>
@@ -483,24 +520,7 @@ function MediaGalleryApp() {
               aria-label={`remove selected`}
               title="Remove selected"
               size="small"
-              onClick={() => {
-                // TODO: move to function
-                const itemsToDelete = items.filter((item: any) => item.selected)
-                const numChanges = itemsToDelete.length
-                if (numChanges > 0) {
-                  setItems((prev: any) => prev.filter((item: any) => !item.selected))
-                  setCurrentAlert({
-                    severity: "success",
-                    message: `${numChanges} item${numChanges > 1 ? 's' : ''} removed successfully!`
-                  })
-                } else {
-                  setCurrentAlert({
-                    severity: "info",
-                    message: `No item selected`
-                  })
-                }
-                setTimeout(() => {handleSnackOpen()}, 500)
-              }}
+              onClick={handleRemoveSelected}
             > 
               <DeleteOutline />
             </IconButton>
@@ -518,15 +538,7 @@ function MediaGalleryApp() {
               aria-label={`reset`}
               size="small"
               title="Reset"
-              onClick={() => {
-                // TODO: move to function
-                setItems(structuredClone(itemData))
-                setCurrentAlert({
-                  severity: "success",
-                  message: "Collection reset successfully!"
-                })
-                setTimeout(() => {handleSnackOpen()}, 500)
-              }}
+              onClick={handleResetItems}
             >
               <CachedOutlined />
             </IconButton>
@@ -650,15 +662,37 @@ function MediaGalleryApp() {
               <Divider/>
             </>
           }
-          <MenuItem onClick={handleContextClose}>Import</MenuItem>
+          <MenuItem onClick={() => {
+            handleContextClose()
+            handleImport()
+          }}>Import</MenuItem>
+          <Divider/>
           <MenuItem onClick={() => {
             handleContextClose()
             handleSelectAll()
           }}>Select all</MenuItem>
-          <MenuItem onClick={handleContextClose}>Select none</MenuItem>
-          <MenuItem onClick={handleContextClose}>Remove selected</MenuItem>
-          <MenuItem onClick={handleContextClose}>Sort by</MenuItem>
-          <MenuItem onClick={handleContextClose}>{ gridMode ? 'List view' : 'Grid view'}</MenuItem>
+          <MenuItem onClick={() => {
+            handleContextClose()
+            handleSelectNone()
+          }}>Select none</MenuItem>
+          <Divider/>
+          <MenuItem onClick={() => {
+            handleContextClose()
+            handleRemoveSelected()
+          }}>Remove selected</MenuItem>
+          <MenuItem onClick={(event) => {
+            handleSortClick(event)
+            handleContextClose()
+          }}>Sort by</MenuItem>
+          <MenuItem onClick={() => {
+            handleContextClose()
+            handleResetItems()
+          }}>Reset</MenuItem>
+          <Divider/>
+          <MenuItem onClick={() => {
+            handleContextClose()
+            gridMode ? setGridMode(false) : setGridMode(true)
+          }}>{ gridMode ? 'List view' : 'Grid view'}</MenuItem>
         </Menu>
 
         {/* Main view */}
@@ -827,6 +861,7 @@ function MediaGalleryApp() {
                         key={item.img}
                         id={item.id}>
                         <TableCell
+                          id={item.id}
                           sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
                         >
                           <IconButton
@@ -849,6 +884,7 @@ function MediaGalleryApp() {
                           </IconButton>
                         </TableCell>
                         <TableCell
+                          id={item.id}
                           sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
                         >
                           <img
@@ -857,10 +893,12 @@ function MediaGalleryApp() {
                             alt={item.title}
                             title="Click to zoom"
                             onClick={() => handleFullScreenView(item)}
+                            id={item.id}
                             loading="lazy"
                           />
                         </TableCell>
                         <TableCell align="left"
+                          id={item.id}
                           sx={{bgcolor: `${item.selected ? '#444' : ''}`}}
                         >
                           <IconButton
@@ -869,8 +907,8 @@ function MediaGalleryApp() {
                           title="Click to zoom"
                           onClick={() => handleFullScreenView(item)}
                         >
-                          <VisibilityOutlined />
-                        </IconButton>
+                            <VisibilityOutlined />
+                          </IconButton>
                           <IconButton
                             sx={{ color: "white" }}
                             aria-label={`edit`}
@@ -888,8 +926,18 @@ function MediaGalleryApp() {
                             <DeleteOutline />
                           </IconButton>
                         </TableCell>
-                        <TableCell sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} align="left">{item.title}</TableCell>
-                        <TableCell sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} align="left">{item.author}</TableCell>
+                        <TableCell 
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} 
+                          id={item.id}
+                          align="left">
+                          {item.title}
+                          </TableCell>
+                        <TableCell 
+                          sx={{ bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }} 
+                          id={item.id}
+                          align="left">
+                          {item.author}
+                        </TableCell>
                       </SortableTableRow>
                     ))}
                   </TableBody>
