@@ -92,6 +92,9 @@ import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
 
+/**
+ * Media item
+ */
 interface MediaItem {
   id: number;
   selected: boolean;
@@ -101,6 +104,9 @@ interface MediaItem {
   author: string;
 }
 
+/**
+ * Alert message
+ */
 interface AlertMessage {
   severity: AlertColor
   message: string
