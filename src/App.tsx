@@ -134,8 +134,8 @@ function MediaGalleryApp() {
   const [chApi, setChApi] = useState<ChApi>();
   const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
   const [importDrawerOpen, setImportDrawerOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const sortOpen = Boolean(anchorEl);
+  const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
+  const sortOpen = Boolean(sortAnchorEl);
   const [dragging, setDragging] = useState(false)
   const [fullscreenView, setFullscreenView] = useState(false)
   const [contextMedia, setContextMedia] = useState<any | null>(null)
@@ -229,7 +229,7 @@ function MediaGalleryApp() {
    * @param event 
    */
   const handleSortClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setSortAnchorEl(event.currentTarget);
   };
 
   /**
@@ -258,7 +258,7 @@ function MediaGalleryApp() {
    * TODO: move to components
    */
   const handleSortClose = () => {
-    setAnchorEl(null);
+    setSortAnchorEl(null);
   };
 
   /**
@@ -349,6 +349,8 @@ function MediaGalleryApp() {
           setGridMode(true)
         } else if (event.key.toLowerCase() === 'l') {
           setGridMode(false)
+        } else if (event.key.toLowerCase() === 's') {
+          setSortAnchorEl(document.getElementById('toolbar-icon-sort'))
         } else if (event.key === 'ArrowRight') {
           offsetActiveElementIndex(1)
         } else if (event.key === 'ArrowLeft') {
@@ -419,8 +421,9 @@ function MediaGalleryApp() {
    * @param id 
    */
   const removeItem = (id: number) => {
-    const newItems = items.filter((item: any) => id !== item.id)
-    setItems(newItems)
+    setItems((prevState: MediaItem[]) => {
+      return prevState.filter((item: any) => id !== item.id)
+    })
   }
 
   /**
@@ -428,36 +431,36 @@ function MediaGalleryApp() {
    * @param id 
    */
   const selectItem = (id: number) => {
-    const newItems = structuredClone(items)
-    const itemToUpdate = newItems.find((element: any) => element.id === id)
-    if (itemToUpdate) {
-      itemToUpdate.selected = !itemToUpdate.selected
-      setItems(newItems)
-    }
+    setItems((prevState: MediaItem[]) => {
+      return prevState.map((item: MediaItem) => {
+        if (item.id === id) item.selected = !item.selected
+        return item
+      })
+    })
   }
 
   /**
    * Select all items
    */
   const handleSelectAll = () => {
-    const newItems = structuredClone(items)
-    newItems.map((element: any) => {
-      element.selected = true
-      return element
+    setItems((prevState: MediaItem[]) => {
+      return prevState.map((element: MediaItem) => {
+        element.selected = true
+        return element
+      })
     })
-    setItems(newItems)
   }
 
   /**
    * Un-select all items
    */
   const handleSelectNone = () => {
-    const newItems = structuredClone(items)
-    newItems.map((element: any) => {
-      element.selected = false
-      return element
+    setItems((prevState: MediaItem[]) => {
+      return prevState.map((element: any) => {
+        element.selected = false
+        return element
+      })
     })
-    setItems(newItems)
   }
 
   /**
@@ -690,6 +693,7 @@ function MediaGalleryApp() {
               title="Sort by"
               onClick={handleSortClick}
               size="small"
+              id="toolbar-icon-sort"
             >
               <SortOutlined />
             </IconButton>
@@ -707,7 +711,7 @@ function MediaGalleryApp() {
             {/* TODO: move to components */}
             <Menu
               id="basic-menu"
-              anchorEl={anchorEl}
+              anchorEl={sortAnchorEl}
               open={sortOpen}
               onClose={handleSortClose}
               MenuListProps={{
@@ -718,7 +722,9 @@ function MediaGalleryApp() {
                 <ListSubheader>Sort By</ListSubheader>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
-                  setItems(structuredClone(items).sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
+                  setItems((prevState: MediaItem[]) => {
+                    return prevState.sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
+                  })
                   handleSortClose()
                 }}>
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
@@ -726,7 +732,9 @@ function MediaGalleryApp() {
                 </MenuItem>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
-                  setItems(structuredClone(items).sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
+                  setItems((prevState: MediaItem[]) => {
+                    return prevState.sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime()))
+                  })
                   handleSortClose()
                 }}>
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
@@ -734,7 +742,9 @@ function MediaGalleryApp() {
                 </MenuItem>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
-                  setItems(structuredClone(items).sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
+                  setItems((prevState: MediaItem[]) => {
+                    return prevState.sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0))
+                  })
                   handleSortClose()
                 }}>
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
@@ -742,7 +752,9 @@ function MediaGalleryApp() {
                 </MenuItem>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
-                  setItems(structuredClone(items).sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
+                  setItems((prevState: MediaItem[]) => {
+                    return prevState.sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0))
+                  })
                   handleSortClose()
                 }}>
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
@@ -750,7 +762,9 @@ function MediaGalleryApp() {
                 </MenuItem>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
-                  setItems(structuredClone(items).sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
+                  setItems((prevState: MediaItem[]) => {
+                    return prevState.sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+                  })
                   handleSortClose()
                 }}>
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
@@ -758,7 +772,9 @@ function MediaGalleryApp() {
                 </MenuItem>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
-                  setItems(structuredClone(items).sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
+                  setItems((prevState: MediaItem[]) => {
+                    return prevState.sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0))
+                  })
                   handleSortClose()
                 }}>
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
@@ -898,6 +914,7 @@ function MediaGalleryApp() {
                 <SortOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Sort by</ListItemText>
+              <Typography variant="body2" color="text.secondary">S</Typography>
             </MenuItem>
             <MenuItem onClick={() => {
               handleContextClose()
@@ -1108,7 +1125,7 @@ function MediaGalleryApp() {
                             title="Select"
                             onClick={() => {
                               // TODO: move to function
-                              const newItems = items.slice()
+                              const newItems = structuredClone(items)
                               const itemToUpdate = newItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
                                 itemToUpdate.selected = !itemToUpdate.selected
@@ -1339,7 +1356,7 @@ function MediaGalleryApp() {
                     title="Select all"
                     onClick={() => {
                       // TODO: move to function
-                      const newItems = importItems.slice()
+                      const newItems = structuredClone(importItems)
                       newItems.map((element: any) => {
                         element.selected = true
                         return element
@@ -1355,7 +1372,7 @@ function MediaGalleryApp() {
                     title="Select none"
                     onClick={() => {
                       // TODO: move to function
-                      const newItems = importItems.slice()
+                      const newItems = structuredClone(importItems)
                       newItems.map((element: any) => {
                         element.selected = false
                         return element
@@ -1389,7 +1406,7 @@ function MediaGalleryApp() {
                             title="Select"
                             onClick={() => {
                               // TODO: move to function
-                              const newImportItems = importItems.slice()
+                              const newImportItems = structuredClone(importItems)
                               const itemToUpdate = newImportItems.find((element: any) => element.id === item.id)
                               if (itemToUpdate) {
                                 itemToUpdate.selected = !itemToUpdate.selected
