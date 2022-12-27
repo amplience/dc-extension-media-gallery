@@ -340,7 +340,7 @@ function MediaGalleryApp() {
    */
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      const nonModalMode = !importDrawerOpen && !detailDrawerOpen && !sortOpen && !dragging && !contextMenu
+      const nonModalMode = !fullscreenView && !importDrawerOpen && !detailDrawerOpen && !sortOpen && !dragging && !contextMenu
       if (nonModalMode) {
         if (event.key.toLowerCase() === 'i') {
           handleImport()
@@ -402,7 +402,7 @@ function MediaGalleryApp() {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [items, dragging, cols, gridMode, importDrawerOpen, detailDrawerOpen, sortOpen, contextMenu]);
+  }, [items, dragging, cols, gridMode, fullscreenView, importDrawerOpen, detailDrawerOpen, sortOpen, contextMenu]);
 
   /** 
    * Getting folders from Content Hub
