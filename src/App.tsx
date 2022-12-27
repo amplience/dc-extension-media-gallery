@@ -357,6 +357,11 @@ function MediaGalleryApp() {
           setGridMode(true)
         } else if (event.key.toLowerCase() === 'l') {
           setGridMode(false)
+        } else if (event.key.toLowerCase() === 'm') {
+          const element = document.activeElement as HTMLElement
+          const id = element.id
+          setContextMedia(items.find((item) => item.id === parseInt(id)) || null)
+          setContextMenu({mouseX: element.getBoundingClientRect().x+50, mouseY: element.getBoundingClientRect().y+50})
         } else if (event.key.toLowerCase() === 's') {
           setSortAnchorEl(document.getElementById('toolbar-icon-sort'))
         } else if (event.key === 'ArrowRight') {
@@ -876,7 +881,7 @@ function MediaGalleryApp() {
                   <ListItemText>Select</ListItemText>
                 </MenuItem>
                 */}
-                <MenuItem dense onClick={() => {
+                <MenuItem dense autoFocus onClick={() => {
                   handleContextClose()
                   handleFullScreenView(contextMedia)
                 }}>
@@ -907,7 +912,7 @@ function MediaGalleryApp() {
               </>
             }
             <ListSubheader>Global</ListSubheader>
-            <MenuItem dense onClick={() => {
+            <MenuItem autoFocus={contextMedia == null} dense onClick={() => {
               handleContextClose()
               handleImport()
             }}>

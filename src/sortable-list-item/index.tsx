@@ -20,7 +20,7 @@ export default function SortableListItem(props: any) {
   };
   
   return (
-    <ImageListItem className="gridItem" ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <ImageListItem id={props.id} className="gridItem" ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {props.children}
     </ImageListItem>
   );
