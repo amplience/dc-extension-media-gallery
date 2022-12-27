@@ -717,7 +717,6 @@ function MediaGalleryApp() {
 
             {/* Sort menu */}
             {/* TODO: move to components */}
-            {/* BUG: focus skipped when using up/down arrows */}
             <Menu
               id="basic-menu"
               anchorEl={sortAnchorEl}
@@ -727,7 +726,6 @@ function MediaGalleryApp() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuList sx={{ width: '250px' }} dense>
                 <ListSubheader>Sort By</ListSubheader>
                 <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
@@ -789,7 +787,6 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Caption Desc</ListItemText>
                 </MenuItem>
-              </MenuList>
             </Menu>
             <Divider
               orientation="vertical"
@@ -821,7 +818,6 @@ function MediaGalleryApp() {
         </AppBar>
 
         {/* Context Menu */}
-        {/* BUG: focus skipped when using up/down arrows */}
         <Menu
           open={contextMenu !== null}
           onClose={handleContextClose}
@@ -832,7 +828,6 @@ function MediaGalleryApp() {
               : undefined
           }
         >
-          <MenuList sx={{ width: '300px' }} dense>
             {
               contextMedia != null &&
               <>
@@ -961,8 +956,6 @@ function MediaGalleryApp() {
                 <Typography variant="body2" color="text.secondary">G</Typography>
               </MenuItem>
             }
-
-          </MenuList>
         </Menu>
 
         {/* Main view */}
