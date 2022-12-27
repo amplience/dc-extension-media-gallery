@@ -370,7 +370,7 @@ function MediaGalleryApp() {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [dragging, cols, gridMode, importDrawerOpen, detailDrawerOpen, sortOpen, contextMenu]);
+  }, [items, dragging, cols, gridMode, importDrawerOpen, detailDrawerOpen, sortOpen, contextMenu]);
 
   /** 
    * Getting folders from Content Hub
@@ -1123,15 +1123,7 @@ function MediaGalleryApp() {
                             sx={{ color: "white" }}
                             aria-label={`select`}
                             title="Select"
-                            onClick={() => {
-                              // TODO: move to function
-                              const newItems = structuredClone(items)
-                              const itemToUpdate = newItems.find((element: any) => element.id === item.id)
-                              if (itemToUpdate) {
-                                itemToUpdate.selected = !itemToUpdate.selected
-                                setItems(newItems)
-                              }
-                            }}
+                            onClick={() => {selectItem(item.id)}}
                           >
                             {
                               item.selected ? <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
