@@ -101,6 +101,11 @@ interface MediaItem {
   author: string;
 }
 
+interface AlertMessage {
+  severity: AlertColor
+  message: string
+}
+
 // TODO: get assets from Content Hub
 const itemData: MediaItem[] = [
   { id: 1, selected: false, dateModified: "2022-12-21T20:15:20.379Z", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d", title: "Burger", author: "@rollelflex_graphy726", },
@@ -143,10 +148,7 @@ function MediaGalleryApp() {
   const [tempMedia, setTempMedia] = useState<MediaItem | null>(null)
   const [snackOpen, setSnackOpen] = useState(false);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false)
-  const [currentAlert, setCurrentAlert] = useState({
-    message: "Sucess!",
-    severity: "success"
-  })
+  const [currentAlert, setCurrentAlert] = useState<AlertMessage | null>(null)
   const [contextMenu, setContextMenu] = useState<{
     mouseX: number;
     mouseY: number;
@@ -1455,8 +1457,8 @@ function MediaGalleryApp() {
         onClose={handleSnackClose}
         TransitionComponent={SlideTransition}
       >
-        <Alert onClose={handleSnackClose} severity={currentAlert.severity as AlertColor} sx={{ width: '100%' }}>
-          {currentAlert.message}
+        <Alert onClose={handleSnackClose} severity={currentAlert?.severity} sx={{ width: '100%' }}>
+          {currentAlert?.message}
         </Alert>
       </Snackbar>
     </ExtensionContextProvider>
