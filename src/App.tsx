@@ -303,11 +303,38 @@ function MediaGalleryApp() {
   };
 
   /**
+   * Move focus from current active element
+   * @param offset 
+   */
+  const offsetActiveElementIndex = (offset: number) => {
+    const element: Element | null = document.activeElement
+    if (element) {
+      const parent: HTMLElement | null = element.parentElement
+      if (parent) {
+        const children: HTMLCollection = parent.children
+        if (children) {
+          let found = -1
+          for (let i = 0; i < children.length; i++) {
+            if (children[i] === element) {
+              found = i
+            }
+            if ((found + offset < children.length ) &&
+              (found + offset >= 0)) {
+              (children.item(found + offset) as HTMLElement).focus()
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * Keyboard shortcuts
    */
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      if (!importDrawerOpen && !detailDrawerOpen ) {
+      const nonModalMode = !importDrawerOpen && !detailDrawerOpen && !sortOpen && !dragging && !contextMenu
+      if (nonModalMode) {
         if (event.key.toLowerCase() === 'i') {
           handleImport()
         } else if (event.key.toLowerCase() === 'a') {
@@ -322,127 +349,18 @@ function MediaGalleryApp() {
           setGridMode(true)
         } else if (event.key.toLowerCase() === 'l') {
           setGridMode(false)
-        }
-      }
-      if (event.key === 'ArrowRight' && !dragging) {
-        const element: Element | null= document.activeElement
-        if (element) {
-          const parent: HTMLElement | null= element.parentElement
-          if (parent) {
-            const children: HTMLCollection = parent.children
-            if (children) {
-              let found = -1
-              for (let i = 0; i < children.length; i++) {
-                if (children[i] === element) {
-                  found = i
-                  break
-                }
-              }
-              if (found < children.length - 1) {
-                (children.item(found + 1) as HTMLElement).focus()
-              }
-            }
-          }
-        }
-      } else if (event.key === 'ArrowLeft' && !dragging) {
-        const element: Element | null= document.activeElement
-        if (element) {
-          const parent: HTMLElement | null= element.parentElement
-          if (parent) {
-            const children: HTMLCollection = parent.children
-            if (children) {
-              let found = -1
-              for (let i = 0; i < children.length; i++) {
-                if (children[i] === element) {
-                  found = i
-                  break
-                }
-              }
-              if (found -1 >= 0) {
-                (children.item(found - 1) as HTMLElement).focus()
-              }
-            }
-          }
-        }
-      } else if (event.key === 'ArrowDown' && !dragging && gridMode) {
-        const element: Element | null= document.activeElement
-        if (element) {
-          const parent: HTMLElement | null= element.parentElement
-          if (parent) {
-            const children: HTMLCollection = parent.children
-            if (children) {
-              let found = -1
-              for (let i = 0; i < children.length; i++) {
-                if (children[i] === element) {
-                  found = i
-                  break
-                }
-              }
-              if (found + cols < children.length - 1) {
-                (children.item(found + cols) as HTMLElement).focus()
-              }
-            }
-          }
-        }
-      } else if (event.key === 'ArrowUp' && !dragging && gridMode) {
-        const element: Element | null= document.activeElement
-        if (element) {
-          const parent: HTMLElement | null= element.parentElement
-          if (parent) {
-            const children: HTMLCollection = parent.children
-            if (children) {
-              let found = -1
-              for (let i = 0; i < children.length; i++) {
-                if (children[i] === element) {
-                  found = i
-                  break
-                }
-              }
-              if (found - cols >= 0) {
-                (children.item(found - cols) as HTMLElement).focus()
-              }
-            }
-          }
-        }
-      } else if (event.key === 'ArrowDown' && !dragging && !gridMode) {
-        const element: Element | null= document.activeElement
-        if (element) {
-          const parent: HTMLElement | null= element.parentElement
-          if (parent) {
-            const children: HTMLCollection = parent.children
-            if (children) {
-              let found = -1
-              for (let i = 0; i < children.length; i++) {
-                if (children[i] === element) {
-                  found = i
-                  break
-                }
-              }
-              if (found < children.length - 1) {
-                (children.item(found + 1) as HTMLElement).focus()
-              }
-            }
-          }
-        }
-      } else if (event.key === 'ArrowUp' && !dragging && !gridMode) {
-        const element: Element | null= document.activeElement
-        if (element) {
-          const parent: HTMLElement | null= element.parentElement
-          if (parent) {
-            const children: HTMLCollection = parent.children
-            if (children) {
-              let found = -1
-              for (let i = 0; i < children.length; i++) {
-                if (children[i] === element) {
-                  found = i
-                  break
-                }
-              }
-              if (found -1 >= 0) {
-                (children.item(found - 1) as HTMLElement).focus()
-              }
-            }
-          }
+        } else if (event.key === 'ArrowRight') {
+          offsetActiveElementIndex(1)
+        } else if (event.key === 'ArrowLeft') {
+          offsetActiveElementIndex(-1)
+        } else if (event.key === 'ArrowDown' && gridMode) {
+          offsetActiveElementIndex(cols)
+        } else if (event.key === 'ArrowUp' && gridMode) {
+          offsetActiveElementIndex(-cols)
+        } else if (event.key === 'ArrowDown' && !gridMode) {
+          offsetActiveElementIndex(1) 
+        } else if (event.key === 'ArrowUp' && !gridMode) {
+          offsetActiveElementIndex(-1)
         }
       }
     };
@@ -450,7 +368,7 @@ function MediaGalleryApp() {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [dragging, cols, gridMode, importDrawerOpen, detailDrawerOpen]);
+  }, [dragging, cols, gridMode, importDrawerOpen, detailDrawerOpen, sortOpen, contextMenu]);
 
   /** 
    * Getting folders from Content Hub
@@ -474,10 +392,10 @@ function MediaGalleryApp() {
     })();
   }, []);
 
- /**
-   * Drag-end-Drop action start
-   * @param event 
-   */
+  /**
+    * Drag-end-Drop action start
+    * @param event 
+    */
   const dragStart = (event: any) => {
     setDragging(true)
   }
@@ -488,22 +406,35 @@ function MediaGalleryApp() {
    */
   const dragEnd = (event: any) => {
     setDragging(false)
-    const { active, over } = event;
+    const { active, over } = event
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex((item: any) => item.id === active.id);
-      const newIndex = items.findIndex((item: any) => item.id === over.id);
-      setItems(arrayMove(items, oldIndex, newIndex));
+      const oldIndex = items.findIndex((item: any) => item.id === active.id)
+      const newIndex = items.findIndex((item: any) => item.id === over.id)
+      setItems(arrayMove(items, oldIndex, newIndex))
     }
   };
 
   /**
    * Removing an item from the collection
-   * @param index 
+   * @param id 
    */
   const removeItem = (id: number) => {
-    const newItems = items.filter((item: any) => id !== item.id);
-    setItems(newItems);
-  };
+    const newItems = items.filter((item: any) => id !== item.id)
+    setItems(newItems)
+  }
+
+  /**
+   * Select an item in the collection
+   * @param id 
+   */
+  const selectItem = (id: number) => {
+    const newItems = structuredClone(items)
+    const itemToUpdate = newItems.find((element: any) => element.id === id)
+    if (itemToUpdate) {
+      itemToUpdate.selected = !itemToUpdate.selected
+      setItems(newItems)
+    }
+  }
 
   /**
    * Select all items
@@ -550,6 +481,9 @@ function MediaGalleryApp() {
     setTimeout(() => { handleSnackOpen() }, 500)
   }
 
+  /**
+   * Reset collection
+   */
   const handleResetItems = () => {
     setItems(structuredClone(itemData))
     setCurrentAlert({
@@ -559,6 +493,9 @@ function MediaGalleryApp() {
     setTimeout(() => { handleSnackOpen() }, 500)
   }
 
+  /**
+   * Prepare and open import drawer
+   */
   const handleImport = () => {
     const newItems = structuredClone(importItems)
     newItems.map((element: any) => {
@@ -569,9 +506,44 @@ function MediaGalleryApp() {
     setImportDrawerOpen(true)
   }
 
+  /**
+   * Import new media in collection
+   */
+  const importMedia = () => {
+    setImportDrawerOpen(false)
+    if (importItems.filter((item: any) => item.selected).length === 0) {
+      setCurrentAlert({
+        severity: "info",
+        message: "No media file selected for import"
+      })
+      setTimeout(() => { handleSnackOpen() }, 500)
+    } else {
+      const newItems = structuredClone(items)
+      const newSelectedItems = importItems.filter((item: any) => {
+        return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
+      }).map((item: any) => {
+        item.selected = false
+        return item
+      })
+      setTimeout(() => { setItems(newItems.concat(structuredClone(newSelectedItems))) }, 500)
+      if (newSelectedItems.length > 0) {
+        setCurrentAlert({
+          severity: "success",
+          message: `${newSelectedItems.length} new media file${newSelectedItems.length > 1 ? 's' : ''} successful imported!`
+        })
+      } else {
+        setCurrentAlert({
+          severity: "info",
+          message: `No new media file was imported`
+        })
+      }
+      setTimeout(() => { handleSnackOpen() }, 1000)
+    }
+  }
+
   return (
     <ExtensionContextProvider>
-      
+
       {/* Image full screen view */}
       {/* TODO: move to components */}
       {/* TODO: mode styles for all components */}
@@ -744,7 +716,7 @@ function MediaGalleryApp() {
             >
               <MenuList sx={{ width: '250px' }} dense>
                 <ListSubheader>Sort By</ListSubheader>
-                <MenuItem onClick={() => {
+                <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
                   setItems(structuredClone(items).sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime())))
                   handleSortClose()
@@ -752,7 +724,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Date Modified Asc</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
                   setItems(structuredClone(items).sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime())))
                   handleSortClose()
@@ -760,7 +732,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Date Modified Desc</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
                   setItems(structuredClone(items).sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0)))
                   handleSortClose()
@@ -768,7 +740,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Author Asc</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
                   setItems(structuredClone(items).sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0)))
                   handleSortClose()
@@ -776,7 +748,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Author Desc</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
                   setItems(structuredClone(items).sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                   handleSortClose()
@@ -784,7 +756,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Caption Asc</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem tabIndex={0} onClick={() => {
                   // TODO: move to function
                   setItems(structuredClone(items).sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0)))
                   handleSortClose()
@@ -838,7 +810,7 @@ function MediaGalleryApp() {
             {
               contextMedia != null &&
               <>
-                <ListSubheader style={{width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                <ListSubheader style={{ width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {contextMedia.title}
                 </ListSubheader>
                 <MenuItem onClick={() => {
@@ -880,6 +852,7 @@ function MediaGalleryApp() {
                 <AddPhotoAlternateOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Import</ListItemText>
+              <Typography variant="body2" color="text.secondary">I</Typography>
             </MenuItem>
             <Divider />
             <MenuItem onClick={() => {
@@ -890,6 +863,7 @@ function MediaGalleryApp() {
                 <GridViewSharp fontSize="small" />
               </ListItemIcon>
               <ListItemText>Select all</ListItemText>
+              <Typography variant="body2" color="text.secondary">A</Typography>
             </MenuItem>
             <MenuItem onClick={() => {
               handleContextClose()
@@ -899,6 +873,7 @@ function MediaGalleryApp() {
                 <GridViewOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Select none</ListItemText>
+              <Typography variant="body2" color="text.secondary">N</Typography>
             </MenuItem>
             <Divider />
             <MenuItem onClick={() => {
@@ -910,9 +885,10 @@ function MediaGalleryApp() {
               </ListItemIcon>
               <ListItemText>
                 <Badge badgeContent={items.filter((item: any) => item.selected).length} color="secondary">
-                  Remove selected<Box style={{width: '10px'}} />
+                  Remove selected<Box style={{ width: '10px' }} />
                 </Badge>
               </ListItemText>
+              <Typography variant="body2" color="text.secondary">R</Typography>
             </MenuItem>
             <MenuItem onClick={(event) => {
               handleSortClick(event)
@@ -931,17 +907,34 @@ function MediaGalleryApp() {
                 <CachedOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Reset</ListItemText>
+              <Typography variant="body2" color="text.secondary">Z</Typography>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => {
-              handleContextClose()
-              gridMode ? setGridMode(false) : setGridMode(true)
-            }}>
-              <ListItemIcon>
-                {gridMode ? <ViewHeadlineOutlined fontSize="small" /> : <AppsOutlined fontSize="small" />}
-              </ListItemIcon>
-              <ListItemText>{gridMode ? 'List view' : 'Grid view'}</ListItemText>
-            </MenuItem>
+            {
+              gridMode ?
+                <MenuItem onClick={() => {
+                handleContextClose()
+                  setGridMode(false)
+                }}>
+                <ListItemIcon>
+                  <ViewHeadlineOutlined fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>List view</ListItemText>
+                <Typography variant="body2" color="text.secondary">L</Typography>
+              </MenuItem>
+            :
+              <MenuItem onClick={() => {
+                handleContextClose()
+                setGridMode(true)
+              }}>
+                <ListItemIcon>
+                  <AppsOutlined fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Grid view</ListItemText>
+                <Typography variant="body2" color="text.secondary">G</Typography>
+              </MenuItem>
+            }
+
           </MenuList>
         </Menu>
 
@@ -1019,15 +1012,7 @@ function MediaGalleryApp() {
                             }}
                             aria-label={`select ${item.title}`}
                             title="Select"
-                            onClick={() => {
-                              // TODO: move to function
-                              const newItems = items.slice()
-                              const itemToUpdate = newItems.find((element: any) => element.id === item.id)
-                              if (itemToUpdate) {
-                                itemToUpdate.selected = !itemToUpdate.selected
-                                setItems(newItems)
-                              }
-                            }}
+                            onClick={() => {selectItem(item.id)}}
                           >
                             {
                               item.selected ? <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
@@ -1053,27 +1038,27 @@ function MediaGalleryApp() {
                           subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
                           sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
                           position="below"
-                          // actionIcon={
-                          //   <IconButton
-                          //     sx={{ color: "white" }}
-                          //     aria-label={`select ${item.title}`}
-                          //     title="Select"
-                          //     onClick={() => {
-                          //       // TODO: move to function
-                          //       const newItems = items.slice()
-                          //       const itemToUpdate = newItems.find((element: any) => element.id === item.id)
-                          //       if (itemToUpdate) {
-                          //         itemToUpdate.selected = !itemToUpdate.selected
-                          //         setItems(newItems)
-                          //       }
-                          //     }}
-                          //   >
-                          //     {
-                          //       item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
-                          //     }
-                          //   </IconButton>
-                          // }
-                          // actionPosition="left"
+                        // actionIcon={
+                        //   <IconButton
+                        //     sx={{ color: "white" }}
+                        //     aria-label={`select ${item.title}`}
+                        //     title="Select"
+                        //     onClick={() => {
+                        //       // TODO: move to function
+                        //       const newItems = items.slice()
+                        //       const itemToUpdate = newItems.find((element: any) => element.id === item.id)
+                        //       if (itemToUpdate) {
+                        //         itemToUpdate.selected = !itemToUpdate.selected
+                        //         setItems(newItems)
+                        //       }
+                        //     }}
+                        //   >
+                        //     {
+                        //       item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
+                        //     }
+                        //   </IconButton>
+                        // }
+                        // actionPosition="left"
                         />
                       </SortableListItem>
                     ))}
@@ -1115,7 +1100,7 @@ function MediaGalleryApp() {
                       >
                         <TableCell
                           id={item.id}
-                          sx={{borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}` }}
+                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}` }}
                         >
                           <IconButton
                             sx={{ color: "white" }}
@@ -1429,38 +1414,7 @@ function MediaGalleryApp() {
               <Button
                 sx={{ mr: 2 }}
                 variant="contained"
-                onClick={() => {
-                  // TODO: move to function
-                  setImportDrawerOpen(false)
-                  if (importItems.filter((item: any) => item.selected).length === 0) {
-                    setCurrentAlert({
-                      severity: "info",
-                      message: "No media file selected for import"
-                    })
-                    setTimeout(() => { handleSnackOpen() }, 500)
-                  } else {
-                    const newItems = structuredClone(items)
-                    const newSelectedItems = importItems.filter((item: any) => {
-                      return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
-                    }).map((item: any) => {
-                      item.selected = false
-                      return item
-                    })
-                    setTimeout(() => { setItems(newItems.concat(structuredClone(newSelectedItems))) }, 500)
-                    if (newSelectedItems.length > 0) {
-                      setCurrentAlert({
-                        severity: "success",
-                        message: `${newSelectedItems.length} new media file${newSelectedItems.length > 1 ? 's' : ''} successful imported!`
-                      })
-                    } else {
-                      setCurrentAlert({
-                        severity: "info",
-                        message: `No new media file was imported`
-                      })
-                    }
-                    setTimeout(() => { handleSnackOpen() }, 1000)
-                  }
-                }}
+                onClick={importMedia}
               >Import</Button>
               <Button
                 variant="outlined"
