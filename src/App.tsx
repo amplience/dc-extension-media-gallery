@@ -725,9 +725,14 @@ function MediaGalleryApp() {
               MenuListProps={{
                 'aria-labelledby': 'basic-button',
               }}
+              PaperProps={{
+                style: {
+                  width: '270px'
+                }
+              }}
             >
                 <ListSubheader>Sort By</ListSubheader>
-                <MenuItem tabIndex={0} onClick={() => {
+                <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
@@ -737,7 +742,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Date Modified Asc</ListItemText>
                 </MenuItem>
-                <MenuItem tabIndex={0} onClick={() => {
+                <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime()))
@@ -747,7 +752,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Date Modified Desc</ListItemText>
                 </MenuItem>
-                <MenuItem tabIndex={0} onClick={() => {
+                <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0))
@@ -757,7 +762,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Author Asc</ListItemText>
                 </MenuItem>
-                <MenuItem tabIndex={0} onClick={() => {
+                <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0))
@@ -767,7 +772,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Author Desc</ListItemText>
                 </MenuItem>
-                <MenuItem tabIndex={0} onClick={() => {
+                <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
@@ -777,7 +782,7 @@ function MediaGalleryApp() {
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Caption Asc</ListItemText>
                 </MenuItem>
-                <MenuItem tabIndex={0} onClick={() => {
+                <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0))
@@ -827,6 +832,11 @@ function MediaGalleryApp() {
               ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
               : undefined
           }
+          PaperProps={{
+            style: {
+              width: '300px'
+            }
+          }}
         >
             {
               contextMedia != null &&
@@ -834,7 +844,7 @@ function MediaGalleryApp() {
                 <ListSubheader style={{ width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {contextMedia.title}
                 </ListSubheader>
-                <MenuItem onClick={() => {
+                <MenuItem dense onClick={() => {
                   handleContextClose()
                   handleFullScreenView(contextMedia)
                 }}>
@@ -843,7 +853,7 @@ function MediaGalleryApp() {
                   </ListItemIcon>
                   <ListItemText>View</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem dense onClick={() => {
                   handleContextClose()
                   handleDetailView(contextMedia)
                 }}>
@@ -852,7 +862,7 @@ function MediaGalleryApp() {
                   </ListItemIcon>
                   <ListItemText>Edit</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem dense onClick={() => {
                   handleContextClose()
                   removeItem(contextMedia.id)
                 }}>
@@ -865,7 +875,7 @@ function MediaGalleryApp() {
               </>
             }
             <ListSubheader>Global</ListSubheader>
-            <MenuItem onClick={() => {
+            <MenuItem dense onClick={() => {
               handleContextClose()
               handleImport()
             }}>
@@ -876,7 +886,7 @@ function MediaGalleryApp() {
               <Typography variant="body2" color="text.secondary">I</Typography>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => {
+            <MenuItem dense onClick={() => {
               handleContextClose()
               handleSelectAll()
             }}>
@@ -886,7 +896,7 @@ function MediaGalleryApp() {
               <ListItemText>Select all</ListItemText>
               <Typography variant="body2" color="text.secondary">A</Typography>
             </MenuItem>
-            <MenuItem onClick={() => {
+            <MenuItem dense onClick={() => {
               handleContextClose()
               handleSelectNone()
             }}>
@@ -897,7 +907,7 @@ function MediaGalleryApp() {
               <Typography variant="body2" color="text.secondary">N</Typography>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => {
+            <MenuItem dense onClick={() => {
               handleContextClose()
               handleRemoveSelected()
             }}>
@@ -911,7 +921,7 @@ function MediaGalleryApp() {
               </ListItemText>
               <Typography variant="body2" color="text.secondary">R</Typography>
             </MenuItem>
-            <MenuItem onClick={(event) => {
+            <MenuItem dense onClick={(event) => {
               handleSortClick(event)
               handleContextClose()
             }}>
@@ -921,7 +931,7 @@ function MediaGalleryApp() {
               <ListItemText>Sort by</ListItemText>
               <Typography variant="body2" color="text.secondary">S</Typography>
             </MenuItem>
-            <MenuItem onClick={() => {
+            <MenuItem dense onClick={() => {
               handleContextClose()
               handleResetItems()
             }}>
@@ -934,7 +944,7 @@ function MediaGalleryApp() {
             <Divider />
             {
               gridMode ?
-                <MenuItem onClick={() => {
+                <MenuItem dense onClick={() => {
                 handleContextClose()
                   setGridMode(false)
                 }}>
@@ -945,7 +955,7 @@ function MediaGalleryApp() {
                 <Typography variant="body2" color="text.secondary">L</Typography>
               </MenuItem>
             :
-              <MenuItem onClick={() => {
+              <MenuItem dense onClick={() => {
                 handleContextClose()
                 setGridMode(true)
               }}>
