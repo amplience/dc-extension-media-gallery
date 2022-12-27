@@ -709,6 +709,7 @@ function MediaGalleryApp() {
 
             {/* Sort menu */}
             {/* TODO: move to components */}
+            {/* BUG: focus skipped when using up/down arrows */}
             <Menu
               id="basic-menu"
               anchorEl={sortAnchorEl}
@@ -812,6 +813,7 @@ function MediaGalleryApp() {
         </AppBar>
 
         {/* Context Menu */}
+        {/* BUG: focus skipped when using up/down arrows */}
         <Menu
           open={contextMenu !== null}
           onClose={handleContextClose}
