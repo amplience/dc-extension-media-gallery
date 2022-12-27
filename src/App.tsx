@@ -174,7 +174,7 @@ function MediaGalleryApp() {
     event.preventDefault();
     if (event.target instanceof HTMLElement) {
       if (event.target.id) {
-        const filteredItems = items.filter((element: any) => ((event.target as HTMLElement).id === element.id))
+        const filteredItems = items.filter((element: MediaItem) => (parseInt((event.target as HTMLElement).id) === element.id))
         console.log(filteredItems)
         if (filteredItems.length > 0) {
           setContextMedia(filteredItems[0])
