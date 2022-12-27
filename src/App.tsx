@@ -453,7 +453,7 @@ function MediaGalleryApp() {
    * @param id 
    */
     const getItem = (id: number) => {
-      return items.find((item: MediaItem) => id == item.id)
+      return items.find((item: MediaItem) => id === item.id)
     }
 
   /**
