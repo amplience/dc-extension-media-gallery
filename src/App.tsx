@@ -26,7 +26,6 @@ import {
   NotesOutlined,
   LockOutlined,
   VisibilityOutlined,
-  CheckBoxOutlineBlankOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -245,7 +244,7 @@ function MediaGalleryApp() {
    * TODO: move to components
    * @param media 
    */
-  const handleFullScreenView = (media: any) => {
+  const handleFullScreenView = (media: MediaItem) => {
     setCurrentMedia(media)
     setFullscreenView(true)
   }
@@ -255,7 +254,7 @@ function MediaGalleryApp() {
    * TODO: move to components
    * @param media 
    */
-  const handleDetailView = (media: any) => {
+  const handleDetailView = (media: MediaItem) => {
     setCurrentMedia(media)
     setTempMedia(structuredClone(media))
     setDetailDrawerOpen(true)
@@ -349,14 +348,34 @@ function MediaGalleryApp() {
           handleSelectAll()
         } else if (event.key.toLowerCase() === 'n') {
           handleSelectNone()
-        } else if (event.key.toLowerCase() === 'z') {
+        } else if (event.key === 'Z') {
           handleResetItems()
-        } else if (event.key.toLowerCase() === 'r') {
+        } else if (event.key === 'R') {
           handleRemoveSelected()
         } else if (event.key.toLowerCase() === 'g') {
           setGridMode(true)
         } else if (event.key.toLowerCase() === 'l') {
           setGridMode(false)
+        } else if (event.key.toLowerCase() === 'v') {
+          const element = document.activeElement as HTMLElement
+          const id = parseInt(element.id)
+          const item = getItem(id)
+          if (item) {
+            handleFullScreenView(item) 
+          }
+        } else if (event.key.toLowerCase() === 'e') {
+          const element = document.activeElement as HTMLElement
+          const id = parseInt(element.id)
+          const item = getItem(id)
+          if (item) {
+            handleDetailView(item)
+          }
+        } else if (event.key === 'r') {
+          const element = document.activeElement as HTMLElement
+          const id = parseInt(element.id)
+          if (id) {
+            removeItem(id)
+          }
         } else if (event.key.toLowerCase() === 'm') {
           const element = document.activeElement as HTMLElement
           const id = element.id
@@ -430,12 +449,20 @@ function MediaGalleryApp() {
   };
 
   /**
-   * Removing an item from the collection
+   * Get an item from the collection
+   * @param id 
+   */
+    const getItem = (id: number) => {
+      return items.find((item: MediaItem) => id == item.id)
+    }
+
+  /**
+   * Remove an item from the collection
    * @param id 
    */
   const removeItem = (id: number) => {
     setItems((prevState: MediaItem[]) => {
-      return prevState.filter((item: any) => id !== item.id)
+      return prevState.filter((item: MediaItem) => id !== item.id)
     })
   }
 
@@ -756,7 +783,7 @@ function MediaGalleryApp() {
               }}
             >
                 <ListSubheader>Sort By</ListSubheader>
-                <MenuItem dense onClick={() => {
+                <MenuItem dense autoFocus onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
                     return prevState.sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
@@ -889,6 +916,7 @@ function MediaGalleryApp() {
                     <VisibilityOutlined fontSize="small" />
                   </ListItemIcon>
                   <ListItemText>View</ListItemText>
+                  <Typography variant="body2" color="text.secondary">v</Typography>
                 </MenuItem>
                 <MenuItem dense onClick={() => {
                   handleContextClose()
@@ -898,6 +926,7 @@ function MediaGalleryApp() {
                     <EditOutlined fontSize="small" />
                   </ListItemIcon>
                   <ListItemText>Edit</ListItemText>
+                  <Typography variant="body2" color="text.secondary">e</Typography>
                 </MenuItem>
                 <MenuItem dense onClick={() => {
                   handleContextClose()
@@ -907,6 +936,7 @@ function MediaGalleryApp() {
                     <DeleteOutline fontSize="small" />
                   </ListItemIcon>
                   <ListItemText>Remove</ListItemText>
+                  <Typography variant="body2" color="text.secondary">r</Typography>
                 </MenuItem>
                 <Divider />
               </>
@@ -920,7 +950,7 @@ function MediaGalleryApp() {
                 <AddPhotoAlternateOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Import</ListItemText>
-              <Typography variant="body2" color="text.secondary">I</Typography>
+              <Typography variant="body2" color="text.secondary">i</Typography>
             </MenuItem>
             <Divider />
             <MenuItem dense onClick={() => {
@@ -931,7 +961,7 @@ function MediaGalleryApp() {
                 <GridViewSharp fontSize="small" />
               </ListItemIcon>
               <ListItemText>Select all</ListItemText>
-              <Typography variant="body2" color="text.secondary">A</Typography>
+              <Typography variant="body2" color="text.secondary">a</Typography>
             </MenuItem>
             <MenuItem dense onClick={() => {
               handleContextClose()
@@ -941,7 +971,7 @@ function MediaGalleryApp() {
                 <GridViewOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Select none</ListItemText>
-              <Typography variant="body2" color="text.secondary">N</Typography>
+              <Typography variant="body2" color="text.secondary">n</Typography>
             </MenuItem>
             <Divider />
             <MenuItem dense onClick={() => {
@@ -966,7 +996,7 @@ function MediaGalleryApp() {
                 <SortOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>Sort by</ListItemText>
-              <Typography variant="body2" color="text.secondary">S</Typography>
+              <Typography variant="body2" color="text.secondary">s</Typography>
             </MenuItem>
             <MenuItem dense onClick={() => {
               handleContextClose()
@@ -989,7 +1019,7 @@ function MediaGalleryApp() {
                   <ViewHeadlineOutlined fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>List view</ListItemText>
-                <Typography variant="body2" color="text.secondary">L</Typography>
+                <Typography variant="body2" color="text.secondary">l</Typography>
               </MenuItem>
             :
               <MenuItem dense onClick={() => {
@@ -1000,7 +1030,7 @@ function MediaGalleryApp() {
                   <AppsOutlined fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Grid view</ListItemText>
-                <Typography variant="body2" color="text.secondary">G</Typography>
+                <Typography variant="body2" color="text.secondary">g</Typography>
               </MenuItem>
             }
         </Menu>
@@ -1105,27 +1135,6 @@ function MediaGalleryApp() {
                           subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
                           sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
                           position="below"
-                        // actionIcon={
-                        //   <IconButton
-                        //     sx={{ color: "white" }}
-                        //     aria-label={`select ${item.title}`}
-                        //     title="Select"
-                        //     onClick={() => {
-                        //       // TODO: move to function
-                        //       const newItems = items.slice()
-                        //       const itemToUpdate = newItems.find((element: any) => element.id === item.id)
-                        //       if (itemToUpdate) {
-                        //         itemToUpdate.selected = !itemToUpdate.selected
-                        //         setItems(newItems)
-                        //       }
-                        //     }}
-                        //   >
-                        //     {
-                        //       item.selected ?  <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
-                        //     }
-                        //   </IconButton>
-                        // }
-                        // actionPosition="left"
                         />
                       </SortableListItem>
                     ))}
@@ -1278,7 +1287,7 @@ function MediaGalleryApp() {
               srcSet={`${currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
               alt={currentMedia?.title}
               title="Click to zoom"
-              onClick={() => { handleFullScreenView(currentMedia) }}
+              onClick={() => { currentMedia && handleFullScreenView(currentMedia) }}
               loading="lazy"
             />
             <TextField

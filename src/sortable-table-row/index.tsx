@@ -19,7 +19,7 @@ export default function SortableTableRow(props: any) {
   };
   
   return (
-    <TableRow ref={setNodeRef} 
+    <TableRow id={props.id} ref={setNodeRef} 
       sx={{
         'border': "1px transparent solid",
         '&:focus': {
