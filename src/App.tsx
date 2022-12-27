@@ -25,7 +25,8 @@ import {
   PhotoCameraFrontOutlined,
   NotesOutlined,
   LockOutlined,
-  VisibilityOutlined
+  VisibilityOutlined,
+  CheckBoxOutlineBlankOutlined
 } from "@mui/icons-material";
 import {
   Alert,
@@ -42,7 +43,6 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
-  MenuList,
   Slide,
   Snackbar,
   SwipeableDrawer,
@@ -138,8 +138,8 @@ function MediaGalleryApp() {
   const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
 
   const [cols, setCols] = useState(5);
-  const [items, setItems] = useState(structuredClone(itemData));
-  const [importItems, setImportItems] = useState(structuredClone(itemData));
+  const [items, setItems] = useState<MediaItem[]>(structuredClone(itemData));
+  const [importItems, setImportItems] = useState<MediaItem[]>(structuredClone(itemData));
   const [gridMode, setGridMode] = useState(true);
   const [repo, setRepo] = useState<EnrichedRepository>();
   const [chApi, setChApi] = useState<ChApi>();
@@ -149,7 +149,7 @@ function MediaGalleryApp() {
   const sortOpen = Boolean(sortAnchorEl);
   const [dragging, setDragging] = useState(false)
   const [fullscreenView, setFullscreenView] = useState(false)
-  const [contextMedia, setContextMedia] = useState<any | null>(null)
+  const [contextMedia, setContextMedia] = useState<MediaItem | null>(null)
   const [currentMedia, setCurrentMedia] = useState<MediaItem | null>(null)
   const [tempMedia, setTempMedia] = useState<MediaItem | null>(null)
   const [snackOpen, setSnackOpen] = useState(false);
@@ -846,6 +846,16 @@ function MediaGalleryApp() {
                 </ListSubheader>
                 <MenuItem dense onClick={() => {
                   handleContextClose()
+                  alert(contextMedia.id)
+                  selectItem(contextMedia.id)
+                }}>
+                  <ListItemIcon>
+                    <CheckBoxOutlineBlankOutlined fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Select</ListItemText>
+                </MenuItem>
+                <MenuItem dense onClick={() => {
+                  handleContextClose()
                   handleFullScreenView(contextMedia)
                 }}>
                   <ListItemIcon>
@@ -1305,7 +1315,12 @@ function MediaGalleryApp() {
                 onClick={() => {
                   // TODO: move to function
                   setDetailDrawerOpen(false)
-                  setCurrentMedia(tempMedia) // TODO: not working
+                  tempMedia && setItems((prevState: MediaItem[]) => {
+                    return prevState.map((item: MediaItem) => {
+                      if (item.id === tempMedia.id) item = tempMedia
+                      return item
+                    })
+                  })
                   setCurrentAlert({
                     severity: "success",
                     message: "Media details successfully saved!"
