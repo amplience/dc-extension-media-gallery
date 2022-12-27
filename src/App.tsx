@@ -552,6 +552,25 @@ function MediaGalleryApp() {
     }
   }
 
+  /**
+   * Save item
+   */
+  const saveItem = () => {
+    // TODO: move to function
+    setDetailDrawerOpen(false)
+    tempMedia && setItems((prevState: MediaItem[]) => {
+      return prevState.map((item: MediaItem) => {
+        if (item.id === tempMedia.id) item = tempMedia
+        return item
+      })
+    })
+    setCurrentAlert({
+      severity: "success",
+      message: "Media details successfully saved!"
+    })
+    setTimeout(() => { handleSnackOpen() }, 500)
+  }
+
   return (
     <ExtensionContextProvider>
 
@@ -844,16 +863,19 @@ function MediaGalleryApp() {
                 <ListSubheader style={{ width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {contextMedia.title}
                 </ListSubheader>
+                {/* BUG: not working */}
+                {/* 
                 <MenuItem dense onClick={() => {
                   handleContextClose()
                   alert(contextMedia.id)
                   selectItem(contextMedia.id)
-                }}>
+                }}> 
                   <ListItemIcon>
                     <CheckBoxOutlineBlankOutlined fontSize="small" />
                   </ListItemIcon>
                   <ListItemText>Select</ListItemText>
                 </MenuItem>
+                */}
                 <MenuItem dense onClick={() => {
                   handleContextClose()
                   handleFullScreenView(contextMedia)
@@ -1312,21 +1334,7 @@ function MediaGalleryApp() {
               <Button
                 sx={{ mr: 2 }}
                 variant="contained"
-                onClick={() => {
-                  // TODO: move to function
-                  setDetailDrawerOpen(false)
-                  tempMedia && setItems((prevState: MediaItem[]) => {
-                    return prevState.map((item: MediaItem) => {
-                      if (item.id === tempMedia.id) item = tempMedia
-                      return item
-                    })
-                  })
-                  setCurrentAlert({
-                    severity: "success",
-                    message: "Media details successfully saved!"
-                  })
-                  setTimeout(() => { handleSnackOpen() }, 500)
-                }}
+                onClick={saveItem}
               >Save</Button>
               <Button
                 variant="outlined"
