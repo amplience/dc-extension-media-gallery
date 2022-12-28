@@ -479,6 +479,19 @@ function MediaGalleryApp() {
     })
   }
 
+    /**
+   * Select an item in the import collection
+   * @param id 
+   */
+    const selectImportItem = (id: number) => {
+      setImportItems((prevState: MediaItem[]) => {
+        return prevState.map((item: MediaItem) => {
+          if (item.id === id) item.selected = !item.selected
+          return item
+        })
+      })
+    }
+
   /**
    * Select all items
    */
@@ -1385,13 +1398,11 @@ function MediaGalleryApp() {
                 </IconButton>
               </Box>
             </Stack>
-            <Stack direction={"row"} spacing={4}>
+            <Stack spacing={4}>
               {repo && (
                 <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
               )}
-              <Divider
-                orientation="vertical"
-              />
+              <Divider />
               <Stack sx={{ w: '100%' }}>
                 <Stack sx={{ pb: 4 }} direction={"row"}>
                   <Box sx={{ flexGrow: 1 }} />
@@ -1428,7 +1439,7 @@ function MediaGalleryApp() {
                     <GridViewOutlined />
                   </IconButton>
                 </Stack>
-                <ImageList cols={5} rowHeight={200}>
+                <ImageList cols={cols} rowHeight={200}>
                   {importItems.map((item: any) => (
                     <ImageListItem
                       key={item.img}
@@ -1449,15 +1460,7 @@ function MediaGalleryApp() {
                           <IconButton
                             aria-label={`select ${item.title}`}
                             title="Select"
-                            onClick={() => {
-                              // TODO: move to function
-                              const newImportItems = structuredClone(importItems)
-                              const itemToUpdate = newImportItems.find((element: any) => element.id === item.id)
-                              if (itemToUpdate) {
-                                itemToUpdate.selected = !itemToUpdate.selected
-                                setImportItems(newImportItems)
-                              }
-                            }}
+                            onClick={() => {selectImportItem(item.id)}}
                           >
                             {
                               item.selected ? <CheckBoxOutlined /> : <CheckBoxOutlineBlank />
