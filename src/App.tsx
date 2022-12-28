@@ -1133,8 +1133,9 @@ function MediaGalleryApp() {
                         <ImageListItemBar
                           title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
                           subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
-                          sx={{ bgcolor: `${item.selected ? '#444' : ''}` }}
+                          sx={{ cursor: 'pointer', bgcolor: `${item.selected ? '#444' : ''}` }}
                           position="below"
+                          onClick={() => selectItem(item.id)}
                         />
                       </SortableListItem>
                     ))}
@@ -1233,14 +1234,16 @@ function MediaGalleryApp() {
                           </IconButton>
                         </TableCell>
                         <TableCell
-                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
+                          sx={{ cursor: 'pointer', borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
                           id={item.id}
+                          onClick={() => selectItem(item.id)}
                           align="left">
                           {item.title}
                         </TableCell>
                         <TableCell
-                          sx={{ borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
+                          sx={{cursor: 'pointer', borderBottom: "none", bgcolor: `${item.selected ? '#444' : ''}`, color: "white" }}
                           id={item.id}
+                          onClick={() => selectItem(item.id)}
                           align="left">
                           {item.author}
                         </TableCell>
