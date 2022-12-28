@@ -1399,6 +1399,8 @@ function MediaGalleryApp() {
               </Box>
             </Stack>
             <Stack spacing={4}>
+              {/* Tree View */}
+              {/* TODO: replace with a dropdown tree select */}
               {repo && (
                 <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
               )}
@@ -1439,6 +1441,8 @@ function MediaGalleryApp() {
                     <GridViewOutlined />
                   </IconButton>
                 </Stack>
+
+                {/* Import image list */}
                 <ImageList cols={cols} rowHeight={200}>
                   {importItems.map((item: any) => (
                     <ImageListItem
