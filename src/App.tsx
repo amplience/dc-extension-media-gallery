@@ -704,7 +704,7 @@ function MediaGalleryApp() {
         {/* TODO: move to components */}
         <AppBar position="sticky">
           <Toolbar variant="dense">
-            <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+            <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={(event) => handleContextMenu(event)}>
               <CollectionsOutlined />
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
