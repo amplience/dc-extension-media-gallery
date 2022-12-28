@@ -442,8 +442,8 @@ function MediaGalleryApp() {
     setDragging(false)
     const { active, over } = event
     if (active.id !== over.id) {
-      const oldIndex = items.findIndex((item: any) => item.id === active.id)
-      const newIndex = items.findIndex((item: any) => item.id === over.id)
+      const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
+      const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
       setItems(arrayMove(items, oldIndex, newIndex))
     }
   };
@@ -509,7 +509,7 @@ function MediaGalleryApp() {
    */
   const handleSelectNone = () => {
     setItems((prevState: MediaItem[]) => {
-      return prevState.map((element: any) => {
+      return prevState.map((element: MediaItem) => {
         element.selected = false
         return element
       })
@@ -520,10 +520,10 @@ function MediaGalleryApp() {
    * Remove selected items
    */
   const handleRemoveSelected = () => {
-    const itemsToDelete = items.filter((item: any) => item.selected)
+    const itemsToDelete = items.filter((item: MediaItem) => item.selected)
     const numChanges = itemsToDelete.length
     if (numChanges > 0) {
-      setItems((prev: any) => prev.filter((item: any) => !item.selected))
+      setItems((prev: MediaItem[]) => prev.filter((item: MediaItem) => !item.selected))
       setCurrentAlert({
         severity: "success",
         message: `${numChanges} item${numChanges > 1 ? 's' : ''} removed successfully!`
@@ -554,7 +554,7 @@ function MediaGalleryApp() {
    */
   const handleImport = () => {
     const newItems = structuredClone(importItems)
-    newItems.map((element: any) => {
+    newItems.map((element: MediaItem) => {
       element.selected = false
       return element
     })
@@ -567,7 +567,7 @@ function MediaGalleryApp() {
    */
   const importMedia = () => {
     setImportDrawerOpen(false)
-    if (importItems.filter((item: any) => item.selected).length === 0) {
+    if (importItems.filter((item: MediaItem) => item.selected).length === 0) {
       setCurrentAlert({
         severity: "info",
         message: "No media file selected for import"
@@ -575,9 +575,9 @@ function MediaGalleryApp() {
       setTimeout(() => { handleSnackOpen() }, 500)
     } else {
       const newItems = structuredClone(items)
-      const newSelectedItems = importItems.filter((item: any) => {
-        return item.selected && items.filter((item2: any) => item2.id === item.id).length === 0
-      }).map((item: any) => {
+      const newSelectedItems = importItems.filter((item: MediaItem) => {
+        return item.selected && items.filter((item2: MediaItem) => item2.id === item.id).length === 0
+      }).map((item: MediaItem) => {
         item.selected = false
         return item
       })
@@ -633,8 +633,8 @@ function MediaGalleryApp() {
         <Box sx={{ p: 4 }}>
           <Box sx={{ position: 'relative' }}>
             <img
-              src={`${currentMedia?.img}??w=2048&h=1365&fit=crop&auto=format`}
-              srcSet={`${currentMedia?.img}??w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+              src={`${currentMedia?.img}??w=2048&h=1365&auto=format`}
+              srcSet={`${currentMedia?.img}??w=2048&h=1365&auto=format&dpr=2 2x`}
               alt={currentMedia?.title}
               onClick={() => setFullscreenView(false)}
               loading="lazy"
@@ -755,7 +755,7 @@ function MediaGalleryApp() {
               size="small"
               onClick={handleRemoveSelected}
             >
-              <Badge badgeContent={items.filter((item: any) => item.selected).length} color="secondary">
+              <Badge badgeContent={items.filter((item: MediaItem) => item.selected).length} color="secondary">
                 <DeleteOutline />
               </Badge>
             </IconButton>
