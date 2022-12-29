@@ -625,6 +625,66 @@ function MediaGalleryApp() {
     setTimeout(() => { handleSnackOpen() }, 500)
   }
 
+  /**
+   * Sort by date asc
+   */
+  const handleSortByDateAsc = () => {
+    setItems((prevState: MediaItem[]) => {
+      return prevState.slice().sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
+    })
+    handleSortClose()
+  }
+
+  /**
+   * Sort by date desc
+   */
+  const handleSortByDateDesc = () => {
+    setItems((prevState: MediaItem[]) => {
+      return prevState.slice().sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime()))
+    })
+    handleSortClose()
+  }
+
+  /**
+   * Sort by author asc
+   */
+  const handleSortByAuthorAsc = () => {
+    setItems((prevState: MediaItem[]) => {
+      return prevState.slice().sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0))
+    })
+    handleSortClose()
+  }
+
+  /**
+   * Sort by author desc
+   */
+  const handleSortByAuthorDesc = () => {
+    setItems((prevState: MediaItem[]) => {
+      return prevState.slice().sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0))
+    })
+    handleSortClose()
+  }
+
+  /**
+   * Sort by caption asc
+   */
+  const handleSortByCaptionAsc = () => {
+    setItems((prevState: MediaItem[]) => {
+      return prevState.slice().sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+    })
+    handleSortClose()
+  }
+
+  /**
+   * Sort by caption desc
+   */
+  const handleSortByCaptionDesc = () => {
+    setItems((prevState: MediaItem[]) => {
+      return prevState.slice().sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0))
+    })
+    handleSortClose()
+  }
+
   return (
     <ExtensionContextProvider>
 
@@ -805,63 +865,27 @@ function MediaGalleryApp() {
               }}
             >
                 <ListSubheader>Sort By</ListSubheader>
-                <MenuItem dense autoFocus onClick={() => {
-                  // TODO: move to function
-                  setItems((prevState: MediaItem[]) => {
-                    return prevState.slice().sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
-                  })
-                  handleSortClose()
-                }}>
+                <MenuItem dense autoFocus onClick={handleSortByDateAsc}>
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Date Modified Asc</ListItemText>
                 </MenuItem>
-                <MenuItem dense onClick={() => {
-                  // TODO: move to function
-                  setItems((prevState: MediaItem[]) => {
-                    return prevState.slice().sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime()))
-                  })
-                  handleSortClose()
-                }}>
+                <MenuItem dense onClick={handleSortByDateDesc}>
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Date Modified Desc</ListItemText>
                 </MenuItem>
-                <MenuItem dense onClick={() => {
-                  // TODO: move to function
-                  setItems((prevState: MediaItem[]) => {
-                    return prevState.slice().sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0))
-                  })
-                  handleSortClose()
-                }}>
+                <MenuItem dense onClick={handleSortByAuthorAsc}>
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Author Asc</ListItemText>
                 </MenuItem>
-                <MenuItem dense onClick={() => {
-                  // TODO: move to function
-                  setItems((prevState: MediaItem[]) => {
-                    return prevState.slice().sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0))
-                  })
-                  handleSortClose()
-                }}>
+                <MenuItem dense onClick={handleSortByAuthorDesc}>
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Author Desc</ListItemText>
                 </MenuItem>
-                <MenuItem dense onClick={() => {
-                  // TODO: move to function
-                  setItems((prevState: MediaItem[]) => {
-                    return prevState.slice().sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
-                  })
-                  handleSortClose()
-                }}>
+                <MenuItem dense onClick={handleSortByCaptionAsc}>
                   <ListItemIcon><ArrowUpwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Caption Asc</ListItemText>
                 </MenuItem>
-                <MenuItem dense onClick={() => {
-                  // TODO: move to function
-                  setItems((prevState: MediaItem[]) => {
-                    return prevState.slice().sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0))
-                  })
-                  handleSortClose()
-                }}>
+                <MenuItem dense onClick={handleSortByCaptionDesc}>
                   <ListItemIcon><ArrowDownwardOutlined fontSize="small" /></ListItemIcon>
                   <ListItemText>Caption Desc</ListItemText>
                 </MenuItem>
