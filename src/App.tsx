@@ -376,6 +376,12 @@ function MediaGalleryApp() {
           if (id) {
             removeItem(id)
           }
+        } else if (event.key === ' ') {
+          const element = document.activeElement as HTMLElement
+          const id = parseInt(element.id)
+          if (id) {
+            selectItem(id) // Not working
+          }
         } else if (event.key.toLowerCase() === 'm') {
           const element = document.activeElement as HTMLElement
           const id = element.id
@@ -473,8 +479,11 @@ function MediaGalleryApp() {
   const selectItem = (id: number) => {
     setItems((prevState: MediaItem[]) => {
       return prevState.map((item: MediaItem) => {
-        if (item.id === id) item.selected = !item.selected
-        return item
+        const newItem = structuredClone(item)
+        if (item.id === id) {
+          newItem.selected = !item.selected
+        }
+        return newItem
       })
     })
   }
