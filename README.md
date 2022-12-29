@@ -32,7 +32,7 @@ You can perform the following actions from the toolbar:
 
 ![Context Menu](media/context-menu.png)
 
-Context menu with all possible action can be opened when right clicking on a specific media item, on the top left icon, or anywhere else on the interface, as well as using the "m" keyboard shortcut.
+Context menu with all possible action can be opened when right clicking on a specific media item, on the top left icon, or anywhere else on the interface, as well as using the `m` keyboard shortcut.
 
 ### Notifications
 
