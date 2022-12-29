@@ -402,6 +402,12 @@ function MediaGalleryApp() {
         } else if (event.key === 'ArrowUp' && !gridMode) {
           offsetActiveElementIndex(-1)
         }
+      } else if (importDrawerOpen) {
+        if (event.key.toLowerCase() === 'a') {
+          handleSelectAllImportItems()
+        } else if (event.key.toLowerCase() === 'n') {
+          handleSelectNoneImportItems()
+        }
       }
     };
     document.addEventListener('keydown', keyDownHandler);
