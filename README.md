@@ -1,6 +1,6 @@
 [![Amplience Dynamic Content](media/header.png)](https://amplience.com/dynamic-content)
 
-![Dynamic Content Media Gallery Extension](media/grid-view.png)
+![Dynamic Content Media Gallery Extension](media/mouse-drag-and-drop.png)
 
 # Dynamic Content Media Gallery Extension
 This extension allows you to manage a collection of media items easily, with import from Content Hub, drag-and-drop, sorting, grid and list view.
