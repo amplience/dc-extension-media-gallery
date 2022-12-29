@@ -937,6 +937,7 @@ function MediaGalleryApp() {
                       <CheckBoxOutlineBlank fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Select</ListItemText>
+                    <Typography variant="body2" color="text.secondary">Space</Typography>
                   </MenuItem>
                 }
                 {
@@ -949,6 +950,7 @@ function MediaGalleryApp() {
                       <CheckBoxOutlined fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>De-select</ListItemText>
+                    <Typography variant="body2" color="text.secondary">Space</Typography>
                   </MenuItem>
                 }
                 <MenuItem dense onClick={() => {
