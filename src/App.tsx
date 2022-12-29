@@ -808,7 +808,7 @@ function MediaGalleryApp() {
                 <MenuItem dense autoFocus onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
-                    return prevState.sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
+                    return prevState.slice().sort((a: any, b: any) => (new Date(a.dateModified).getTime() - new Date(b.dateModified).getTime()))
                   })
                   handleSortClose()
                 }}>
@@ -818,7 +818,7 @@ function MediaGalleryApp() {
                 <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
-                    return prevState.sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime()))
+                    return prevState.slice().sort((a: any, b: any) => (new Date(b.dateModified).getTime() - new Date(a.dateModified).getTime()))
                   })
                   handleSortClose()
                 }}>
@@ -828,7 +828,7 @@ function MediaGalleryApp() {
                 <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
-                    return prevState.sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0))
+                    return prevState.slice().sort((a: any, b: any) => (a.author > b.author) ? 1 : ((b.author > a.author) ? -1 : 0))
                   })
                   handleSortClose()
                 }}>
@@ -838,7 +838,7 @@ function MediaGalleryApp() {
                 <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
-                    return prevState.sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0))
+                    return prevState.slice().sort((a: any, b: any) => (b.author > a.author) ? 1 : ((a.author > b.author) ? -1 : 0))
                   })
                   handleSortClose()
                 }}>
@@ -848,7 +848,7 @@ function MediaGalleryApp() {
                 <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
-                    return prevState.sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+                    return prevState.slice().sort((a: any, b: any) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
                   })
                   handleSortClose()
                 }}>
@@ -858,7 +858,7 @@ function MediaGalleryApp() {
                 <MenuItem dense onClick={() => {
                   // TODO: move to function
                   setItems((prevState: MediaItem[]) => {
-                    return prevState.sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0))
+                    return prevState.slice().sort((a: any, b: any) => (b.title > a.title) ? 1 : ((a.title > b.title) ? -1 : 0))
                   })
                   handleSortClose()
                 }}>
