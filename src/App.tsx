@@ -971,16 +971,6 @@ function MediaGalleryApp() {
                 <ListSubheader style={{ width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {contextMedia.title}
                 </ListSubheader>
-                <MenuItem dense autoFocus onClick={() => {
-                  handleContextClose()
-                  handleFullScreenView(contextMedia)
-                }}>
-                  <ListItemIcon>
-                    <VisibilityOutlined fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>View</ListItemText>
-                  <Typography variant="body2" color="text.secondary">v</Typography>
-                </MenuItem>
                 {
                  !contextMedia.selected &&
                  <MenuItem dense onClick={() => {
@@ -1007,6 +997,16 @@ function MediaGalleryApp() {
                     <Typography variant="body2" color="text.secondary">Space</Typography>
                   </MenuItem>
                 }
+                <MenuItem dense autoFocus onClick={() => {
+                  handleContextClose()
+                  handleFullScreenView(contextMedia)
+                }}>
+                  <ListItemIcon>
+                    <VisibilityOutlined fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>View</ListItemText>
+                  <Typography variant="body2" color="text.secondary">v</Typography>
+                </MenuItem>
                 <MenuItem dense onClick={() => {
                   handleContextClose()
                   handleDetailView(contextMedia)
