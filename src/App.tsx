@@ -685,6 +685,30 @@ function MediaGalleryApp() {
     handleSortClose()
   }
 
+  /**
+   * Select all import items
+   */
+  const handleSelectAllImportItems = () => {
+    setImportItems((prevState: MediaItem[]) => {
+      return prevState.map((element: MediaItem) => {
+        element.selected = true
+        return element
+      })
+    })
+  }
+
+  /**
+   * De-select all import items
+   */
+  const handleSelectNoneImportItems =() => {
+    setImportItems((prevState: MediaItem[]) => {
+      return prevState.map((element: MediaItem) => {
+        element.selected = false
+        return element
+      })
+    })
+  }
+
   return (
     <ExtensionContextProvider>
 
@@ -773,7 +797,13 @@ function MediaGalleryApp() {
         {/* TODO: move to components */}
         <AppBar position="sticky">
           <Toolbar variant="dense">
-            <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={(event) => handleContextMenu(event)}>
+            <IconButton 
+              edge="start" 
+              color="inherit" 
+              aria-label="menu" 
+              sx={{ mr: 2 }} 
+              onClick={(event) => handleContextMenu(event)}
+            >
               <CollectionsOutlined />
             </IconButton>
             <Typography variant="h6" color="inherit" component="div">
@@ -1458,15 +1488,7 @@ function MediaGalleryApp() {
                     size="small"
                     aria-label={`select all`}
                     title="Select all"
-                    onClick={() => {
-                      // TODO: move to function
-                      const newItems = structuredClone(importItems)
-                      newItems.map((element: any) => {
-                        element.selected = true
-                        return element
-                      })
-                      setImportItems(newItems)
-                    }}
+                    onClick={handleSelectAllImportItems}
                   >
                     <GridViewSharp />
                   </IconButton>
@@ -1474,15 +1496,7 @@ function MediaGalleryApp() {
                     size="small"
                     aria-label={`select none`}
                     title="Select none"
-                    onClick={() => {
-                      // TODO: move to function
-                      const newItems = structuredClone(importItems)
-                      newItems.map((element: any) => {
-                        element.selected = false
-                        return element
-                      })
-                      setImportItems(newItems)
-                    }}
+                    onClick={handleSelectNoneImportItems}
                   >
                     <GridViewOutlined />
                   </IconButton>
@@ -1533,10 +1547,7 @@ function MediaGalleryApp() {
               >Import</Button>
               <Button
                 variant="outlined"
-                onClick={
-                  // TODO: move to function
-                  () => setImportDrawerOpen(false)
-                }
+                onClick={() => setImportDrawerOpen(false)}
               >Cancel</Button>
             </Stack>
           </Stack>
