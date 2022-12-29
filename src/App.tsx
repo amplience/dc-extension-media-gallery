@@ -408,7 +408,7 @@ function MediaGalleryApp() {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, [items, dragging, cols, gridMode, fullscreenView, importDrawerOpen, detailDrawerOpen, sortOpen, contextMenu]);
+  });
 
   /** 
    * Getting folders from Content Hub
