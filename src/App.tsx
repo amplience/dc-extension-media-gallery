@@ -917,19 +917,6 @@ function MediaGalleryApp() {
                 <ListSubheader style={{ width: '250px', height: '50px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {contextMedia.title}
                 </ListSubheader>
-                {/* BUG: not working */}
-                {/* 
-                <MenuItem dense onClick={() => {
-                  handleContextClose()
-                  alert(contextMedia.id)
-                  selectItem(contextMedia.id)
-                }}> 
-                  <ListItemIcon>
-                    <CheckBoxOutlineBlankOutlined fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Select</ListItemText>
-                </MenuItem>
-                */}
                 <MenuItem dense autoFocus onClick={() => {
                   handleContextClose()
                   handleFullScreenView(contextMedia)
@@ -940,6 +927,30 @@ function MediaGalleryApp() {
                   <ListItemText>View</ListItemText>
                   <Typography variant="body2" color="text.secondary">v</Typography>
                 </MenuItem>
+                {
+                 !contextMedia.selected &&
+                 <MenuItem dense onClick={() => {
+                    handleContextClose()
+                    selectItem(contextMedia.id)
+                  }}> 
+                    <ListItemIcon>
+                      <CheckBoxOutlineBlank fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Select</ListItemText>
+                  </MenuItem>
+                }
+                {
+                 contextMedia.selected &&
+                 <MenuItem dense onClick={() => {
+                    handleContextClose()
+                    selectItem(contextMedia.id)
+                  }}> 
+                    <ListItemIcon>
+                      <CheckBoxOutlined fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>De-select</ListItemText>
+                  </MenuItem>
+                }
                 <MenuItem dense onClick={() => {
                   handleContextClose()
                   handleDetailView(contextMedia)
