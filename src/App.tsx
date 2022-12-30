@@ -408,6 +408,8 @@ function MediaGalleryApp() {
         } else if (event.key.toLowerCase() === 'n') {
           handleSelectNoneImportItems()
         }
+      } else if (fullscreenView && event.key.toLowerCase() === 'i') {
+        setInfoPanelOpen(!infoPanelOpen)
       }
     };
     document.addEventListener('keydown', keyDownHandler);
