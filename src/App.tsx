@@ -26,6 +26,8 @@ import {
   NotesOutlined,
   LockOutlined,
   VisibilityOutlined,
+  ZoomInOutlined,
+  ZoomOutOutlined,
 } from "@mui/icons-material";
 import {
   Alert,
@@ -136,7 +138,8 @@ function MediaGalleryApp() {
   const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
   const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
 
-  const [cols, setCols] = useState(5);
+  const [cols, setCols] = useState(6);
+  const [zoom, setZoom] = useState(1);
   const [items, setItems] = useState<MediaItem[]>(structuredClone(itemData));
   const [importItems, setImportItems] = useState<MediaItem[]>(structuredClone(itemData));
   const [gridMode, setGridMode] = useState(true);
@@ -164,10 +167,10 @@ function MediaGalleryApp() {
    */
   useEffect(() => {
     function handleResize() {
-      if (isXLarge) setCols(5)
-      if (isLarge) setCols(4)
-      if (isTablet) setCols(3)
-      if (isMobile) setCols(2)
+      if (isXLarge) setCols(Math.floor(6*zoom))
+      if (isLarge) setCols(Math.floor(4*zoom))
+      if (isTablet) setCols(Math.floor(3*zoom))
+      if (isMobile) setCols(Math.floor(2*zoom))
     }
     window.addEventListener('resize', handleResize)
   })
@@ -267,6 +270,24 @@ function MediaGalleryApp() {
   const handleSortClose = () => {
     setSortAnchorEl(null);
   };
+
+  /**
+   * Zoom in for grid mode
+   */
+  const handleZoomIn = () => {
+    if (zoom < 2) {
+      setZoom(zoom * 2)
+    }
+  }
+
+  /**
+   * Zoom out for grid mode
+   */
+  const handleZoomOut = () => {
+    if (zoom > 1/2) {
+      setZoom(zoom / 2)
+    }
+  }
 
   /**
    * Drag-and-drop sensors setup
@@ -393,14 +414,18 @@ function MediaGalleryApp() {
           offsetActiveElementIndex(1)
         } else if (event.key === 'ArrowLeft') {
           offsetActiveElementIndex(-1)
-        } else if (event.key === 'ArrowDown' && gridMode) {
-          offsetActiveElementIndex(cols)
-        } else if (event.key === 'ArrowUp' && gridMode) {
-          offsetActiveElementIndex(-cols)
-        } else if (event.key === 'ArrowDown' && !gridMode) {
-          offsetActiveElementIndex(1) 
-        } else if (event.key === 'ArrowUp' && !gridMode) {
-          offsetActiveElementIndex(-1)
+        // } else if (event.key === 'ArrowDown' && gridMode) {
+        //   offsetActiveElementIndex(Math.floor(cols / zoom))
+        // } else if (event.key === 'ArrowUp' && gridMode) {
+        //   offsetActiveElementIndex(Math.floor(-cols / zoom))
+        } else if (event.key === '-' && gridMode) {
+          handleZoomOut()
+        } else if (event.key === '+' && gridMode) {
+          handleZoomIn()
+        // } else if (event.key === 'ArrowDown' && !gridMode) {
+        //   offsetActiveElementIndex(1) 
+        // } else if (event.key === 'ArrowUp' && !gridMode) {
+        //   offsetActiveElementIndex(-1)
         }
       } else if (importDrawerOpen) {
         if (event.key.toLowerCase() === 'a') {
@@ -719,7 +744,6 @@ function MediaGalleryApp() {
 
   return (
     <ExtensionContextProvider>
-
       {/* Image full screen view */}
       {/* TODO: move to components */}
       {/* TODO: mode styles for all components */}
@@ -933,6 +957,24 @@ function MediaGalleryApp() {
               variant="middle"
               sx={{ ml: 1, mr: 1 }}
               flexItem />
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`zoonm in`}
+              title="Zoom In"
+              disabled={zoom === 2 || !gridMode}
+              onClick={handleZoomIn}
+            >
+              <ZoomInOutlined />
+            </IconButton>
+            <IconButton
+              sx={{ color: "white" }}
+              aria-label={`zoonm out`}
+              title="Zoom Out"
+              disabled={zoom === 1/2 || !gridMode}
+              onClick={handleZoomOut}
+            >
+              <ZoomOutOutlined />
+            </IconButton>
             {
               gridMode &&
               <IconButton
@@ -1106,10 +1148,30 @@ function MediaGalleryApp() {
               <Typography variant="body2" color="text.secondary">Z</Typography>
             </MenuItem>
             <Divider />
+            <MenuItem disabled={zoom === 2 || !gridMode} dense onClick={() => {
+                handleContextClose()
+                handleZoomIn()
+              }}>
+              <ListItemIcon>
+                <ZoomInOutlined />
+              </ListItemIcon>
+              <ListItemText>Zoom In</ListItemText>
+              <Typography variant="body2" color="text.secondary">+</Typography>
+            </MenuItem> 
+            <MenuItem disabled={zoom === 1/2 || !gridMode} dense onClick={() => {
+                handleContextClose()
+                handleZoomOut()
+              }}>
+              <ListItemIcon>
+                <ZoomOutOutlined />
+              </ListItemIcon>
+              <ListItemText>Zoom Out</ListItemText>
+              <Typography variant="body2" color="text.secondary">-</Typography>
+            </MenuItem> 
             {
               gridMode ?
                 <MenuItem dense onClick={() => {
-                handleContextClose()
+                  handleContextClose()
                   setGridMode(false)
                 }}>
                 <ListItemIcon>
@@ -1142,8 +1204,8 @@ function MediaGalleryApp() {
             // Grid view
             // TODO: move to components
             <Stack direction={'row'}>
-              <Box sx={{ flexGrow: 1 }} />
-              <ImageList cols={cols} gap={8} sx={{ p: '2px' }}>
+              {/* <ImageList cols={Math.floor(cols / zoom)} gap={8} sx={{ p: '2px' }}> */}
+              <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', p:1 }}>
                 <DndContext
                   sensors={sensors}
                   collisionDetection={closestCenter}
@@ -1156,14 +1218,15 @@ function MediaGalleryApp() {
                       <SortableListItem
                         key={item.img}
                         id={item.id}
+                        zoom={zoom}
                       >
-                        <Box style={{ position: "relative" }}>
+                        <Box sx={{mt:1, ml:1, mr:1}} style={{ position: "relative" }}>
                           <img
-                            src={`${item.img}?w=248&h=165&fit=crop&auto=format`}
-                            srcSet={`${item.img}?w=248&h=165&fit=crop&auto=format&dpr=2 2x`}
+                            src={`${item.img}?w=${248*zoom}&h=${164*zoom}&fit=crop&auto=format`}
+                            srcSet={`${item.img}?w=${248*zoom}&h=${164*zoom}&fit=crop&auto=format&dpr=2 2x`}
                             alt={item.title}
                             loading="lazy"
-                            style={{ display: "block", width: '100%' }}
+                            style={{ width: '100%' }}
                             title="Click to zoom"
                             id={item.id}
                             onClick={() => handleFullScreenView(item)}
@@ -1173,8 +1236,8 @@ function MediaGalleryApp() {
                             sx={{
                               color: "white",
                               position: "absolute",
-                              top: 0,
-                              left: 0,
+                              top: 4,
+                              left: 4,
                             }}
                             aria-label={`view fullscreen`}
                             title="Click to zoom"
@@ -1187,8 +1250,8 @@ function MediaGalleryApp() {
                             sx={{
                               color: "white",
                               position: "absolute",
-                              top: 0,
-                              right: 0,
+                              top: 4,
+                              right: 4,
                             }}
                             aria-label={`edit`}
                             title="Edit"
@@ -1201,8 +1264,8 @@ function MediaGalleryApp() {
                             sx={{
                               color: "white",
                               position: "absolute",
-                              bottom: 0,
-                              left: 0,
+                              bottom: 4,
+                              left: 4,
                             }}
                             aria-label={`select ${item.title}`}
                             title="Select"
@@ -1217,8 +1280,8 @@ function MediaGalleryApp() {
                             sx={{
                               color: "white",
                               position: "absolute",
-                              bottom: 0,
-                              right: 0,
+                              bottom: 4,
+                              right: 4,
                             }}
                             title="Remove"
                             aria-label={`delete`}
@@ -1230,7 +1293,7 @@ function MediaGalleryApp() {
                         <ImageListItemBar
                           title={<Typography variant="subtitle1" noWrap>{item.title}</Typography>}
                           subtitle={<Typography variant="subtitle2" noWrap>by: {item.author}</Typography>}
-                          sx={{ cursor: 'pointer', bgcolor: `${item.selected ? '#444' : ''}` }}
+                          sx={{ p: 0, mb: 1, ml: 1, mr: 1, cursor: 'pointer', bgcolor: `${item.selected ? '#444' : ''}` }}
                           position="below"
                           onClick={() => selectItem(item.id)}
                         />
@@ -1238,7 +1301,7 @@ function MediaGalleryApp() {
                     ))}
                   </SortableContext>
                 </DndContext>
-              </ImageList>
+              </Box>
               <Box sx={{ flexGrow: 1 }} />
             </Stack>
           ) : (

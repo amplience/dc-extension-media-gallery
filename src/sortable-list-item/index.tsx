@@ -16,11 +16,12 @@ export default function SortableListItem(props: any) {
     transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? "100" : "auto",
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
+    width: `${248 * props.zoom}px`
   };
   
   return (
-    <ImageListItem id={props.id} className="gridItem" ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <ImageListItem id={props.id}  ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {props.children}
     </ImageListItem>
   );
