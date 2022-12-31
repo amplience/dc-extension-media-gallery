@@ -398,6 +398,7 @@ function MediaGalleryApp() {
             removeItem(id)
           }
         } else if (event.key === ' ') {
+          event.preventDefault()
           const element = document.activeElement as HTMLElement
           const id = parseInt(element.id)
           if (id) {
