@@ -132,13 +132,13 @@ const itemData: MediaItem[] = [
 ];
 
 function MediaGalleryApp() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-  const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
-  const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  // const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
+  // const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
 
-  const [cols, setCols] = useState(6);
+  // const [cols, setCols] = useState(6);
   const [zoom, setZoom] = useState(1);
   const [items, setItems] = useState<MediaItem[]>(structuredClone(itemData));
   const [importItems, setImportItems] = useState<MediaItem[]>(structuredClone(itemData));
@@ -165,15 +165,15 @@ function MediaGalleryApp() {
   /**
    * re-calculate cols
    */
-  useEffect(() => {
-    function handleResize() {
-      if (isXLarge) setCols(Math.floor(6*zoom))
-      if (isLarge) setCols(Math.floor(4*zoom))
-      if (isTablet) setCols(Math.floor(3*zoom))
-      if (isMobile) setCols(Math.floor(2*zoom))
-    }
-    window.addEventListener('resize', handleResize)
-  })
+  // useEffect(() => {
+  //   function handleResize() {
+  //     if (isXLarge) setCols(Math.floor(6*zoom))
+  //     if (isLarge) setCols(Math.floor(4*zoom))
+  //     if (isTablet) setCols(Math.floor(3*zoom))
+  //     if (isMobile) setCols(Math.floor(2*zoom))
+  //   }
+  //   window.addEventListener('resize', handleResize)
+  // })
 
   /**
    * Open context menu
@@ -1574,7 +1574,8 @@ function MediaGalleryApp() {
                 </Stack>
 
                 {/* Import image list */}
-                <ImageList cols={cols} rowHeight={200}>
+                {/* TODO: move to flex wrap */}
+                <ImageList cols={5} rowHeight={200}>
                   {importItems.map((item: any) => (
                     <ImageListItem
                       key={item.img}
