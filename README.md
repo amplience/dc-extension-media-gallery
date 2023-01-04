@@ -138,7 +138,7 @@ This extension requires no additional permissions.
 {
     "type": "object",
     "ui:extension": {
-      "name": "media-gallery",
+      "name": "media-gallery"
     }
 }
 ```
