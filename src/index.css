@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body .MuiImageListItemBar-titleWrap .MuiImageListItemBar-title {
+  white-space: inherit;
+  margin-bottom: 6px;
+}
+
+body .MuiImageListItem-root .MuiImageListItem-img {
+  object-fit: contain;
+  flex: 0;
+  flex-grow: 0;
+  aspect-ratio: 1.5/1;
+}

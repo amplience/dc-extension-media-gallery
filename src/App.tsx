@@ -93,6 +93,8 @@ import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
 
+import Entry from './model/entry';
+
 /**
  * Media item
  */
@@ -130,6 +132,25 @@ const itemData: MediaItem[] = [
   { id: 13, selected: false, dateModified: "2021-12-30T13:25:20.379Z", img: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3", title: "Concert crowd", author: "@silverdalex", },
   { id: 14, selected: false, dateModified: "2021-11-20T12:15:20.379Z", img: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec", title: "Crowd love", author: "@silverdalex", },
 ];
+
+function assetToImg(asset: Entry): string {
+  // TODO: use vse?
+  const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io';
+
+  return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`;
+}
+
+function assetsToItems(assets: Entry[]) {
+  return assets.map((asset, index) => ({
+    id: index,
+    selected: false,
+    dateModified: '',
+    img: assetToImg(asset),
+    title: asset.description,
+    author: asset.photographer,
+    asset: asset
+  }));
+}
 
 function MediaGalleryApp() {
   // const theme = useTheme();
@@ -315,7 +336,7 @@ function MediaGalleryApp() {
    * Getting assets from Content Hub
    * @param id 
    */
-  const getEntries = async (id: string) => {
+  const getEntries = async (id: string): Promise<Entry[]> => {
     if (chApi && repo) {
       const assets = await chApi.getExifByFolder(repo.id, id);
 
@@ -326,8 +347,10 @@ function MediaGalleryApp() {
         })
       );
 
-      console.log(entries);
+      return entries;
     }
+
+    return [];
   };
 
   /**
@@ -596,12 +619,14 @@ function MediaGalleryApp() {
    * Prepare and open import drawer
    */
   const handleImport = () => {
+    /*
     const newItems = structuredClone(importItems)
     newItems.map((element: MediaItem) => {
       element.selected = false
       return element
     })
-    setImportItems(newItems)
+    */
+    setImportItems([])
     setImportDrawerOpen(true)
   }
 
@@ -1550,7 +1575,11 @@ function MediaGalleryApp() {
               {/* Tree View */}
               {/* TODO: replace with a dropdown tree select */}
               {repo && (
-                <RichObjectTreeView folders={repo.folders} onChange={getEntries} />
+                <RichObjectTreeView folders={repo.folders} onChange={async (id: string) => {
+                  const entries = await getEntries(id);
+
+                  setImportItems(assetsToItems(entries));
+                }} />
               )}
               <Divider />
               <Stack sx={{ w: '100%' }}>
@@ -1576,7 +1605,7 @@ function MediaGalleryApp() {
 
                 {/* Import image list */}
                 {/* TODO: move to flex wrap */}
-                <ImageList cols={5} rowHeight={200}>
+                <ImageList cols={5}>
                   {importItems.map((item: any) => (
                     <ImageListItem
                       key={item.img}
