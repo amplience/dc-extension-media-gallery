@@ -28,56 +28,11 @@ import {
 	Toolbar
 } from '@mui/material'
 import { MediaItem } from '../model'
+import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
-type AppToolbarArgs = {
-	gridMode: boolean
-	items: MediaItem[]
-	handleContextMenu: any
-	handleImport: any
-	handleSelectAll: any
-	handleSelectNone: any
-	handleRemoveSelected: any
-	handleSortClick: any
-	handleResetItems: any
-	handleSortByDateAsc: any
-	handleSortByDateDesc: any
-	handleSortByAuthorAsc: any
-	handleSortByAuthorDesc: any
-	handleSortByCaptionAsc: any
-	handleSortByCaptionDesc: any
-	handleSortClose: any
-	handleZoomIn: any
-	handleZoomOut: any
-	setGridMode: any
-	sortAnchorEl: HTMLElement | null
-	sortOpen: boolean
-	zoom: number
-}
-
-const AppToolbar = ({
-	gridMode,
-	items,
-	handleContextMenu,
-	handleImport,
-	handleSelectAll,
-	handleSelectNone,
-	handleRemoveSelected,
-	handleSortClick,
-	handleResetItems,
-	handleSortByDateAsc,
-	handleSortByDateDesc,
-	handleSortByAuthorAsc,
-	handleSortByAuthorDesc,
-	handleSortByCaptionAsc,
-	handleSortByCaptionDesc,
-	handleSortClose,
-	handleZoomIn,
-	handleZoomOut,
-	setGridMode,
-	sortAnchorEl,
-	sortOpen,
-	zoom
-}: AppToolbarArgs) => {
+const AppToolbar = () => {
+	const app = useContext(AppContext)
 	return (
 		<AppBar position='sticky'>
 			<Toolbar variant='dense'>
@@ -86,7 +41,7 @@ const AppToolbar = ({
 					color='inherit'
 					aria-label='menu'
 					sx={{ mr: 2 }}
-					onClick={(event) => handleContextMenu(event)}>
+					onClick={(event) => app.handleContextMenu(event)}>
 					<CollectionsOutlined />
 				</IconButton>
 				<Typography variant='h6' color='inherit' component='div'>
@@ -98,7 +53,7 @@ const AppToolbar = ({
 					aria-label={`import`}
 					size='small'
 					title='Import'
-					onClick={handleImport}>
+					onClick={app.handleImport}>
 					<AddPhotoAlternateOutlined />
 				</IconButton>
 				<Divider orientation='vertical' variant='middle' sx={{ ml: 1, mr: 1 }} flexItem />
@@ -107,7 +62,7 @@ const AppToolbar = ({
 					size='small'
 					aria-label={`select all`}
 					title='Select all'
-					onClick={handleSelectAll}>
+					onClick={app.handleSelectAll}>
 					<GridViewSharp />
 				</IconButton>
 				<IconButton
@@ -115,7 +70,7 @@ const AppToolbar = ({
 					size='small'
 					aria-label={`select none`}
 					title='Select none'
-					onClick={handleSelectNone}>
+					onClick={app.handleSelectNone}>
 					<GridViewOutlined />
 				</IconButton>
 				<Divider orientation='vertical' variant='middle' sx={{ ml: 1, mr: 1 }} flexItem />
@@ -124,9 +79,9 @@ const AppToolbar = ({
 					aria-label={`remove selected`}
 					title='Remove selected'
 					size='small'
-					onClick={handleRemoveSelected}>
+					onClick={app.handleRemoveSelected}>
 					<Badge
-						badgeContent={items.filter((item: MediaItem) => item.selected).length}
+						badgeContent={app.items?.filter((item: MediaItem) => item.selected).length}
 						color='secondary'>
 						<DeleteOutline />
 					</Badge>
@@ -135,7 +90,7 @@ const AppToolbar = ({
 					sx={{ color: 'white' }}
 					aria-label={`sort`}
 					title='Sort by'
-					onClick={handleSortClick}
+					onClick={app.handleSortClick}
 					size='small'
 					id='toolbar-icon-sort'>
 					<SortOutlined />
@@ -145,7 +100,7 @@ const AppToolbar = ({
 					aria-label={`reset`}
 					size='small'
 					title='Reset'
-					onClick={handleResetItems}>
+					onClick={app.handleResetItems}>
 					<CachedOutlined />
 				</IconButton>
 
@@ -153,9 +108,9 @@ const AppToolbar = ({
 				{/* TODO: move to components */}
 				<Menu
 					id='basic-menu'
-					anchorEl={sortAnchorEl}
-					open={sortOpen}
-					onClose={handleSortClose}
+					anchorEl={app.sortAnchorEl}
+					open={app.sortOpen}
+					onClose={app.handleSortClose}
 					MenuListProps={{
 						'aria-labelledby': 'basic-button'
 					}}
@@ -165,37 +120,37 @@ const AppToolbar = ({
 						}
 					}}>
 					<ListSubheader>Sort By</ListSubheader>
-					<MenuItem dense autoFocus onClick={handleSortByDateAsc}>
+					<MenuItem dense autoFocus onClick={app.handleSortByDateAsc}>
 						<ListItemIcon>
 							<ArrowUpwardOutlined fontSize='small' />
 						</ListItemIcon>
 						<ListItemText>Date Modified Asc</ListItemText>
 					</MenuItem>
-					<MenuItem dense onClick={handleSortByDateDesc}>
+					<MenuItem dense onClick={app.handleSortByDateDesc}>
 						<ListItemIcon>
 							<ArrowDownwardOutlined fontSize='small' />
 						</ListItemIcon>
 						<ListItemText>Date Modified Desc</ListItemText>
 					</MenuItem>
-					<MenuItem dense onClick={handleSortByAuthorAsc}>
+					<MenuItem dense onClick={app.handleSortByAuthorAsc}>
 						<ListItemIcon>
 							<ArrowUpwardOutlined fontSize='small' />
 						</ListItemIcon>
 						<ListItemText>Author Asc</ListItemText>
 					</MenuItem>
-					<MenuItem dense onClick={handleSortByAuthorDesc}>
+					<MenuItem dense onClick={app.handleSortByAuthorDesc}>
 						<ListItemIcon>
 							<ArrowDownwardOutlined fontSize='small' />
 						</ListItemIcon>
 						<ListItemText>Author Desc</ListItemText>
 					</MenuItem>
-					<MenuItem dense onClick={handleSortByCaptionAsc}>
+					<MenuItem dense onClick={app.handleSortByCaptionAsc}>
 						<ListItemIcon>
 							<ArrowUpwardOutlined fontSize='small' />
 						</ListItemIcon>
 						<ListItemText>Caption Asc</ListItemText>
 					</MenuItem>
-					<MenuItem dense onClick={handleSortByCaptionDesc}>
+					<MenuItem dense onClick={app.handleSortByCaptionDesc}>
 						<ListItemIcon>
 							<ArrowDownwardOutlined fontSize='small' />
 						</ListItemIcon>
@@ -207,33 +162,37 @@ const AppToolbar = ({
 					sx={{ color: 'white' }}
 					aria-label={`zoonm in`}
 					title='Zoom In'
-					disabled={zoom === 2 || !gridMode}
-					onClick={handleZoomIn}>
+					disabled={app.zoom === 2 || !app.gridMode}
+					onClick={app.handleZoomIn}>
 					<ZoomInOutlined />
 				</IconButton>
 				<IconButton
 					sx={{ color: 'white' }}
 					aria-label={`zoonm out`}
 					title='Zoom Out'
-					disabled={zoom === 1 / 2 || !gridMode}
-					onClick={handleZoomOut}>
+					disabled={app.zoom === 1 / 2 || !app.gridMode}
+					onClick={app.handleZoomOut}>
 					<ZoomOutOutlined />
 				</IconButton>
-				{gridMode && (
+				{app.gridMode && (
 					<IconButton
 						sx={{ color: 'white' }}
 						aria-label={`list mode`}
 						title='List view'
-						onClick={() => setGridMode(false)}>
+						onClick={() => {
+							if (app.setGridMode) app.setGridMode(false)
+						}}>
 						<ViewHeadlineOutlined />
 					</IconButton>
 				)}
-				{!gridMode && (
+				{!app.gridMode && (
 					<IconButton
 						sx={{ color: 'white' }}
 						aria-label={`grid mode`}
 						title='Grid view'
-						onClick={() => setGridMode(true)}>
+						onClick={() => {
+							if (app.setGridMode) app.setGridMode(true)
+						}}>
 						<AppsOutlined />
 					</IconButton>
 				)}

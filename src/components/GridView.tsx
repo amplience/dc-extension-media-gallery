@@ -11,6 +11,8 @@ import {
 import { Stack, Box, IconButton, ImageListItemBar, Typography } from '@mui/material'
 import { MediaItem } from '../model'
 import SortableListItem from '../sortable-list-item'
+import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
 type GridViewArgs = {
 	sensors: any
@@ -35,6 +37,7 @@ const GridView = ({
 	selectItem,
 	removeItem
 }: GridViewArgs) => {
+	const app = useContext(AppContext)
 	return (
 		<Stack direction={'row'}>
 			{/* <ImageList cols={Math.floor(cols / zoom)} gap={8} sx={{ p: '2px' }}> */}
@@ -47,28 +50,28 @@ const GridView = ({
 					p: 1
 				}}>
 				<DndContext
-					sensors={sensors}
+					sensors={app.sensors}
 					collisionDetection={closestCenter}
-					onDragStart={dragStart}
-					onDragEnd={dragEnd}
+					onDragStart={app.dragStart}
+					onDragEnd={app.dragEnd}
 					modifiers={[restrictToWindowEdges, restrictToParentElement]}>
-					<SortableContext items={items} strategy={rectSortingStrategy}>
-						{items.map((item: any, index: number) => (
-							<SortableListItem key={item.img} id={item.id} zoom={zoom}>
+					<SortableContext items={app.items} strategy={rectSortingStrategy}>
+						{app.items?.map((item: any, index: number) => (
+							<SortableListItem key={item.img} id={item.id} zoom={app.zoom}>
 								<Box sx={{ mt: 1, ml: 1, mr: 1 }} style={{ position: 'relative' }}>
 									<img
-										src={`${item.img}?w=${248 * zoom}&h=${
-											164 * zoom
+										src={`${item.img}?w=${248 * app.zoom}&h=${
+											164 * app.zoom
 										}&fit=crop&auto=format`}
-										srcSet={`${item.img}?w=${248 * zoom}&h=${
-											164 * zoom
+										srcSet={`${item.img}?w=${248 * app.zoom}&h=${
+											164 * app.zoom
 										}&fit=crop&auto=format&dpr=2 2x`}
 										alt={item.title}
 										loading='lazy'
 										style={{ width: '100%' }}
 										title='Click to zoom'
 										id={item.id}
-										onClick={() => handleFullScreenView(item)}
+										onClick={() => app.handleFullScreenView(item)}
 									/>
 									<IconButton
 										size='small'
@@ -80,7 +83,7 @@ const GridView = ({
 										}}
 										aria-label={`view fullscreen`}
 										title='Click to zoom'
-										onClick={() => handleFullScreenView(item)}>
+										onClick={() => app.handleFullScreenView(item)}>
 										<VisibilityOutlined />
 									</IconButton>
 									<IconButton
@@ -93,7 +96,7 @@ const GridView = ({
 										}}
 										aria-label={`edit`}
 										title='Edit'
-										onClick={() => handleDetailView(item)}>
+										onClick={() => app.handleDetailView(item)}>
 										<EditOutlined />
 									</IconButton>
 									<IconButton
@@ -107,7 +110,7 @@ const GridView = ({
 										aria-label={`select ${item.title}`}
 										title='Select'
 										onClick={() => {
-											selectItem(item.id)
+											app.selectItem(item.id)
 										}}>
 										{item.selected ? (
 											<CheckBoxOutlined />
@@ -125,7 +128,7 @@ const GridView = ({
 										}}
 										title='Remove'
 										aria-label={`delete`}
-										onClick={() => removeItem(item.id)}>
+										onClick={() => app.removeItem(item.id)}>
 										<DeleteOutline />
 									</IconButton>
 								</Box>
@@ -149,7 +152,7 @@ const GridView = ({
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}
 									position='below'
-									onClick={() => selectItem(item.id)}
+									onClick={() => app.selectItem(item.id)}
 								/>
 							</SortableListItem>
 						))}

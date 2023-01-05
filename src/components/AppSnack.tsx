@@ -1,28 +1,25 @@
 import { Snackbar, Alert } from '@mui/material'
 import SlideTransition from './SlideTransition'
+import { useContext } from 'react'
+import { AppContext } from '../app-context'
 
-type SnackArgs = {
-	snackOpen: boolean
-	handleSnackClose: any
-	currentAlert: any
-}
-
-const AppSnack = ({ snackOpen, handleSnackClose, currentAlert }: SnackArgs) => {
+const AppSnack = () => {
+	const app = useContext(AppContext)
 	return (
 		<Snackbar
 			anchorOrigin={{
 				vertical: 'top',
 				horizontal: 'left'
 			}}
-			open={snackOpen}
+			open={app.snackOpen}
 			autoHideDuration={3000}
-			onClose={handleSnackClose}
+			onClose={app.handleSnackClose}
 			TransitionComponent={SlideTransition}>
 			<Alert
-				onClose={handleSnackClose}
-				severity={currentAlert?.severity}
+				onClose={app.handleSnackClose}
+				severity={app.currentAlert?.severity}
 				sx={{ width: '100%' }}>
-				{currentAlert?.message}
+				{app.currentAlert?.message}
 			</Alert>
 		</Snackbar>
 	)
