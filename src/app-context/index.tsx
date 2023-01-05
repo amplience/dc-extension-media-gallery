@@ -1,27 +1,12 @@
-import './App.css'
-
-import { KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { useSensors, useSensor, PointerSensor, KeyboardSensor } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import React, { useEffect, useState, useContext, ReactNode } from 'react'
+import { EnrichedRepository, ChApi } from '../ch-api'
+import credentials from '../credentials'
+import { AlertMessage, MediaItem } from '../model'
+import { convertToEntry, defaultExifMap } from '../model/conversion'
+import Entry from '../model/entry'
 
-import { useEffect, useState } from 'react'
-import { ExtensionContextProvider } from './extension-context'
-import { ChApi, EnrichedRepository } from './ch-api'
-import credentials from './credentials'
-import { convertToEntry, defaultExifMap } from './model/conversion'
-import { Box } from '@mui/material'
-
-import Entry from './model/entry'
-import ImageDialog from './components/ImageDialog'
-import AppToolbar from './components/AppToolbar'
-import GridView from './components/GridView'
-import ItemListView from './components/ItemListView'
-import DetailDrawer from './components/DetailDrawer'
-import ImportDrawer from './components/ImportDrawer'
-import AppSnack from './components/AppSnack'
-import { AlertMessage, MediaItem } from './model'
-import ContextMenu from './components/ContextMenu'
-
-// TODO: get assets from Content Hub
 const itemData: MediaItem[] = [
 	{
 		id: 1,
@@ -137,33 +122,89 @@ const itemData: MediaItem[] = [
 	}
 ]
 
-function assetToImg(asset: Entry): string {
-	// TODO: use vse?
-	const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io'
-
-	return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`
+interface AppContextData {
+	zoom?: number
+	items?: MediaItem[]
+	importItems?: MediaItem[]
+	gridMode?: boolean
+	repo?: EnrichedRepository | null
+	chApi?: ChApi | null
+	detailDrawerOpen?: boolean
+	importDrawerOpen?: boolean
+	sortAnchorEl?: HTMLElement | null
+	sortOpen?: boolean
+	dragging?: boolean
+	fullscreenView?: boolean
+	contextMedia?: MediaItem | null
+	currentMedia?: MediaItem | null
+	tempMedia?: MediaItem | null
+	snackOpen?: boolean
+	infoPanelOpen?: boolean
+	currentAlert?: AlertMessage | null
+	contextMenu?: {
+		mouseX: number
+		mouseY: number
+	} | null
+	handleContextMenu?: () => void
+	handleContextClose?: () => void
+	handleSnackOpen?: () => void
+	handleSnackClose?: () => void
+	handleSortClick?: () => void
+	handleFullScreenView?: () => void
+	handleDetailView?: () => void
+	handleSortClose?: () => void
+	handleZoomIn?: () => void
+	handleZoomOut?: () => void
+	sensors?: () => void
+	getEntries?: () => void
+	offsetActiveElementIndex?: (offset: number) => void
+	dragStart?: (event: any) => void
+	dragEnd?: (event: any) => void
+	getItem?: () => void
+	removeItem?: () => void
+	selectItem?: () => void
+	selectImportItem?: () => void
+	handleSelectAll?: () => void
+	handleSelectNone?: () => void
+	handleRemoveSelected?: () => void
+	handleResetItems?: () => void
+	handleImport?: () => void
+	importMedia?: () => void
+	saveItem?: () => void
+	handleSortByDateAsc?: () => void
+	handleSortByDateDesc?: () => void
+	handleSortByCaptionAsc?: () => void
+	handleSortByCaptionDesc?: () => void
+	handleSelectAllImportItems?: () => void
+	handleSelectNoneImportItems?: () => void
 }
 
-function assetsToItems(assets: Entry[]) {
-	return assets.map((asset, index) => ({
-		id: index,
-		selected: false,
-		dateModified: '',
-		img: assetToImg(asset),
-		title: asset.description,
-		author: asset.photographer,
-		asset: asset
-	}))
+const defaultAppState = {
+	zoom: 1,
+	items: structuredClone(itemData),
+	importItems: structuredClone(itemData),
+	gridMode: true,
+	repo: null,
+	chApi: null,
+	detailDrawerOpen: false,
+	importDrawerOpen: false,
+	sortAnchorEl: null,
+	sortOpen: false,
+	dragging: false,
+	fullscreenView: false,
+	contextMedia: null,
+	currentMedia: null,
+	tempMedia: null,
+	snackOpen: false,
+	infoPanelOpen: false,
+	currentAlert: null,
+	contextMenu: null
 }
 
-function MediaGalleryApp() {
-	// const theme = useTheme();
-	// const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-	// const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-	// const isLarge = useMediaQuery(theme.breakpoints.down("lg"));
-	// const isXLarge = useMediaQuery(theme.breakpoints.down("xl"));
+const AppContext = React.createContext<AppContextData>(defaultAppState)
 
-	// const [cols, setCols] = useState(6);
+export function ExtensionContextProvider({ children }: { children: ReactNode }) {
+	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
 	const [items, setItems] = useState<MediaItem[]>(structuredClone(itemData))
 	const [importItems, setImportItems] = useState<MediaItem[]>(structuredClone(itemData))
@@ -821,145 +862,13 @@ function MediaGalleryApp() {
 		})
 	}
 
-	return (
-		<ExtensionContextProvider>
-			{/* Image full screen view */}
-			{/* TODO: mode styles for all components */}
-			<ImageDialog
-				fullscreenView={fullscreenView}
-				currentMedia={currentMedia}
-				infoPanelOpen={infoPanelOpen}
-				setFullscreenView={setFullscreenView}
-				setInfoPanelOpen={setInfoPanelOpen}
-			/>
-			<Box style={{ width: '100%' }}>
-				{/* Toolbar */}
-				<AppToolbar
-					gridMode={gridMode}
-					items={items}
-					handleImport={handleImport}
-					handleRemoveSelected={handleRemoveSelected}
-					handleContextMenu={handleContextMenu}
-					handleResetItems={handleResetItems}
-					handleSelectAll={handleSelectAll}
-					handleSelectNone={handleSelectNone}
-					handleSortByAuthorAsc={handleSortByAuthorAsc}
-					handleSortByAuthorDesc={handleSortByAuthorDesc}
-					handleSortByCaptionAsc={handleSortByCaptionAsc}
-					handleSortByCaptionDesc={handleSortByCaptionDesc}
-					handleSortByDateAsc={handleSortByDateAsc}
-					handleSortByDateDesc={handleSortByDateDesc}
-					handleSortClick={handleSortClick}
-					handleSortClose={handleSortClose}
-					handleZoomIn={handleZoomIn}
-					handleZoomOut={handleZoomOut}
-					setGridMode={setGridMode}
-					sortAnchorEl={sortAnchorEl}
-					sortOpen={sortOpen}
-					zoom={zoom}
-				/>
+	useEffect(() => {
+		setState({ ...state })
+	}, [setState, state])
 
-				{/* Context Menu */}
-				<ContextMenu
-					contextMenu={contextMenu}
-					contextMedia={contextMedia}
-					gridMode={gridMode}
-					selectItem={selectItem}
-					handleContextClose={handleContextClose}
-					handleFullScreenView={handleFullScreenView}
-					handleDetailView={handleDetailView}
-					handleImport={handleImport}
-					handleSelectAll={handleSelectAll}
-					handleSelectNone={handleSelectNone}
-					handleRemoveSelected={handleRemoveSelected}
-					handleSortClick={handleSortClick}
-					handleResetItems={handleResetItems}
-					handleZoomIn={handleZoomIn}
-					handleZoomOut={handleZoomOut}
-					items={items}
-					removeItem={removeItem}
-					setGridMode={setGridMode}
-					zoom={zoom}
-				/>
-
-				{/* Main view */}
-				<Box sx={{ w: '100%', pr: 2, pl: 2 }} onContextMenu={handleContextMenu}>
-					{gridMode ? (
-						// Grid view
-						<GridView
-							sensors={sensors}
-							items={items}
-							dragEnd={dragEnd}
-							dragStart={dragStart}
-							zoom={zoom}
-							handleDetailView={handleDetailView}
-							handleFullScreenView={handleFullScreenView}
-							selectItem={selectItem}
-							removeItem={removeItem}
-						/>
-					) : (
-						// List view
-						<ItemListView
-							sensors={sensors}
-							items={items}
-							dragEnd={dragEnd}
-							dragStart={dragStart}
-							zoom={zoom}
-							handleDetailView={handleDetailView}
-							handleFullScreenView={handleFullScreenView}
-							selectItem={selectItem}
-							removeItem={removeItem}
-						/>
-					)}
-				</Box>
-
-				{/* Image detail drawer */}
-				<DetailDrawer
-					currentMedia={currentMedia}
-					tempMedia={tempMedia}
-					saveItem={saveItem}
-					detailDrawerOpen={detailDrawerOpen}
-					setDetailDrawerOpen={setDetailDrawerOpen}
-					handleFullScreenView={handleFullScreenView}
-				/>
-
-				{/* Import media drawer */}
-				{/* TODO: move to components */}
-				<ImportDrawer
-					repo={repo}
-					importDrawerOpen={importDrawerOpen}
-					setImportDrawerOpen={setImportDrawerOpen}
-					getEntries={getEntries}
-					setImportItems={setImportItems}
-					assetsToItems={assetsToItems}
-					handleSelectAllImportItems={handleSelectAllImportItems}
-					handleSelectNoneImportItems={handleSelectNoneImportItems}
-					importItems={importItems}
-					handleFullScreenView={handleFullScreenView}
-					selectImportItem={selectImportItem}
-					importMedia={importMedia}
-				/>
-			</Box>
-			<Box sx={{ width: '100%', flexGrow: 1 }} onContextMenu={handleContextMenu} />
-
-			{/* Snack Bar for alerts */}
-			<AppSnack
-				snackOpen={snackOpen}
-				handleSnackClose={handleSnackClose}
-				currentAlert={currentAlert}
-			/>
-		</ExtensionContextProvider>
-	)
+	return <AppContext.Provider value={state}>{children}</AppContext.Provider>
 }
 
-function App() {
-	return (
-		<div className='App'>
-			<header className='App-header'>
-				<MediaGalleryApp />
-			</header>
-		</div>
-	)
+export function useExtension() {
+	return useContext(AppContext)
 }
-
-export default App
