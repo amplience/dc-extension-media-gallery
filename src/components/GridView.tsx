@@ -59,10 +59,10 @@ const GridView = ({
 									<img
 										src={`${item.img}?w=${248 * zoom}&h=${
 											164 * zoom
-										}&sm=c&auto=format`}
+										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
 										srcSet={`${item.img}?w=${248 * zoom}&h=${
 											164 * zoom
-										}&sm=c&auto=format&dpr=2 2x`}
+										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										loading='lazy'
 										style={{ width: '100%', aspectRatio: '1.5/1' }}

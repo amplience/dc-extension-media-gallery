@@ -122,8 +122,8 @@ const ItemListView = ({
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
 									<img
-										src={`${item.img}?w=124&h=82&sm=c&auto=format`}
-										srcSet={`${item.img}?w=124&h=82&sm=c&auto=format&dpr=2 2x`}
+										src={`${item.img}?w=62&h=41&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
+										srcSet={`${item.img}?w=124&h=82&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										title='Click to zoom'
 										onClick={() => handleFullScreenView(item)}

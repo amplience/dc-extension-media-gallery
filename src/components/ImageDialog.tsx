@@ -30,8 +30,8 @@ const ImageDialog = ({
 			<Box sx={{ p: 4 }}>
 				<Box sx={{ position: 'relative' }}>
 					<img
-						src={`${currentMedia?.img}??w=2048&h=1365&auto=format`}
-						srcSet={`${currentMedia?.img}??w=2048&h=1365&auto=format&dpr=2 2x`}
+						src={`${currentMedia?.img}?w=1024&h=686&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true`}
+						srcSet={`${currentMedia?.img}?w=2048&h=1366&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true 2x`}
 						alt={currentMedia?.title}
 						onClick={() => setFullscreenView(false)}
 						loading='lazy'

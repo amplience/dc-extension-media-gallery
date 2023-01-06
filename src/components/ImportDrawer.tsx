@@ -110,8 +110,8 @@ const ImportDrawer = ({
 							{importItems.map((item: any) => (
 								<ImageListItem key={item.img}>
 									<img
-										src={`${item.img}?w=150&h=100&sm=c&auto=format`}
-										srcSet={`${item.img}?w=150&h=100&sm=c&auto=format&dpr=2 2x`}
+										src={`${item.img}?w=150&h=100&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
+										srcSet={`${item.img}?w=300&h=200&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										onClick={() => handleFullScreenView(item)}
 										style={{aspectRatio: 1.5/1}}
