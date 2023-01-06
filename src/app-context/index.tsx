@@ -416,10 +416,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	useEffect(() => {
 		if (field) {
-			const data = assetsToItems(field[galleryPath]);
-			setItems(data);
+			const data = assetsToItems(field[galleryPath])
+			setItems(data)
 		}
-	}, [field, galleryPath])	
+	}, [field, galleryPath])
 
 	useEffect(() => {
 		if (field) {
@@ -900,7 +900,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 	}, [
 		zoom,
-		//items,
+		items,
 		importItems,
 		gridMode,
 		repo,
