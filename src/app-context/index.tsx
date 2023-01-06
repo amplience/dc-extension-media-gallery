@@ -8,7 +8,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import React, { useEffect, useState, useContext, ReactNode, Dispatch, SetStateAction } from 'react'
-import { EnrichedRepository, ChApi } from '../ch-api'
+import { AssetWithExif, EnrichedRepository, ChApi } from '../ch-api'
 import credentials from '../credentials'
 import { AlertMessage, MediaItem } from '../model'
 import { convertToEntry, defaultExifMap } from '../model/conversion'
@@ -555,10 +555,21 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * Getting assets from Content Hub
 		 * @param id
 		 */
-		const getEntries = async (id: string): Promise<Entry[]> => {
+		const getEntries = async (id: string, query?: string): Promise<Entry[]> => {
 			if (chApi && repo) {
 				setDefaultFolder(repo.id, id)
-				const assets = await chApi.getExifByFolder(repo.id, id)
+				//const assets = await chApi.getExifByFolder(repo.id, id)
+				let assets: AssetWithExif[]
+
+				if (query && query !== '') {
+					assets = await chApi.queryAssetsExif({
+						folderId: id,
+						repoId: repo.id,
+						query
+					})
+				} else {
+					assets = await chApi.getExifByFolder(repo.id, id)
+				}
 
 				const entries = assets.map((asset) =>
 					convertToEntry(asset, defaultExifMap, {
