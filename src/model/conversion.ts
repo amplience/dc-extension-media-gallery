@@ -1,6 +1,7 @@
 import Entry from "./entry";
 import {AssetWithExif, getFirstListItem} from '../ch-api';
 import ExifMap from "./exif-map";
+import { MediaItem } from ".";
 
 export const defaultExifMap: ExifMap = {
     photographer: 'artist',
@@ -34,4 +35,27 @@ export function convertToEntry(asset: AssetWithExif, exifMap: ExifMap, chConfigu
     }
 
     return result;
+}
+
+export function assetToImg(asset: Entry): string {
+	// TODO: pass vse as argument
+	const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io'
+
+	return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`
+}
+
+export function itemsToAssets(items: MediaItem[]): Entry[] {
+	return items.map((item) => item.entry as Entry)
+}
+
+export function assetsToItems(assets: Entry[]): MediaItem[] {
+	return assets.map((asset, index) => ({
+		id: index,
+		selected: false,
+		dateModified: '',
+		img: assetToImg(asset),
+		title: asset.description,
+		author: asset.photographer,
+		entry: asset
+	}))
 }

@@ -11,7 +11,7 @@ import React, { useEffect, useState, useContext, ReactNode, Dispatch, SetStateAc
 import { AssetWithExif, EnrichedRepository, ChApi } from '../ch-api'
 import credentials from '../credentials'
 import { AlertMessage, MediaItem } from '../model'
-import { convertToEntry, defaultExifMap } from '../model/conversion'
+import { assetsToItems, convertToEntry, defaultExifMap, itemsToAssets } from '../model/conversion'
 import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
 
@@ -86,7 +86,6 @@ type AppContextData = {
 	selectImportItem: (id: number) => void
 	selectItem: (id: number) => void
 	saveItem?: () => void
-	assetsToItems: (assets: Entry[]) => MediaItem[]
 }
 
 const defaultAppState = {
@@ -130,9 +129,6 @@ const defaultAppState = {
 	handleSortByAuthorAsc: () => {},
 	handleSortByAuthorDesc: () => {},
 	importMedia: () => {},
-	assetsToItems: (assets: Entry[]) => {
-		return []
-	},
 	selectImportItem: (id: number) => {}
 }
 
@@ -415,19 +411,15 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		})
 	}
 
-	const assetToImg = (asset: Entry): string => {
-		// TODO: use vse?
-		const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io'
-
-		return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`
-	}
-
-	const itemsToAssets = (items: MediaItem[]): Entry[] => {
-		return items.map((item) => item.entry as Entry)
-	}
-
 	const { field, setField, params } = useExtension()
 	const { galleryPath, configPath } = params
+
+	useEffect(() => {
+		if (field) {
+			const data = assetsToItems(field[galleryPath]);
+			setItems(data);
+		}
+	}, [field, galleryPath])	
 
 	useEffect(() => {
 		if (field) {
@@ -527,18 +519,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 		}
 		document.addEventListener('keydown', keyDownHandler)
-
-		const assetsToItems = (assets: Entry[]): MediaItem[] => {
-			return assets.map((asset, index) => ({
-				id: index,
-				selected: false,
-				dateModified: '',
-				img: assetToImg(asset),
-				title: asset.description,
-				author: asset.photographer,
-				entry: asset
-			}))
-		}
 
 		const setDefaultFolder = (repoId: string, folderId: string) => {
 			// Should also clear the last used query here if it's being replaced with a folder.
@@ -841,11 +821,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSortClose()
 		}
 
-		if (field) {
-			const data = assetsToItems(field[galleryPath])
-			setItems(data)
-		}
-
 		let state: AppContextData = {
 			zoom,
 			setZoom,
@@ -916,7 +891,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			selectImportItem,
 			selectItem,
 			saveItem,
-			assetsToItems,
 			sensors
 		}
 

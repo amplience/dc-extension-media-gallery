@@ -20,6 +20,7 @@ import {
 import RichObjectTreeView from './RichTreeView'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import { assetsToItems } from '../model/conversion'
 
 const ImportDrawer = () => {
 	const app = useContext(AppContext)
@@ -62,7 +63,7 @@ const ImportDrawer = () => {
 							onChange={async (id: string) => {
 								if (app.getEntries && app.setImportItems) {
 									const entries = await app.getEntries(id)
-									app.setImportItems(app.assetsToItems(entries))
+									app.setImportItems(assetsToItems(entries))
 								}
 							}}
 						/>
