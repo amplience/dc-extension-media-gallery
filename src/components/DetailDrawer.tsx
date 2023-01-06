@@ -55,8 +55,8 @@ const DetailDrawer = () => {
 					</Box>
 				</Stack>
 				<img
-					src={`${app.currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format`}
-					srcSet={`${app.currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+					src={`${app.currentMedia?.img}?w=1024&h=683&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true`}
+					srcSet={`${app.currentMedia?.img}?w=2048&h=1366&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true 2x`}
 					alt={app.currentMedia?.title}
 					title='Click to zoom'
 					onClick={() => {

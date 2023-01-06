@@ -13,6 +13,9 @@ export function convertToEntry(asset: AssetWithExif, exifMap: ExifMap, chConfigu
     const idString = atob(asset.id);
 
     const result = {
+        _meta: {
+            schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+        },
         id: idString.split(':')[1],
         name: asset.name,
         photographer: 'Unknown',

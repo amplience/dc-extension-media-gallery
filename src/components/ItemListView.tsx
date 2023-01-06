@@ -12,7 +12,15 @@ import {
 	EditOutlined,
 	DeleteOutline
 } from '@mui/icons-material'
-import { Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
+import {
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
+	IconButton,
+	Tooltip
+} from '@mui/material'
 import SortableTableRow from '../sortable-table-row'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
@@ -102,11 +110,12 @@ const ItemListView = () => {
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
 									<img
-										src={`${item.img}?w=124&h=82&sm=c&auto=format`}
-										srcSet={`${item.img}?w=124&h=82&sm=c&auto=format&dpr=2 2x`}
+										src={`${item.img}?w=62&h=41&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
+										srcSet={`${item.img}?w=124&h=82&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										title='Click to zoom'
 										onClick={() => app.handleFullScreenView(item)}
+										style={{ cursor: 'zoom-in' }}
 										id={item.id}
 										loading='lazy'
 									/>
@@ -140,30 +149,34 @@ const ItemListView = () => {
 										<DeleteOutline />
 									</IconButton>
 								</TableCell>
-								<TableCell
-									sx={{
-										cursor: 'pointer',
-										borderBottom: 'none',
-										bgcolor: `${item.selected ? '#444' : ''}`,
-										color: 'white'
-									}}
-									id={item.id}
-									onClick={() => app.selectItem(item.id)}
-									align='left'>
-									{item.title}
-								</TableCell>
-								<TableCell
-									sx={{
-										cursor: 'pointer',
-										borderBottom: 'none',
-										bgcolor: `${item.selected ? '#444' : ''}`,
-										color: 'white'
-									}}
-									id={item.id}
-									onClick={() => app.selectItem(item.id)}
-									align='left'>
-									{item.author}
-								</TableCell>
+								<Tooltip title={item.title} followCursor={true}>
+									<TableCell
+										sx={{
+											cursor: 'pointer',
+											borderBottom: 'none',
+											bgcolor: `${item.selected ? '#444' : ''}`,
+											color: 'white'
+										}}
+										id={item.id}
+										onClick={() => app.selectItem(item.id)}
+										align='left'>
+										{item.title}
+									</TableCell>
+								</Tooltip>
+								<Tooltip title={item.author} followCursor={true}>
+									<TableCell
+										sx={{
+											cursor: 'pointer',
+											borderBottom: 'none',
+											bgcolor: `${item.selected ? '#444' : ''}`,
+											color: 'white'
+										}}
+										id={item.id}
+										onClick={() => app.selectItem(item.id)}
+										align='left'>
+										{item.author}
+									</TableCell>
+								</Tooltip>
 							</SortableTableRow>
 						))}
 					</TableBody>

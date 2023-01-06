@@ -1,8 +1,6 @@
 import './media-gallery.css'
 
-import { useContext } from 'react'
 import { Box } from '@mui/material'
-
 import ImageDialog from '../components/ImageDialog'
 import AppToolbar from '../components/AppToolbar'
 import GridView from '../components/GridView'
@@ -12,6 +10,7 @@ import ImportDrawer from '../components/ImportDrawer'
 import AppSnack from '../components/AppSnack'
 import ContextMenu from '../components/ContextMenu'
 import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
 function MediaGallery() {
 	const app = useContext(AppContext)

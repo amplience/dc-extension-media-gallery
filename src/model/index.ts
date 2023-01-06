@@ -8,7 +8,7 @@ export interface MediaItem {
 	img: string
 	title: string
 	author: string
-	entry?: Entry
+	entry: Entry
 }
 
 export interface AlertMessage {

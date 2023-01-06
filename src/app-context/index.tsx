@@ -15,121 +15,6 @@ import { convertToEntry, defaultExifMap } from '../model/conversion'
 import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
 
-const itemData: MediaItem[] = [
-	{
-		id: 1,
-		selected: false,
-		dateModified: '2022-12-21T20:15:20.379Z',
-		img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-		title: 'Burger',
-		author: '@rollelflex_graphy726'
-	},
-	{
-		id: 2,
-		selected: false,
-		dateModified: '2022-11-20T19:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-		title: 'Camera',
-		author: '@helloimnik'
-	},
-	{
-		id: 3,
-		selected: false,
-		dateModified: '2022-11-20T19:15:20.379Z',
-		img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-		title: 'Coffee',
-		author: '@nolanissac'
-	},
-	{
-		id: 4,
-		selected: false,
-		dateModified: '2022-12-30T18:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-		title: 'Hats',
-		author: '@hjrc33'
-	},
-	{
-		id: 5,
-		selected: false,
-		dateModified: '2022-11-20T19:35:20.379Z',
-		img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-		title: 'Honey',
-		author: '@arwinneil'
-	},
-	{
-		id: 6,
-		selected: false,
-		dateModified: '2022-12-30T17:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-		title: 'Basketball',
-		author: '@tjdragotta'
-	},
-	{
-		id: 7,
-		selected: false,
-		dateModified: '2022-11-20T19:45:20.379Z',
-		img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-		title: 'Fern',
-		author: '@katie_wasserman'
-	},
-	{
-		id: 8,
-		selected: false,
-		dateModified: '2022-12-30T16:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-		title: 'Mushrooms',
-		author: '@silverdalex'
-	},
-	{
-		id: 9,
-		selected: false,
-		dateModified: '2022-12-21T20:15:20.379Z',
-		img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-		title: 'Tomato basil',
-		author: '@shelleypauls'
-	},
-	{
-		id: 10,
-		selected: false,
-		dateModified: '2022-12-30T15:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-		title: 'Sea star',
-		author: '@peterlaster'
-	},
-	{
-		id: 11,
-		selected: false,
-		dateModified: '2022-12-30T14:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-		title: 'Bike',
-		author: '@southside_customs'
-	},
-	{
-		id: 12,
-		selected: false,
-		dateModified: '2022-12-21T20:15:20.379Z',
-		img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-		title: 'Breakfast',
-		author: '@bkristastucchio'
-	},
-	{
-		id: 13,
-		selected: false,
-		dateModified: '2021-12-30T13:25:20.379Z',
-		img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3',
-		title: 'Concert crowd',
-		author: '@silverdalex'
-	},
-	{
-		id: 14,
-		selected: false,
-		dateModified: '2021-11-20T12:15:20.379Z',
-		img: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec',
-		title: 'Crowd love',
-		author: '@silverdalex'
-	}
-]
-
 type AppContextData = {
 	zoom: number
 	setZoom?: Dispatch<SetStateAction<number>>
@@ -206,8 +91,8 @@ type AppContextData = {
 
 const defaultAppState = {
 	zoom: 1,
-	items: structuredClone(itemData),
-	importItems: structuredClone(itemData),
+	items: [],
+	importItems: [],
 	gridMode: true,
 	fullscreenView: false,
 	contextMedia: null,
@@ -256,8 +141,8 @@ export const AppContext = React.createContext<AppContextData>(defaultAppState)
 export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
-	const [items, setItems] = useState<MediaItem[]>(structuredClone(itemData))
-	const [importItems, setImportItems] = useState<MediaItem[]>(structuredClone(itemData))
+	const [items, setItems] = useState<MediaItem[]>([])
+	const [importItems, setImportItems] = useState<MediaItem[]>([])
 	const [gridMode, setGridMode] = useState(true)
 	const [repo, setRepo] = useState<EnrichedRepository>()
 	const [chApi, setChApi] = useState<ChApi>()
@@ -689,6 +574,20 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
+		 * Reset collection
+		 */
+		const handleResetItems = () => {
+			setItems([])
+			setCurrentAlert({
+				severity: 'success',
+				message: 'Collection reset successfully!'
+			})
+			setTimeout(() => {
+				handleSnackOpen()
+			}, 500)
+		}
+
+		/**
 		 * Zoom in for grid mode
 		 */
 		const handleZoomIn = () => {
@@ -746,20 +645,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					message: `No item selected`
 				})
 			}
-			setTimeout(() => {
-				handleSnackOpen()
-			}, 500)
-		}
-
-		/**
-		 * Reset collection
-		 */
-		const handleResetItems = () => {
-			setItems(structuredClone(itemData))
-			setCurrentAlert({
-				severity: 'success',
-				message: 'Collection reset successfully!'
-			})
 			setTimeout(() => {
 				handleSnackOpen()
 			}, 500)
@@ -1030,7 +915,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 	}, [
 		zoom,
-		items,
+		//items,
 		importItems,
 		gridMode,
 		repo,

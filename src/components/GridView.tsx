@@ -8,7 +8,7 @@ import {
 	CheckBoxOutlineBlank,
 	DeleteOutline
 } from '@mui/icons-material'
-import { Stack, Box, IconButton, ImageListItemBar, Typography } from '@mui/material'
+import { Stack, Box, IconButton, ImageListItemBar, Typography, Tooltip } from '@mui/material'
 import SortableListItem from '../sortable-list-item'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
@@ -33,19 +33,25 @@ const GridView = () => {
 					onDragEnd={app.dragEnd}
 					modifiers={[restrictToWindowEdges, restrictToParentElement]}>
 					<SortableContext items={app.items} strategy={rectSortingStrategy}>
-						{app.items?.map((item: any, index: number) => (
+						{app.items.map((item: any, index: number) => (
 							<SortableListItem key={item.img} id={item.id} zoom={app.zoom}>
-								<Box sx={{ mt: 1, ml: 1, mr: 1 }} style={{ position: 'relative' }}>
+								<Box
+									sx={{ mt: 1, ml: 1, mr: 1 }}
+									style={{ position: 'relative', cursor: 'grab' }}>
 									<img
 										src={`${item.img}?w=${248 * app.zoom}&h=${
 											164 * app.zoom
-										}&fit=crop&auto=format`}
+										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
 										srcSet={`${item.img}?w=${248 * app.zoom}&h=${
 											164 * app.zoom
-										}&fit=crop&auto=format&dpr=2 2x`}
+										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										loading='lazy'
-										style={{ width: '100%', aspectRatio: '1.5/1' }}
+										style={{
+											width: '100%',
+											aspectRatio: '1.5/1',
+											cursor: 'zoom-in'
+										}}
 										title='Click to zoom'
 										id={item.id}
 										onClick={() => app.handleFullScreenView(item)}
@@ -111,14 +117,18 @@ const GridView = () => {
 								</Box>
 								<ImageListItemBar
 									title={
-										<Typography variant='subtitle1' noWrap>
-											{item.title}
-										</Typography>
+										<Tooltip title={item.title} followCursor={true}>
+											<Typography variant='subtitle1' noWrap>
+												{item.title}
+											</Typography>
+										</Tooltip>
 									}
 									subtitle={
-										<Typography variant='subtitle2' noWrap>
-											by: {item.author}
-										</Typography>
+										<Tooltip title={item.author} followCursor={true}>
+											<Typography variant='subtitle2' noWrap>
+												by: {item.author}
+											</Typography>
+										</Tooltip>
 									}
 									sx={{
 										p: 0,
