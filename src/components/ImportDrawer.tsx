@@ -114,7 +114,7 @@ const ImportDrawer = ({
 										srcSet={`${item.img}?w=300&h=200&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										onClick={() => handleFullScreenView(item)}
-										style={{aspectRatio: 1.5/1}}
+										style={{aspectRatio: 1.5/1, cursor:'zoom-in'}}
 										title='Click to zoom'
 										loading='lazy'
 									/>

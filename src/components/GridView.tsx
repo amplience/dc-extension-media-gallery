@@ -54,8 +54,8 @@ const GridView = ({
 					modifiers={[restrictToWindowEdges, restrictToParentElement]}>
 					<SortableContext items={items} strategy={rectSortingStrategy}>
 						{items.map((item: any, index: number) => (
-							<SortableListItem key={item.img} id={item.id} zoom={zoom}>
-								<Box sx={{ mt: 1, ml: 1, mr: 1 }} style={{ position: 'relative' }}>
+							<SortableListItem key={item.img} id={item.id} zoom={zoom} >
+								<Box sx={{ mt: 1, ml: 1, mr: 1 }} style={{ position: 'relative', cursor: 'grab'}}>
 									<img
 										src={`${item.img}?w=${248 * zoom}&h=${
 											164 * zoom
@@ -65,7 +65,7 @@ const GridView = ({
 										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
 										alt={item.title}
 										loading='lazy'
-										style={{ width: '100%', aspectRatio: '1.5/1' }}
+										style={{ width: '100%', aspectRatio: '1.5/1', cursor: 'zoom-in' }}
 										title='Click to zoom'
 										id={item.id}
 										onClick={() => handleFullScreenView(item)}

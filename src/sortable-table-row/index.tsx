@@ -21,6 +21,7 @@ export default function SortableTableRow(props: any) {
   return (
     <TableRow id={props.id} ref={setNodeRef} 
       sx={{
+        cursor:'grab',
         'border': "1px transparent solid",
         '&:focus': {
           border: "1px blue solid",
