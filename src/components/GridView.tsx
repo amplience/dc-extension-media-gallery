@@ -8,7 +8,7 @@ import {
 	CheckBoxOutlineBlank,
 	DeleteOutline
 } from '@mui/icons-material'
-import { Stack, Box, IconButton, ImageListItemBar, Typography } from '@mui/material'
+import { Stack, Box, IconButton, ImageListItemBar, Typography, Tooltip } from '@mui/material'
 import { MediaItem } from '../model'
 import SortableListItem from '../sortable-list-item'
 
@@ -131,14 +131,18 @@ const GridView = ({
 								</Box>
 								<ImageListItemBar
 									title={
-										<Typography variant='subtitle1' noWrap>
-											{item.title}
-										</Typography>
+										<Tooltip title={item.title} followCursor={true}>
+											<Typography variant='subtitle1' noWrap>
+												{item.title}
+											</Typography>
+										</Tooltip>
 									}
 									subtitle={
-										<Typography variant='subtitle2' noWrap>
-											by: {item.author}
-										</Typography>
+										<Tooltip title={item.author} followCursor={true}>
+											<Typography variant='subtitle2' noWrap>
+												by: {item.author}
+											</Typography>
+										</Tooltip>
 									}
 									sx={{
 										p: 0,

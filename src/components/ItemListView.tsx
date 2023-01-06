@@ -12,7 +12,7 @@ import {
 	EditOutlined,
 	DeleteOutline
 } from '@mui/icons-material'
-import { Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
+import { Table, TableHead, TableRow, TableCell, TableBody, IconButton, Tooltip } from '@mui/material'
 import { MediaItem } from '../model'
 import SortableTableRow from '../sortable-table-row'
 
@@ -160,30 +160,34 @@ const ItemListView = ({
 										<DeleteOutline />
 									</IconButton>
 								</TableCell>
-								<TableCell
-									sx={{
-										cursor: 'pointer',
-										borderBottom: 'none',
-										bgcolor: `${item.selected ? '#444' : ''}`,
-										color: 'white'
-									}}
-									id={item.id}
-									onClick={() => selectItem(item.id)}
-									align='left'>
-									{item.title}
-								</TableCell>
-								<TableCell
-									sx={{
-										cursor: 'pointer',
-										borderBottom: 'none',
-										bgcolor: `${item.selected ? '#444' : ''}`,
-										color: 'white'
-									}}
-									id={item.id}
-									onClick={() => selectItem(item.id)}
-									align='left'>
-									{item.author}
-								</TableCell>
+								<Tooltip title={item.title} followCursor={true}>
+									<TableCell
+										sx={{
+											cursor: 'pointer',
+											borderBottom: 'none',
+											bgcolor: `${item.selected ? '#444' : ''}`,
+											color: 'white'
+										}}
+										id={item.id}
+										onClick={() => selectItem(item.id)}
+										align='left'>
+										{item.title}
+									</TableCell>
+								</Tooltip>
+								<Tooltip title={item.author} followCursor={true}>
+									<TableCell
+										sx={{
+											cursor: 'pointer',
+											borderBottom: 'none',
+											bgcolor: `${item.selected ? '#444' : ''}`,
+											color: 'white'
+										}}
+										id={item.id}
+										onClick={() => selectItem(item.id)}
+										align='left'>
+										{item.author}
+									</TableCell>
+								</Tooltip>
 							</SortableTableRow>
 						))}
 					</TableBody>
