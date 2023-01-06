@@ -5,7 +5,7 @@ import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 
 import { useEffect, useState } from 'react'
 import { ExtensionContextProvider, useExtension } from '../extension-context'
-import { ChApi, EnrichedRepository } from '../ch-api'
+import { AssetWithExif, ChApi, EnrichedRepository } from '../ch-api'
 import credentials from '../credentials'
 import { convertToEntry, defaultExifMap } from '../model/conversion'
 import { Box } from '@mui/material'
@@ -262,10 +262,20 @@ function MediaGallery() {
 	 * Getting assets from Content Hub
 	 * @param id
 	 */
-	const getEntries = async (id: string): Promise<Entry[]> => {
+	const getEntries = async (id: string, query?: string): Promise<Entry[]> => {
 		if (chApi && repo) {
       setDefaultFolder(repo.id, id);
-			const assets = await chApi.getExifByFolder(repo.id, id)
+	  	let assets: AssetWithExif[];
+
+      if (query && query !== '') {
+        assets = await chApi.queryAssetsExif({
+          folderId: id,
+          repoId: repo.id,
+          query
+        });
+      } else {
+        assets = await chApi.getExifByFolder(repo.id, id);
+      }
 
 			const entries = assets.map((asset) =>
 				convertToEntry(asset, defaultExifMap, {

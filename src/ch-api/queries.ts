@@ -1,7 +1,7 @@
 export const queryAssetByFolder = `
-query queryAssetByFolder($folderId: String!, $after: String) {
+query queryAssetByFolder($folderId: String!, $query: String, $after: String) {
   assetSearch(
-    keyword: "*"
+    keyword: $query
     first: 100
     filters: { assetFolderId: [$folderId] }
     sort: { updatedDate: DESC }
@@ -68,6 +68,21 @@ query assetEXIF($uuid: ID!) {
     }
 	}
 }`;
+
+export const assetEXIFBuilder = `node(id: $uuid) {
+    id
+    ... on Asset {
+      id
+      exifMetadata:metadata(schemaName: "exif") {
+        edges {
+          node {
+            schemaName
+            properties
+          }
+        }		
+      }
+    }
+	}`;
 
 export const repositories = `
 query repositories($after: String) {
