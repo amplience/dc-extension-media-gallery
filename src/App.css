@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  min-height: 768px;
 }
 
 .App-logo {
@@ -26,24 +27,4 @@
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/*
-  .gridItem:focus {
-  outline: none !important;
-  outline-offset: none !important;
-} 
-*/
-
-.gridItem {
-  width: 210px
 }

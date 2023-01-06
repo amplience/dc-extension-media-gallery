@@ -17,6 +17,7 @@ query queryAssetByFolder($folderId: String!, $after: String) {
         id
         name
         label
+        updatedDate
       }
     }
   }
@@ -41,6 +42,7 @@ query queryAssetByFolder($repoId: String!, $after: String) {
         id
         name
         label
+        updatedDate
       }
     }
   }
@@ -164,6 +166,7 @@ query exifByFolder($folderId: ID!, $after: String) {
             id
             name
             label
+            updatedDate:createdDate
             exifMetadata:metadata(schemaName: "exif") {
               edges {
                 node {
@@ -195,6 +198,7 @@ query exifByRepo($repoId: ID!, $after: String) {
             id
             name
             label
+            updatedDate:createdDate
             exifMetadata:metadata(schemaName: "exif") {
               edges {
                 node {

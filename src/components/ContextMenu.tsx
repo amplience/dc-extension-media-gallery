@@ -25,59 +25,19 @@ import {
 	Badge,
 	Box
 } from '@mui/material'
-import { MediaItem } from '../model'
+import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
-type ContextArgs = {
-	contextMenu: any
-	contextMedia: MediaItem | null
-	gridMode: boolean
-	selectItem: any
-	handleContextClose: any
-	handleFullScreenView: any
-	handleDetailView: any
-	handleImport: any
-	handleSelectAll: any
-	handleSelectNone: any
-	handleRemoveSelected: any
-	handleSortClick: any
-	handleResetItems: any
-	handleZoomIn: any
-	handleZoomOut: any
-	items: MediaItem[]
-	removeItem: any
-	setGridMode: any
-	zoom: number
-}
-
-const ContextMenu = ({
-	contextMenu,
-	contextMedia,
-	gridMode,
-	selectItem,
-	handleContextClose,
-	handleFullScreenView,
-	handleDetailView,
-	handleImport,
-	handleSelectAll,
-	handleSelectNone,
-	handleRemoveSelected,
-	handleSortClick,
-	handleResetItems,
-	handleZoomIn,
-	handleZoomOut,
-	items,
-	removeItem,
-	setGridMode,
-	zoom
-}: ContextArgs) => {
+const ContextMenu = () => {
+	const app = useContext(AppContext)
 	return (
 		<Menu
-			open={contextMenu !== null}
-			onClose={handleContextClose}
+			open={app.contextMenu !== null}
+			onClose={app.handleContextClose}
 			anchorReference='anchorPosition'
 			anchorPosition={
-				contextMenu !== null
-					? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+				app.contextMenu !== null
+					? { top: app.contextMenu.mouseY, left: app.contextMenu.mouseX }
 					: undefined
 			}
 			PaperProps={{
@@ -85,7 +45,7 @@ const ContextMenu = ({
 					width: '300px'
 				}
 			}}>
-			{contextMedia != null && (
+			{app.contextMedia != null && (
 				<>
 					<ListSubheader
 						style={{
@@ -94,14 +54,16 @@ const ContextMenu = ({
 							overflow: 'hidden',
 							textOverflow: 'ellipsis'
 						}}>
-						{contextMedia.title}
+						{app.contextMedia.title}
 					</ListSubheader>
-					{!contextMedia.selected && (
+					{!app.contextMedia.selected && (
 						<MenuItem
 							dense
 							onClick={() => {
-								handleContextClose()
-								selectItem(contextMedia.id)
+								if (app.contextMedia) {
+									app.handleContextClose()
+									app.selectItem(app.contextMedia.id)
+								}
 							}}>
 							<ListItemIcon>
 								<CheckBoxOutlineBlank fontSize='small' />
@@ -112,12 +74,14 @@ const ContextMenu = ({
 							</Typography>
 						</MenuItem>
 					)}
-					{contextMedia.selected && (
+					{app.contextMedia.selected && (
 						<MenuItem
 							dense
 							onClick={() => {
-								handleContextClose()
-								selectItem(contextMedia.id)
+								if (app.contextMedia) {
+									app.handleContextClose()
+									app.selectItem(app.contextMedia.id)
+								}
 							}}>
 							<ListItemIcon>
 								<CheckBoxOutlined fontSize='small' />
@@ -132,8 +96,10 @@ const ContextMenu = ({
 						dense
 						autoFocus
 						onClick={() => {
-							handleContextClose()
-							handleFullScreenView(contextMedia)
+							if (app.contextMedia) {
+								app.handleContextClose()
+								app.handleFullScreenView(app.contextMedia)
+							}
 						}}>
 						<ListItemIcon>
 							<VisibilityOutlined fontSize='small' />
@@ -146,8 +112,10 @@ const ContextMenu = ({
 					<MenuItem
 						dense
 						onClick={() => {
-							handleContextClose()
-							handleDetailView(contextMedia)
+							if (app.contextMedia) {
+								app.handleContextClose()
+								app.handleDetailView(app.contextMedia)
+							}
 						}}>
 						<ListItemIcon>
 							<EditOutlined fontSize='small' />
@@ -160,8 +128,10 @@ const ContextMenu = ({
 					<MenuItem
 						dense
 						onClick={() => {
-							handleContextClose()
-							removeItem(contextMedia.id)
+							if (app.contextMedia) {
+								app.handleContextClose()
+								app.removeItem(app.contextMedia.id)
+							}
 						}}>
 						<ListItemIcon>
 							<DeleteOutline fontSize='small' />
@@ -176,11 +146,11 @@ const ContextMenu = ({
 			)}
 			<ListSubheader>Global</ListSubheader>
 			<MenuItem
-				autoFocus={contextMedia == null}
+				autoFocus={app.contextMedia == null}
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleImport()
+					app.handleContextClose()
+					app.handleImport()
 				}}>
 				<ListItemIcon>
 					<AddPhotoAlternateOutlined fontSize='small' />
@@ -194,8 +164,8 @@ const ContextMenu = ({
 			<MenuItem
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleSelectAll()
+					app.handleContextClose()
+					app.handleSelectAll()
 				}}>
 				<ListItemIcon>
 					<GridViewSharp fontSize='small' />
@@ -208,8 +178,8 @@ const ContextMenu = ({
 			<MenuItem
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleSelectNone()
+					app.handleContextClose()
+					app.handleSelectNone()
 				}}>
 				<ListItemIcon>
 					<GridViewOutlined fontSize='small' />
@@ -223,15 +193,15 @@ const ContextMenu = ({
 			<MenuItem
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleRemoveSelected()
+					app.handleContextClose()
+					app.handleRemoveSelected()
 				}}>
 				<ListItemIcon>
 					<DeleteOutline fontSize='small' />
 				</ListItemIcon>
 				<ListItemText>
 					<Badge
-						badgeContent={items.filter((item: any) => item.selected).length}
+						badgeContent={app.items.filter((item: any) => item.selected).length}
 						color='secondary'>
 						Remove selected
 						<Box style={{ width: '10px' }} />
@@ -244,8 +214,8 @@ const ContextMenu = ({
 			<MenuItem
 				dense
 				onClick={(event) => {
-					handleSortClick(event)
-					handleContextClose()
+					app.handleSortClick(event)
+					app.handleContextClose()
 				}}>
 				<ListItemIcon>
 					<SortOutlined fontSize='small' />
@@ -258,8 +228,8 @@ const ContextMenu = ({
 			<MenuItem
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleResetItems()
+					app.handleContextClose()
+					app.handleResetItems()
 				}}>
 				<ListItemIcon>
 					<CachedOutlined fontSize='small' />
@@ -271,11 +241,11 @@ const ContextMenu = ({
 			</MenuItem>
 			<Divider />
 			<MenuItem
-				disabled={zoom === 2 || !gridMode}
+				disabled={app.zoom === 2 || !app.gridMode}
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleZoomIn()
+					app.handleContextClose()
+					app.handleZoomIn()
 				}}>
 				<ListItemIcon>
 					<ZoomInOutlined />
@@ -286,11 +256,11 @@ const ContextMenu = ({
 				</Typography>
 			</MenuItem>
 			<MenuItem
-				disabled={zoom === 1 / 2 || !gridMode}
+				disabled={app.zoom === 1 / 2 || !app.gridMode}
 				dense
 				onClick={() => {
-					handleContextClose()
-					handleZoomOut()
+					app.handleContextClose()
+					app.handleZoomOut()
 				}}>
 				<ListItemIcon>
 					<ZoomOutOutlined />
@@ -300,12 +270,14 @@ const ContextMenu = ({
 					-
 				</Typography>
 			</MenuItem>
-			{gridMode ? (
+			{app.gridMode ? (
 				<MenuItem
 					dense
 					onClick={() => {
-						handleContextClose()
-						setGridMode(false)
+						if (app.setGridMode) {
+							app.handleContextClose()
+							app.setGridMode(false)
+						}
 					}}>
 					<ListItemIcon>
 						<ViewHeadlineOutlined fontSize='small' />
@@ -319,8 +291,10 @@ const ContextMenu = ({
 				<MenuItem
 					dense
 					onClick={() => {
-						handleContextClose()
-						setGridMode(true)
+						if (app.setGridMode) {
+							app.handleContextClose()
+							app.setGridMode(true)
+						}
 					}}>
 					<ListItemIcon>
 						<AppsOutlined fontSize='small' />

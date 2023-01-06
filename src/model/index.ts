@@ -1,4 +1,5 @@
 import { AlertColor } from '@mui/material'
+import Entry from './entry'
 
 export interface MediaItem {
 	id: number
@@ -7,6 +8,7 @@ export interface MediaItem {
 	img: string
 	title: string
 	author: string
+	entry?: Entry
 }
 
 export interface AlertMessage {

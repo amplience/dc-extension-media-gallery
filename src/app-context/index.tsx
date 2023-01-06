@@ -13,6 +13,7 @@ import credentials from '../credentials'
 import { AlertMessage, MediaItem } from '../model'
 import { convertToEntry, defaultExifMap } from '../model/conversion'
 import Entry from '../model/entry'
+import { useExtension } from '../extension-context'
 
 const itemData: MediaItem[] = [
 	{
@@ -134,9 +135,9 @@ type AppContextData = {
 	setZoom?: Dispatch<SetStateAction<number>>
 	items: MediaItem[]
 	setItems?: Dispatch<SetStateAction<MediaItem[]>>
-	importItems?: MediaItem[] | null
+	importItems: MediaItem[] | null
 	setImportItems?: Dispatch<SetStateAction<MediaItem[]>>
-	gridMode?: boolean
+	gridMode: boolean
 	setGridMode?: Dispatch<SetStateAction<boolean>>
 	repo?: EnrichedRepository | null
 	setRepo?: Dispatch<SetStateAction<EnrichedRepository | undefined>>
@@ -151,11 +152,11 @@ type AppContextData = {
 	sortOpen: boolean
 	dragging?: boolean
 	setDragging?: Dispatch<SetStateAction<boolean>>
-	fullscreenView?: boolean
+	fullscreenView: boolean
 	setFullscreenView?: Dispatch<SetStateAction<boolean>>
-	contextMedia?: MediaItem | null
+	contextMedia: MediaItem | null
 	setContextMedia?: Dispatch<SetStateAction<MediaItem | null>>
-	currentMedia?: MediaItem | null
+	currentMedia: MediaItem | null
 	setCurrentMedia?: Dispatch<SetStateAction<MediaItem | null>>
 	tempMedia?: MediaItem | null
 	setTempMedia?: Dispatch<SetStateAction<MediaItem | null>>
@@ -165,58 +166,95 @@ type AppContextData = {
 	setInfoPanelOpen?: Dispatch<SetStateAction<boolean>>
 	currentAlert?: AlertMessage | null
 	setCurrentAlert?: Dispatch<SetStateAction<AlertMessage | null>>
-	contextMenu?: { mouseX: number; mouseY: number } | null
+	contextMenu: { mouseX: number; mouseY: number } | null
 	setContextMenu?: Dispatch<SetStateAction<{ mouseX: number; mouseY: number } | null>>
 	dragStart?: (event: any) => void
 	dragEnd?: (event: any) => void
-	handleContextClose?: (event: React.MouseEvent) => void
+	handleContextClose: () => void
 	handleContextMenu: (event: React.MouseEvent) => void
 	handleDetailView: (media: MediaItem) => void
 	handleFullScreenView: (media: MediaItem) => void
-	handleImport?: () => void
-	handleRemoveSelected?: () => void
-	handleResetItems?: () => void
-	handleSelectAll?: () => void
-	handleSelectAllImportItems?: () => void
-	handleSelectNone?: () => void
-	handleSelectNoneImportItems?: () => void
-	handleSnackClose?: () => void
-	handleSnackOpen?: () => void
-	handleSortByCaptionAsc?: () => void
-	handleSortByCaptionDesc?: () => void
-	handleSortByDateAsc?: () => void
-	handleSortByDateDesc?: () => void
-	handleSortClick?: (event: React.MouseEvent<HTMLElement>) => void
-	handleSortClose?: () => void
-	handleZoomIn?: () => void
-	handleZoomOut?: () => void
-	handleSortByAuthorAsc?: () => void
-	handleSortByAuthorDesc?: () => void
-	importMedia?: () => void
+	handleImport: () => void
+	handleRemoveSelected: () => void
+	handleResetItems: () => void
+	handleSelectAll: () => void
+	handleSelectAllImportItems: () => void
+	handleSelectNone: () => void
+	handleSelectNoneImportItems: () => void
+	handleSnackClose: () => void
+	handleSnackOpen: () => void
+	handleSortByCaptionAsc: () => void
+	handleSortByCaptionDesc: () => void
+	handleSortByDateAsc: () => void
+	handleSortByDateDesc: () => void
+	handleSortClick: (event: React.MouseEvent<HTMLElement>) => void
+	handleSortClose: () => void
+	handleZoomIn: () => void
+	handleZoomOut: () => void
+	handleSortByAuthorAsc: () => void
+	handleSortByAuthorDesc: () => void
+	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
 	getEntries?: (id: string) => Promise<Entry[]>
 	getItem?: (id: number) => MediaItem | undefined
 	removeItem: (id: number) => void
-	selectImportItem?: (id: number) => void
+	selectImportItem: (id: number) => void
 	selectItem: (id: number) => void
 	saveItem?: () => void
+	assetsToItems: (assets: Entry[]) => MediaItem[]
 }
 
-const appDefaultState = {
-	sortOpen: false,
+const defaultAppState = {
 	zoom: 1,
-	items: [],
+	items: structuredClone(itemData),
+	importItems: structuredClone(itemData),
+	gridMode: true,
+	fullscreenView: false,
+	contextMedia: null,
+	repo: null,
+	chApi: null,
+	detailDrawerOpen: false,
+	importDrawerOpen: false,
+	sortAnchorEl: null,
+	sortOpen: false,
+	currentMedia: null,
+	contextMenu: null,
 	handleDetailView: (media: MediaItem) => {},
 	handleFullScreenView: (media: MediaItem) => {},
 	selectItem: (id: number) => {},
 	removeItem: (id: number) => {},
-	handleContextMenu: (event: React.MouseEvent) => {}
+	handleContextMenu: (event: React.MouseEvent) => {},
+	handleContextClose: () => {},
+	handleImport: () => {},
+	handleSelectAll: () => {},
+	handleSelectNone: () => {},
+	handleRemoveSelected: () => {},
+	handleResetItems: () => {},
+	handleSelectAllImportItems: () => {},
+	handleSelectNoneImportItems: () => {},
+	handleSnackClose: () => {},
+	handleSnackOpen: () => {},
+	handleSortByCaptionAsc: () => {},
+	handleSortByCaptionDesc: () => {},
+	handleSortByDateAsc: () => {},
+	handleSortByDateDesc: () => {},
+	handleSortClick: (event: React.MouseEvent<HTMLElement>) => {},
+	handleSortClose: () => {},
+	handleZoomIn: () => {},
+	handleZoomOut: () => {},
+	handleSortByAuthorAsc: () => {},
+	handleSortByAuthorDesc: () => {},
+	importMedia: () => {},
+	assetsToItems: (assets: Entry[]) => {
+		return []
+	},
+	selectImportItem: (id: number) => {}
 }
 
-export const AppContext = React.createContext<AppContextData>(appDefaultState)
+export const AppContext = React.createContext<AppContextData>(defaultAppState)
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
-	const [state, setState] = useState<AppContextData>(appDefaultState)
+	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
 	const [items, setItems] = useState<MediaItem[]>(structuredClone(itemData))
 	const [importItems, setImportItems] = useState<MediaItem[]>(structuredClone(itemData))
@@ -464,13 +502,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Prepare and open import drawer
 	 */
 	const handleImport = () => {
-		/*
-    const newItems = structuredClone(importItems)
-    newItems.map((element: MediaItem) => {
-      element.selected = false
-      return element
-    })
-    */
 		setImportItems([])
 		setImportDrawerOpen(true)
 	}
@@ -498,6 +529,29 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			})
 		})
 	}
+
+	const assetToImg = (asset: Entry): string => {
+		// TODO: use vse?
+		const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io'
+
+		return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`
+	}
+
+	const itemsToAssets = (items: MediaItem[]): Entry[] => {
+		return items.map((item) => item.entry as Entry)
+	}
+
+	/* const { field, setField, params } = useExtension()
+	const { galleryPath, configPath } = params */
+
+	/* useEffect(() => {
+		if (field) {
+			field[galleryPath] = itemsToAssets(items)
+			if (setField) {
+				setField()
+			}
+		}
+	}, [field, galleryPath, setField, items]) */
 
 	useEffect(() => {
 		const keyDownHandler = (event: KeyboardEvent) => {
@@ -589,12 +643,36 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 		document.addEventListener('keydown', keyDownHandler)
 
+		const assetsToItems = (assets: Entry[]): MediaItem[] => {
+			return assets.map((asset, index) => ({
+				id: index,
+				selected: false,
+				dateModified: '',
+				img: assetToImg(asset),
+				title: asset.description,
+				author: asset.photographer,
+				entry: asset
+			}))
+		}
+
+		/* const setDefaultFolder = (repoId: string, folderId: string) => {
+			// Should also clear the last used query here if it's being replaced with a folder.
+
+			field[configPath].repoId = repoId
+			field[configPath].folderId = folderId
+
+			if (setField) {
+				setField()
+			}
+		} */
+
 		/**
 		 * Getting assets from Content Hub
 		 * @param id
 		 */
 		const getEntries = async (id: string): Promise<Entry[]> => {
 			if (chApi && repo) {
+				//setDefaultFolder(repo.id, id)
 				const assets = await chApi.getExifByFolder(repo.id, id)
 
 				const entries = assets.map((asset) =>
@@ -609,12 +687,13 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 			return []
 		}
+
 		/**
 		 * Zoom in for grid mode
 		 */
 		const handleZoomIn = () => {
 			if (zoom < 2) {
-				setZoom(zoom * 2)
+				//setZoom(zoom * 2)
 			}
 		}
 
@@ -623,9 +702,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const handleZoomOut = () => {
 			if (zoom > 1 / 2) {
-				setZoom(zoom / 2)
+				//setZoom(zoom / 2)
 			}
 		}
+
 		/**
 		 * Drag-end-Drop action end
 		 * @param event
@@ -863,6 +943,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSortClose()
 		}
 
+		/* if (field) {
+			const data = assetsToItems(field[galleryPath])
+			setItems(data)
+		} */
+
 		let state: AppContextData = {
 			zoom,
 			setZoom,
@@ -927,13 +1012,14 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSortByAuthorAsc,
 			handleSortByAuthorDesc,
 			importMedia,
-			sensors,
 			getEntries,
 			getItem,
 			removeItem,
 			selectImportItem,
 			selectItem,
-			saveItem
+			saveItem,
+			assetsToItems,
+			sensors
 		}
 
 		setState({ ...state })
@@ -941,32 +1027,30 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			document.removeEventListener('keydown', keyDownHandler)
 		}
 	}, [
-		chApi,
-		contextMedia,
-		contextMenu,
-		currentAlert,
-		currentMedia,
-		detailDrawerOpen,
-		dragging,
-		fullscreenView,
-		gridMode,
-		importDrawerOpen,
-		importItems,
-		infoPanelOpen,
+		zoom,
 		items,
+		importItems,
+		gridMode,
 		repo,
-		sensors,
-		setChApi,
-		snackOpen,
+		chApi,
+		detailDrawerOpen,
+		importDrawerOpen,
 		sortAnchorEl,
 		sortOpen,
+		dragging,
+		fullscreenView,
+		contextMedia,
+		currentMedia,
 		tempMedia,
-		zoom
+		snackOpen,
+		infoPanelOpen,
+		currentAlert,
+		contextMenu
 	])
 
 	return <AppContext.Provider value={state}>{children}</AppContext.Provider>
 }
 
-export function useExtension() {
+export function useApp() {
 	return useContext(AppContext)
 }

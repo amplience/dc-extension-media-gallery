@@ -13,40 +13,20 @@ import {
 	DeleteOutline
 } from '@mui/icons-material'
 import { Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
-import { MediaItem } from '../model'
 import SortableTableRow from '../sortable-table-row'
+import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
-type ListViewArgs = {
-	sensors: any
-	dragStart: any
-	dragEnd: any
-	items: MediaItem[]
-	zoom: number
-	handleFullScreenView: any
-	handleDetailView: any
-	selectItem: any
-	removeItem: any
-}
-
-const ItemListView = ({
-	sensors,
-	dragStart,
-	dragEnd,
-	items,
-	zoom,
-	handleFullScreenView,
-	handleDetailView,
-	selectItem,
-	removeItem
-}: ListViewArgs) => {
+const ItemListView = () => {
+	const app = useContext(AppContext)
 	return (
 		<DndContext
-			sensors={sensors}
+			sensors={app.sensors}
 			collisionDetection={closestCenter}
-			onDragStart={dragStart}
-			onDragEnd={dragEnd}
+			onDragStart={app.dragStart}
+			onDragEnd={app.dragEnd}
 			modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}>
-			<SortableContext items={items} strategy={verticalListSortingStrategy}>
+			<SortableContext items={app.items} strategy={verticalListSortingStrategy}>
 				<Table>
 					<TableHead>
 						<TableRow>
@@ -93,7 +73,7 @@ const ItemListView = ({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{items.map((item: any, index: number) => (
+						{app.items.map((item: any, index: number) => (
 							<SortableTableRow key={item.img} id={item.id}>
 								<TableCell
 									id={item.id}
@@ -106,7 +86,7 @@ const ItemListView = ({
 										aria-label={`select`}
 										title='Select'
 										onClick={() => {
-											selectItem(item.id)
+											app.selectItem(item.id)
 										}}>
 										{item.selected ? (
 											<CheckBoxOutlined />
@@ -122,11 +102,11 @@ const ItemListView = ({
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
 									<img
-										src={`${item.img}?w=124&h=82&fit=crop&auto=format`}
-										srcSet={`${item.img}?w=124&h=82&fit=crop&auto=format&dpr=2 2x`}
+										src={`${item.img}?w=124&h=82&sm=c&auto=format`}
+										srcSet={`${item.img}?w=124&h=82&sm=c&auto=format&dpr=2 2x`}
 										alt={item.title}
 										title='Click to zoom'
-										onClick={() => handleFullScreenView(item)}
+										onClick={() => app.handleFullScreenView(item)}
 										id={item.id}
 										loading='lazy'
 									/>
@@ -142,21 +122,21 @@ const ItemListView = ({
 										sx={{ color: 'white' }}
 										aria-label={`view fullscreen`}
 										title='Click to zoom'
-										onClick={() => handleFullScreenView(item)}>
+										onClick={() => app.handleFullScreenView(item)}>
 										<VisibilityOutlined />
 									</IconButton>
 									<IconButton
 										sx={{ color: 'white' }}
 										aria-label={`edit`}
 										title='Edit'
-										onClick={() => handleDetailView(item)}>
+										onClick={() => app.handleDetailView(item)}>
 										<EditOutlined />
 									</IconButton>
 									<IconButton
 										sx={{ color: 'white' }}
 										aria-label={`delete`}
 										title='Remove'
-										onClick={() => removeItem(item.id)}>
+										onClick={() => app.removeItem(item.id)}>
 										<DeleteOutline />
 									</IconButton>
 								</TableCell>
@@ -168,7 +148,7 @@ const ItemListView = ({
 										color: 'white'
 									}}
 									id={item.id}
-									onClick={() => selectItem(item.id)}
+									onClick={() => app.selectItem(item.id)}
 									align='left'>
 									{item.title}
 								</TableCell>
@@ -180,7 +160,7 @@ const ItemListView = ({
 										color: 'white'
 									}}
 									id={item.id}
-									onClick={() => selectItem(item.id)}
+									onClick={() => app.selectItem(item.id)}
 									align='left'>
 									{item.author}
 								</TableCell>

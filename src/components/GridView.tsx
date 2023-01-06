@@ -9,34 +9,11 @@ import {
 	DeleteOutline
 } from '@mui/icons-material'
 import { Stack, Box, IconButton, ImageListItemBar, Typography } from '@mui/material'
-import { MediaItem } from '../model'
 import SortableListItem from '../sortable-list-item'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 
-type GridViewArgs = {
-	sensors: any
-	dragStart: any
-	dragEnd: any
-	items: MediaItem[]
-	zoom: number
-	handleFullScreenView: any
-	handleDetailView: any
-	selectItem: any
-	removeItem: any
-}
-
-const GridView = ({
-	sensors,
-	dragStart,
-	dragEnd,
-	items,
-	zoom,
-	handleFullScreenView,
-	handleDetailView,
-	selectItem,
-	removeItem
-}: GridViewArgs) => {
+const GridView = () => {
 	const app = useContext(AppContext)
 	return (
 		<Stack direction={'row'}>
@@ -68,7 +45,7 @@ const GridView = ({
 										}&fit=crop&auto=format&dpr=2 2x`}
 										alt={item.title}
 										loading='lazy'
-										style={{ width: '100%' }}
+										style={{ width: '100%', aspectRatio: '1.5/1' }}
 										title='Click to zoom'
 										id={item.id}
 										onClick={() => app.handleFullScreenView(item)}

@@ -4,7 +4,7 @@ import { ContentFieldExtension } from 'dc-extensions-sdk';
 import Params from "./params";
 
 interface ExtensionContextData {
-  params?: Params,
+  params: Params,
   field?: any,
   sdk?: ContentFieldExtension,
   setField?: () => void
@@ -13,6 +13,8 @@ interface ExtensionContextData {
 const defaultParams = {
   clientId: '',
   clientSecret: '',
+  configPath: 'galleryConfig',
+  galleryPath: 'photoGallery',
   exifMap: {}
 };
 

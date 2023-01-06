@@ -1,11 +1,9 @@
 import { Box, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { MediaItem } from '../model'
+import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
-type args = {
-	currentMedia: MediaItem | null
-}
-
-const InfoPanel = ({ currentMedia }: args) => {
+const InfoPanel = () => {
+	const app = useContext(AppContext)
 	return (
 		<Box
 			sx={{
@@ -26,8 +24,8 @@ const InfoPanel = ({ currentMedia }: args) => {
 						</TableCell>
 						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
 							<Typography variant='caption'>
-								{currentMedia?.dateModified &&
-									new Date(currentMedia.dateModified).toLocaleString()}
+								{app.currentMedia?.dateModified &&
+									new Date(app.currentMedia.dateModified).toLocaleString()}
 							</Typography>
 						</TableCell>
 					</TableRow>
@@ -36,7 +34,7 @@ const InfoPanel = ({ currentMedia }: args) => {
 							<Typography variant='caption'>Author</Typography>
 						</TableCell>
 						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
-							<Typography variant='caption'>{currentMedia?.author}</Typography>
+							<Typography variant='caption'>{app.currentMedia?.author}</Typography>
 						</TableCell>
 					</TableRow>
 					<TableRow>
@@ -44,7 +42,7 @@ const InfoPanel = ({ currentMedia }: args) => {
 							<Typography variant='caption'>Caption</Typography>
 						</TableCell>
 						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
-							<Typography variant='caption'>{currentMedia?.title}</Typography>
+							<Typography variant='caption'>{app.currentMedia?.title}</Typography>
 						</TableCell>
 					</TableRow>
 				</TableBody>

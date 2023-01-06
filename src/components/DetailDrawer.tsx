@@ -15,34 +15,24 @@ import {
 	InputAdornment,
 	Button
 } from '@mui/material'
-import { MediaItem } from '../model'
+import { AppContext } from '../app-context'
+import { useContext } from 'react'
 
-type DetailDrawerArgs = {
-	currentMedia: MediaItem | null
-	detailDrawerOpen: boolean
-	setDetailDrawerOpen: any
-	handleFullScreenView: any
-	tempMedia: MediaItem | null
-	saveItem: any
-}
-
-const DetailDrawer = ({
-	currentMedia,
-	detailDrawerOpen,
-	setDetailDrawerOpen,
-	handleFullScreenView,
-	tempMedia,
-	saveItem
-}: DetailDrawerArgs) => {
+const DetailDrawer = () => {
+	const app = useContext(AppContext)
 	return (
 		<SwipeableDrawer
 			PaperProps={{
 				sx: { width: '50%', p: 2 }
 			}}
 			anchor={'left'}
-			open={detailDrawerOpen}
-			onClose={() => setDetailDrawerOpen(false)}
-			onOpen={() => setDetailDrawerOpen(true)}
+			open={app.detailDrawerOpen}
+			onClose={() => {
+				if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+			}}
+			onOpen={() => {
+				if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(true)
+			}}
 			variant='temporary'
 			ModalProps={{
 				keepMounted: false
@@ -57,18 +47,20 @@ const DetailDrawer = ({
 						<IconButton
 							aria-label={`close detail drawer`}
 							size='small'
-							onClick={() => setDetailDrawerOpen(false)}>
+							onClick={() => {
+								if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+							}}>
 							<CloseOutlined />
 						</IconButton>
 					</Box>
 				</Stack>
 				<img
-					src={`${currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format`}
-					srcSet={`${currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
-					alt={currentMedia?.title}
+					src={`${app.currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format`}
+					srcSet={`${app.currentMedia?.img}?w=2048&h=1365&fit=crop&auto=format&dpr=2 2x`}
+					alt={app.currentMedia?.title}
 					title='Click to zoom'
 					onClick={() => {
-						currentMedia && handleFullScreenView(currentMedia)
+						app.currentMedia && app.handleFullScreenView(app.currentMedia)
 					}}
 					loading='lazy'
 				/>
@@ -90,15 +82,15 @@ const DetailDrawer = ({
 						)
 					}}
 					defaultValue={
-						currentMedia?.dateModified &&
-						new Date(currentMedia.dateModified).toLocaleString()
+						app.currentMedia?.dateModified &&
+						new Date(app.currentMedia.dateModified).toLocaleString()
 					}
 				/>
 				<TextField
 					id='author'
 					label='Author'
 					variant='standard'
-					defaultValue={currentMedia?.author}
+					defaultValue={app.currentMedia?.author}
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position='start'>
@@ -107,7 +99,7 @@ const DetailDrawer = ({
 						)
 					}}
 					onChange={(event) => {
-						tempMedia && (tempMedia.author = event.target.value)
+						app.tempMedia && (app.tempMedia.author = event.target.value)
 					}}
 				/>
 				<TextField
@@ -116,7 +108,7 @@ const DetailDrawer = ({
 					id='caption'
 					label='Caption'
 					variant='standard'
-					defaultValue={currentMedia?.title}
+					defaultValue={app.currentMedia?.title}
 					InputProps={{
 						startAdornment: (
 							<InputAdornment
@@ -127,15 +119,19 @@ const DetailDrawer = ({
 						)
 					}}
 					onChange={(event) => {
-						tempMedia && (tempMedia.title = event.target.value)
+						app.tempMedia && (app.tempMedia.title = event.target.value)
 					}}
 				/>
 				<Stack sx={{ pb: 4 }} direction={'row'}>
 					<Box sx={{ flexGrow: 1 }} />
-					<Button sx={{ mr: 2 }} variant='contained' onClick={saveItem}>
+					<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
 						Save
 					</Button>
-					<Button variant='outlined' onClick={() => setDetailDrawerOpen(false)}>
+					<Button
+						variant='outlined'
+						onClick={() => {
+							if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+						}}>
 						Cancel
 					</Button>
 				</Stack>
