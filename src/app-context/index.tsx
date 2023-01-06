@@ -541,17 +541,17 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		return items.map((item) => item.entry as Entry)
 	}
 
-	/* const { field, setField, params } = useExtension()
-	const { galleryPath, configPath } = params */
+	const { field, setField, params } = useExtension()
+	const { galleryPath, configPath } = params
 
-	/* useEffect(() => {
+	useEffect(() => {
 		if (field) {
 			field[galleryPath] = itemsToAssets(items)
 			if (setField) {
 				setField()
 			}
 		}
-	}, [field, galleryPath, setField, items]) */
+	}, [field, galleryPath, setField, items])
 
 	useEffect(() => {
 		const keyDownHandler = (event: KeyboardEvent) => {
@@ -655,7 +655,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}))
 		}
 
-		/* const setDefaultFolder = (repoId: string, folderId: string) => {
+		const setDefaultFolder = (repoId: string, folderId: string) => {
 			// Should also clear the last used query here if it's being replaced with a folder.
 
 			field[configPath].repoId = repoId
@@ -664,7 +664,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			if (setField) {
 				setField()
 			}
-		} */
+		}
 
 		/**
 		 * Getting assets from Content Hub
@@ -672,7 +672,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const getEntries = async (id: string): Promise<Entry[]> => {
 			if (chApi && repo) {
-				//setDefaultFolder(repo.id, id)
+				setDefaultFolder(repo.id, id)
 				const assets = await chApi.getExifByFolder(repo.id, id)
 
 				const entries = assets.map((asset) =>
@@ -693,7 +693,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const handleZoomIn = () => {
 			if (zoom < 2) {
-				//setZoom(zoom * 2)
+				setZoom(zoom * 2)
 			}
 		}
 
@@ -702,7 +702,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const handleZoomOut = () => {
 			if (zoom > 1 / 2) {
-				//setZoom(zoom / 2)
+				setZoom(zoom / 2)
 			}
 		}
 
@@ -727,6 +727,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		const getItem = (id: number) => {
 			return items.find((item: MediaItem) => id === item.id)
 		}
+
 		/**
 		 * Remove selected items
 		 */
@@ -763,6 +764,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				handleSnackOpen()
 			}, 500)
 		}
+
 		const handleContextMenu = (event: React.MouseEvent) => {
 			setContextMedia(null)
 			event.preventDefault()
@@ -943,10 +945,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSortClose()
 		}
 
-		/* if (field) {
+		if (field) {
 			const data = assetsToItems(field[galleryPath])
 			setItems(data)
-		} */
+		}
 
 		let state: AppContextData = {
 			zoom,
@@ -1045,7 +1047,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		snackOpen,
 		infoPanelOpen,
 		currentAlert,
-		contextMenu
+		contextMenu,
+		configPath,
+		field,
+		setField,
+		galleryPath
 	])
 
 	return <AppContext.Provider value={state}>{children}</AppContext.Provider>
