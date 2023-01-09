@@ -139,7 +139,7 @@ function assetToImg(asset: Entry): string {
   // TODO: use vse?
   const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io';
 
-  return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`;
+  return `https://${vse ?? asset.photo.defaultHost}/i/${asset.photo.endpoint}/${asset.photo.name}`;
 }
 
 function assetsToItems(assets: Entry[]): MediaItem[] {

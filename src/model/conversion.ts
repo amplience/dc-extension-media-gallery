@@ -14,14 +14,16 @@ export function convertToEntry(asset: AssetWithExif, exifMap: ExifMap, chConfigu
     const idString = atob(asset.id);
 
     const result = {
-        _meta: {
-            schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+        photo: {
+            _meta: {
+                schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+            },
+            id: idString.split(':')[1],
+            name: asset.name,
+            ...chConfiguration
         },
-        id: idString.split(':')[1],
-        name: asset.name,
         photographer: 'Unknown',
-        description: 'No description.',
-        ...chConfiguration
+        description: 'No description.'
     };
     
     if (metadata) {
@@ -41,7 +43,7 @@ export function assetToImg(asset: Entry): string {
 	// TODO: pass vse as argument
 	const vse = '1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io'
 
-	return `https://${vse ?? asset.defaultHost}/i/${asset.endpoint}/${asset.name}`
+	return `https://${vse ?? asset.photo.defaultHost}/i/${asset.photo.endpoint}/${asset.photo.name}`
 }
 
 export function itemsToAssets(items: MediaItem[]): Entry[] {
@@ -50,7 +52,7 @@ export function itemsToAssets(items: MediaItem[]): Entry[] {
 
 export function assetsToItems(assets: Entry[]): MediaItem[] {
 	return assets.map((asset, index) => ({
-		id: index,
+		id: index + 1,
 		selected: false,
 		dateModified: '',
 		img: assetToImg(asset),
