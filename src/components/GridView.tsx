@@ -48,7 +48,7 @@ const GridView = () => {
 										alt={item.title}
 										loading='lazy'
 										style={{
-											width: '100%',
+											margin: 'auto',
 											aspectRatio: '1.5/1',
 											cursor: 'zoom-in'
 										}}
