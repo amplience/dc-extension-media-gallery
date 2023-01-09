@@ -186,6 +186,10 @@ export class ChApi extends GraphQLClient {
     do {
       const page = await getItems(lastPageInfo?.endCursor);
 
+      if (!page) {
+        return results;
+      }
+
       results.push.apply(results, page.edges.map(edge => edge.node));
 
       lastPageInfo = page.pageInfo;
@@ -204,7 +208,7 @@ export class ChApi extends GraphQLClient {
 
   async allFoldersByRepo(repoId: string): Promise<Folder[]> {
     return await this.paginate(async (after?: string) => {
-      return (await this.fetchFoldersByRepo(repoId, after)).node.assetFolders;
+      return (await this.fetchFoldersByRepo(repoId, after)).node?.assetFolders;
     });
   }
 
@@ -249,11 +253,11 @@ export class ChApi extends GraphQLClient {
     if (folderId === "QXNzZXRGb2xkZXI6MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAw") {
       // No folder - use repo.
       result = await this.paginate(async (after?: string) => {
-        return (await this.fetchExifByRepo(repoId, after)).node.assets;
+        return (await this.fetchExifByRepo(repoId, after)).node?.assets;
       });
     } else {
       result = await this.paginate(async (after?: string) => {
-        return (await this.fetchExifByFolder(folderId, after)).node.assets;
+        return (await this.fetchExifByFolder(folderId, after)).node?.assets;
       });
     }
 
@@ -275,6 +279,10 @@ export class ChApi extends GraphQLClient {
     const assetSearch = await this.paginate(async (after?: string) => {
       return (await this.fetchAssetsByFolder(this.extractId(repoId), this.extractId(folderId), query, after)).assetSearch;
     });
+
+    if (assetSearch == null || assetSearch.length === 0) {
+      return [];
+    }
 
     const exifs = await this.fetchAssetsEXIF(assetSearch.map(item => item.id));
 

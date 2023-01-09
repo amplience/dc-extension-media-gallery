@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, ReactNode } from "react";
 import { getSdk } from "./extension-sdk";
 import { ContentFieldExtension } from 'dc-extensions-sdk';
 import Params from "./params";
+import { defaultExifMap } from "../model/conversion";
 
 interface ExtensionContextData {
   params: Params,
@@ -15,7 +16,7 @@ const defaultParams = {
   clientSecret: '',
   configPath: 'galleryConfig',
   galleryPath: 'photoGallery',
-  exifMap: {}
+  exifMap: defaultExifMap
 };
 
 const defaultExtensionState = {

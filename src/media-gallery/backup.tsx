@@ -85,10 +85,9 @@ import TreeView from "@mui/lab/TreeView";
 import TreeItem from "@mui/lab/TreeItem";
 
 import { useEffect, useState } from "react";
-import { ExtensionContextProvider, useExtension } from "../extension-context";
+import { useExtension } from "../extension-context";
 import { ChApi, Folder, EnrichedRepository } from "../ch-api";
-import credentials from "../credentials";
-import { convertToEntry, defaultExifMap } from "../model/conversion";
+import { convertToEntry } from "../model/conversion";
 import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
@@ -381,7 +380,7 @@ function MediaGallery() {
       const assets = await chApi.getExifByFolder(repo.id, id);
 
       const entries = assets.map((asset) =>
-        convertToEntry(asset, defaultExifMap, {
+        convertToEntry(asset, params.exifMap, {
           endpoint: "nmrsaalphatest",
           defaultHost: "cdn.media.amplience.net",
         })
@@ -512,14 +511,12 @@ function MediaGallery() {
    */
   useEffect(() => {
     (async () => {
-      const { clientId, clientSecret } = credentials;
-
-      if (clientId) {
+      if (params.clientId) {
         const gqlTest = new ChApi(
           "https://auth.amplience.net/oauth/token",
           "https://api.amplience.net/graphql"
         );
-        await gqlTest.auth(clientId, clientSecret);
+        await gqlTest.auth(params.clientId, params.clientSecret);
         setChApi(gqlTest);
 
         const result = await gqlTest.allReposWithFolders();

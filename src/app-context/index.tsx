@@ -9,9 +9,8 @@ import {
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import React, { useEffect, useState, useContext, ReactNode, Dispatch, SetStateAction } from 'react'
 import { AssetWithExif, EnrichedRepository, ChApi } from '../ch-api'
-import credentials from '../credentials'
 import { AlertMessage, MediaItem } from '../model'
-import { assetsToItems, convertToEntry, defaultExifMap, itemsToAssets } from '../model/conversion'
+import { assetsToItems, convertToEntry, itemsToAssets } from '../model/conversion'
 import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
 
@@ -80,7 +79,7 @@ type AppContextData = {
 	handleSortByAuthorDesc: () => void
 	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
-	getEntries?: (id: string) => Promise<Entry[]>
+	getEntries?: (id: string, query?: string) => Promise<Entry[]>
 	getItem?: (id: number) => MediaItem | undefined
 	removeItem: (id: number) => void
 	selectImportItem: (id: number) => void
@@ -135,6 +134,9 @@ const defaultAppState = {
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
+	const { field, setField, params } = useExtension()
+	const { galleryPath, configPath } = params
+
 	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
 	const [items, setItems] = useState<MediaItem[]>([])
@@ -290,15 +292,13 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Getting folders from Content Hub
 	 */
 	useEffect(() => {
-		;(async () => {
-			const { clientId, clientSecret } = credentials
-
-			if (clientId) {
+		(async () => {
+			if (params.clientId) {
 				const gqlTest = new ChApi(
 					'https://auth.amplience.net/oauth/token',
 					'https://api.amplience.net/graphql'
 				)
-				await gqlTest.auth(clientId, clientSecret)
+				await gqlTest.auth(params.clientId, params.clientSecret)
 				setChApi(gqlTest)
 
 				const result = await gqlTest.allReposWithFolders()
@@ -306,7 +306,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				setRepo(result[0])
 			}
 		})()
-	}, [])
+	}, [params])
 
 	/**
 	 * Drag-end-Drop action start
@@ -410,9 +410,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			})
 		})
 	}
-
-	const { field, setField, params } = useExtension()
-	const { galleryPath, configPath } = params
 
 	useEffect(() => {
 		if (field) {
@@ -552,7 +549,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}
 
 				const entries = assets.map((asset) =>
-					convertToEntry(asset, defaultExifMap, {
+					convertToEntry(asset, params.exifMap, {
 						endpoint: 'nmrsaalphatest',
 						defaultHost: 'cdn.media.amplience.net'
 					})
@@ -684,6 +681,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}, 500)
 			} else {
 				const newItems = structuredClone(items)
+				debugger;
 				const newSelectedItems = importItems
 					.filter((item: MediaItem) => {
 						return (
