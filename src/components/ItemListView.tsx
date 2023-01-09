@@ -115,7 +115,7 @@ const ItemListView = () => {
 										alt={item.title}
 										title='Click to zoom'
 										onClick={() => app.handleFullScreenView(item)}
-										style={{ cursor: 'zoom-in' }}
+										style={{ cursor: 'zoom-in', margin: 'auto', width:'auto' }}
 										id={item.id}
 										loading='lazy'
 									/>
