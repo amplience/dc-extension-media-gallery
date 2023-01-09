@@ -31,14 +31,20 @@ const ImportDrawer = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     (async () => {
       if (app.getEntries && app.setImportItems && folderId) {
         setLoading(true);
         const entries = await app.getEntries(folderId, queryValue);
-        app.setImportItems(assetsToItems(entries));
-        setLoading(false);
+        if (!cancelled) {
+          app.setImportItems(assetsToItems(entries));
+          setLoading(false);
+        }
       }
     })();
+
+    return () => { cancelled = true; }
 
     // shouldn't rerun when app changes
   }, [queryValue, folderId, setLoading]);
