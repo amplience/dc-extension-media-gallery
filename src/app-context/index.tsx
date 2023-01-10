@@ -416,30 +416,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		})
 	}
 
-	const handleMoveToTop = (media: MediaItem) => {
-		const i = JSON.parse(JSON.stringify(items))
-		const b: MediaItem[] = i.filter((item: MediaItem) => item.id !== media.id)
-
-		const ordered: MediaItem[] = b.map((item: MediaItem, index: number) => {
-			return { ...item, id: index + 2 }
-		})
-		media.id = 1
-		ordered.unshift(media)
-		setItems(ordered)
-	}
-
-	const handleMoveToBottom = (media: MediaItem) => {
-		const i = JSON.parse(JSON.stringify(items))
-		const b: MediaItem[] = i.filter((item: MediaItem) => item.id !== media.id)
-
-		const ordered: MediaItem[] = b.map((item: MediaItem, index: number) => {
-			return { ...item, id: index + 1 }
-		})
-		media.id = ordered.length
-		ordered.push(media)
-		setItems(ordered)
-	}
-
 	useEffect(() => {
 		if (field) {
 			const data = assetsToItems(field[galleryPath])
@@ -533,6 +509,18 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					//   offsetActiveElementIndex(1)
 					// } else if (event.key === 'ArrowUp' && !gridMode) {
 					//   offsetActiveElementIndex(-1)
+				} else if (event.key === 't') {
+					console.log(event.key)
+					const element = document.activeElement as HTMLElement
+					const id = parseInt(element.id)
+					const item: MediaItem | undefined = getItem(id)
+					console.log(item)
+					if (item) handleMoveToTop(item)
+				} else if (event.key === 'b') {
+					const element = document.activeElement as HTMLElement
+					const id = parseInt(element.id)
+					const item: MediaItem | undefined = getItem(id)
+					if (item) handleMoveToBottom(item)
 				}
 			} else if (importDrawerOpen) {
 				if (event.key.toLowerCase() === 'a') {
@@ -634,6 +622,16 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
 				setItems(arrayMove(items, oldIndex, newIndex))
 			}
+		}
+
+		const handleMoveToTop = (media: MediaItem) => {
+			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
+			setItems(arrayMove(items, oldIndex, 0))
+		}
+
+		const handleMoveToBottom = (media: MediaItem) => {
+			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
+			setItems(arrayMove(items, oldIndex, items.length - 1))
 		}
 
 		/**
