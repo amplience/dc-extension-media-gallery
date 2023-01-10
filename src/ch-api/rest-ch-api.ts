@@ -184,7 +184,7 @@ export class RestChApi extends AuthClient implements IChApi {
         ? `folder:${folderId}`
         : `folder:${repoId}`;
 
-    q = query + ` (${q})`;
+    q = `(${query}) AND (${q})`;
 
     return this.toAssetWithExif(
       await this.paginate<Asset>("assets", "GET", undefined, {
