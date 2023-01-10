@@ -8,11 +8,13 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import React, { useEffect, useState, useContext, ReactNode, Dispatch, SetStateAction } from 'react'
-import { AssetWithExif, EnrichedRepository, ChApi } from '../ch-api'
+import { AssetWithExif, EnrichedRepository, GqlChApi } from '../ch-api/gql-ch-api'
 import { AlertMessage, MediaItem } from '../model'
 import { assetsToItems, convertToEntry, itemsToAssets } from '../model/conversion'
 import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
+import IChApi from '../ch-api/i-ch-api'
+import { RestChApi } from '../ch-api/rest-ch-api'
 
 type AppContextData = {
 	zoom: number
@@ -26,7 +28,7 @@ type AppContextData = {
 	repo?: EnrichedRepository | null
 	setRepo?: Dispatch<SetStateAction<EnrichedRepository | undefined>>
 	chApi?: any
-	setChApi?: Dispatch<SetStateAction<ChApi | undefined>>
+	setChApi?: Dispatch<SetStateAction<IChApi | undefined>>
 	detailDrawerOpen?: boolean
 	setDetailDrawerOpen?: Dispatch<SetStateAction<boolean>>
 	importDrawerOpen?: boolean
@@ -143,7 +145,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [importItems, setImportItems] = useState<MediaItem[]>([])
 	const [gridMode, setGridMode] = useState(true)
 	const [repo, setRepo] = useState<EnrichedRepository>()
-	const [chApi, setChApi] = useState<ChApi>()
+	const [chApi, setChApi] = useState<IChApi>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
@@ -294,14 +296,26 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	useEffect(() => {
 		(async () => {
 			if (params.clientId) {
-				const gqlTest = new ChApi(
-					'https://auth.amplience.net/oauth/token',
-					'https://api.amplience.net/graphql'
-				)
-				await gqlTest.auth(params.clientId, params.clientSecret)
-				setChApi(gqlTest)
+				const isGraphQL = false;
 
-				const result = await gqlTest.allReposWithFolders()
+				let api: IChApi;
+
+				if (isGraphQL) {
+					api = new GqlChApi(
+						'https://auth.amplience.net/oauth/token',
+						'https://api.amplience.net/graphql'
+					);
+				} else {
+					api = new RestChApi(
+						'https://auth.amplience.net/oauth/token',
+						'https://dam-api-internal.amplience.net/v1.5.0/'
+					);
+				}
+
+				await api.auth(params.clientId, params.clientSecret)
+				setChApi(api)
+
+				const result = await api.allReposWithFolders()
 				console.log(result)
 				setRepo(result[0])
 			}

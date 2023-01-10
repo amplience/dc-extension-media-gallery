@@ -1,4 +1,5 @@
 import { GraphQLClient } from "../graphql-client";
+import IChApi from "./i-ch-api";
 import { queryAssetByFolder, assetEXIF, repositories, foldersByRepo, foldersByParent, exifByRepo, exifByFolder, assetEXIFBuilder } from "./queries";
 
 interface Edge<T> {
@@ -35,13 +36,13 @@ interface MetadataProperties {
   id: string;
 }
 
-interface ExifMetadataProperties extends MetadataProperties {
+export interface ExifMetadataProperties extends MetadataProperties {
   software: string;
   artist: string;
   description: string;
 }
 
-interface MetadataResult<T extends MetadataProperties> {
+export interface MetadataResult<T extends MetadataProperties> {
   schemaName: string;
   properties: T;
 }
@@ -117,7 +118,7 @@ export function getFirstListItem<T>(list: List<T> | undefined): T | undefined {
   return undefined;
 }
 
-export class ChApi extends GraphQLClient {
+export class GqlChApi extends GraphQLClient implements IChApi {
   async fetchAssetsByFolder(repoId: string, folderId: string, query: string | undefined, after?: string): Promise<FetchAssetSearch> {
     return await this.fetch(queryAssetByFolder, { repoId, folderId, query, after });
   }
