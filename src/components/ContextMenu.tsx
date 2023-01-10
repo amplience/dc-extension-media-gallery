@@ -12,7 +12,9 @@ import {
 	ZoomInOutlined,
 	ZoomOutOutlined,
 	ViewHeadlineOutlined,
-	AppsOutlined
+	AppsOutlined,
+	VerticalAlignTop,
+	VerticalAlignBottom
 } from '@mui/icons-material'
 import {
 	Menu,
@@ -139,6 +141,38 @@ const ContextMenu = () => {
 						<ListItemText>Remove</ListItemText>
 						<Typography variant='body2' color='text.secondary'>
 							r
+						</Typography>
+					</MenuItem>
+					<MenuItem
+						dense
+						onClick={() => {
+							if (app.contextMedia) {
+								app.handleContextClose()
+								app.handleMoveToTop(app.contextMedia)
+							}
+						}}>
+						<ListItemIcon>
+							<VerticalAlignTop fontSize='small' />
+						</ListItemIcon>
+						<ListItemText>Move to top</ListItemText>
+						<Typography variant='body2' color='text.secondary'>
+							t
+						</Typography>
+					</MenuItem>
+					<MenuItem
+						dense
+						onClick={() => {
+							if (app.contextMedia) {
+								app.handleContextClose()
+								app.handleMoveToBottom(app.contextMedia)
+							}
+						}}>
+						<ListItemIcon>
+							<VerticalAlignBottom fontSize='small' />
+						</ListItemIcon>
+						<ListItemText>Move to bottom</ListItemText>
+						<Typography variant='body2' color='text.secondary'>
+							b
 						</Typography>
 					</MenuItem>
 					<Divider />

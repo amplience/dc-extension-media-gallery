@@ -13,6 +13,7 @@ import { AlertMessage, MediaItem } from '../model'
 import { assetsToItems, convertToEntry, itemsToAssets } from '../model/conversion'
 import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
+import { indexOf } from 'lodash'
 
 type AppContextData = {
 	zoom: number
@@ -77,6 +78,8 @@ type AppContextData = {
 	handleZoomOut: () => void
 	handleSortByAuthorAsc: () => void
 	handleSortByAuthorDesc: () => void
+	handleMoveToTop: (media: MediaItem) => void
+	handleMoveToBottom: (media: MediaItem) => void
 	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
 	getEntries?: (id: string, query?: string) => Promise<Entry[]>
@@ -127,6 +130,8 @@ const defaultAppState = {
 	handleZoomOut: () => {},
 	handleSortByAuthorAsc: () => {},
 	handleSortByAuthorDesc: () => {},
+	handleMoveToTop: () => {},
+	handleMoveToBottom: () => {},
 	importMedia: () => {},
 	selectImportItem: (id: number) => {}
 }
@@ -292,7 +297,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Getting folders from Content Hub
 	 */
 	useEffect(() => {
-		(async () => {
+		;(async () => {
 			if (params.clientId) {
 				const gqlTest = new ChApi(
 					'https://auth.amplience.net/oauth/token',
@@ -409,6 +414,30 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				return element
 			})
 		})
+	}
+
+	const handleMoveToTop = (media: MediaItem) => {
+		const i = JSON.parse(JSON.stringify(items))
+		const b: MediaItem[] = i.filter((item: MediaItem) => item.id !== media.id)
+
+		const ordered: MediaItem[] = b.map((item: MediaItem, index: number) => {
+			return { ...item, id: index + 2 }
+		})
+		media.id = 1
+		ordered.unshift(media)
+		setItems(ordered)
+	}
+
+	const handleMoveToBottom = (media: MediaItem) => {
+		const i = JSON.parse(JSON.stringify(items))
+		const b: MediaItem[] = i.filter((item: MediaItem) => item.id !== media.id)
+
+		const ordered: MediaItem[] = b.map((item: MediaItem, index: number) => {
+			return { ...item, id: index + 1 }
+		})
+		media.id = ordered.length
+		ordered.push(media)
+		setItems(ordered)
 	}
 
 	useEffect(() => {
@@ -681,7 +710,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}, 500)
 			} else {
 				const newItems = structuredClone(items)
-				debugger;
+				debugger
 				const newSelectedItems = importItems
 					.filter((item: MediaItem) => {
 						return (
@@ -882,6 +911,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleZoomOut,
 			handleSortByAuthorAsc,
 			handleSortByAuthorDesc,
+			handleMoveToTop,
+			handleMoveToBottom,
 			importMedia,
 			getEntries,
 			getItem,
