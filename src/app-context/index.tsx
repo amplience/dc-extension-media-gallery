@@ -15,6 +15,7 @@ import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
 import IChApi from '../ch-api/i-ch-api'
 import { RestChApi } from '../ch-api/rest-ch-api'
+import { indexOf } from 'lodash'
 
 type AppContextData = {
 	zoom: number
@@ -79,6 +80,8 @@ type AppContextData = {
 	handleZoomOut: () => void
 	handleSortByAuthorAsc: () => void
 	handleSortByAuthorDesc: () => void
+	handleMoveToTop: (media: MediaItem) => void
+	handleMoveToBottom: (media: MediaItem) => void
 	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
 	getEntries?: (id: string, query?: string) => Promise<Entry[]>
@@ -129,6 +132,8 @@ const defaultAppState = {
 	handleZoomOut: () => {},
 	handleSortByAuthorAsc: () => {},
 	handleSortByAuthorDesc: () => {},
+	handleMoveToTop: () => {},
+	handleMoveToBottom: () => {},
 	importMedia: () => {},
 	selectImportItem: (id: number) => {}
 }
@@ -294,7 +299,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Getting folders from Content Hub
 	 */
 	useEffect(() => {
-		(async () => {
+		;(async () => {
 			if (params.clientId) {
 				const isGraphQL = false;
 
@@ -518,6 +523,18 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					//   offsetActiveElementIndex(1)
 					// } else if (event.key === 'ArrowUp' && !gridMode) {
 					//   offsetActiveElementIndex(-1)
+				} else if (event.key === 't') {
+					console.log(event.key)
+					const element = document.activeElement as HTMLElement
+					const id = parseInt(element.id)
+					const item: MediaItem | undefined = getItem(id)
+					console.log(item)
+					if (item) handleMoveToTop(item)
+				} else if (event.key === 'b') {
+					const element = document.activeElement as HTMLElement
+					const id = parseInt(element.id)
+					const item: MediaItem | undefined = getItem(id)
+					if (item) handleMoveToBottom(item)
 				}
 			} else if (importDrawerOpen) {
 				if (event.key.toLowerCase() === 'a') {
@@ -621,6 +638,16 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 		}
 
+		const handleMoveToTop = (media: MediaItem) => {
+			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
+			setItems(arrayMove(items, oldIndex, 0))
+		}
+
+		const handleMoveToBottom = (media: MediaItem) => {
+			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
+			setItems(arrayMove(items, oldIndex, items.length - 1))
+		}
+
 		/**
 		 * Get an item from the collection
 		 * @param id
@@ -695,7 +722,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}, 500)
 			} else {
 				const newItems = structuredClone(items)
-				debugger;
+				debugger
 				const newSelectedItems = importItems
 					.filter((item: MediaItem) => {
 						return (
@@ -896,6 +923,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleZoomOut,
 			handleSortByAuthorAsc,
 			handleSortByAuthorDesc,
+			handleMoveToTop,
+			handleMoveToBottom,
 			importMedia,
 			getEntries,
 			getItem,
