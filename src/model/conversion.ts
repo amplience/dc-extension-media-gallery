@@ -1,5 +1,5 @@
 import Entry from "./entry";
-import {AssetWithExif, getFirstListItem} from '../ch-api';
+import {AssetWithExif, getFirstListItem} from '../ch-api/gql-ch-api';
 import ExifMap from "./exif-map";
 import { MediaItem } from ".";
 
@@ -11,7 +11,7 @@ export const defaultExifMap: ExifMap = {
 export function convertToEntry(asset: AssetWithExif, exifMap: ExifMap, chConfiguration: any): Entry {
     const metadata = getFirstListItem(asset.exifMetadata)?.properties as any;
 
-    const idString = atob(asset.id);
+    const idString = asset.id.length === 36 ? asset.id : atob(asset.id);
 
     const result = {
         photo: {

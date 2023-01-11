@@ -8,12 +8,14 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import React, { useEffect, useState, useContext, ReactNode, Dispatch, SetStateAction } from 'react'
-import { AssetWithExif, EnrichedRepository, ChApi } from '../ch-api'
-import credentials from '../credentials'
+import { AssetWithExif, EnrichedRepository, GqlChApi } from '../ch-api/gql-ch-api'
 import { AlertMessage, MediaItem } from '../model'
-import { assetsToItems, convertToEntry, defaultExifMap, itemsToAssets } from '../model/conversion'
+import { assetsToItems, convertToEntry, itemsToAssets } from '../model/conversion'
 import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
+import IChApi from '../ch-api/i-ch-api'
+import { RestChApi } from '../ch-api/rest-ch-api'
+import { indexOf } from 'lodash'
 
 type AppContextData = {
 	zoom: number
@@ -27,7 +29,7 @@ type AppContextData = {
 	repo?: EnrichedRepository | null
 	setRepo?: Dispatch<SetStateAction<EnrichedRepository | undefined>>
 	chApi?: any
-	setChApi?: Dispatch<SetStateAction<ChApi | undefined>>
+	setChApi?: Dispatch<SetStateAction<IChApi | undefined>>
 	detailDrawerOpen?: boolean
 	setDetailDrawerOpen?: Dispatch<SetStateAction<boolean>>
 	importDrawerOpen?: boolean
@@ -78,9 +80,11 @@ type AppContextData = {
 	handleZoomOut: () => void
 	handleSortByAuthorAsc: () => void
 	handleSortByAuthorDesc: () => void
+	handleMoveToTop: (media: MediaItem) => void
+	handleMoveToBottom: (media: MediaItem) => void
 	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
-	getEntries?: (id: string) => Promise<Entry[]>
+	getEntries?: (id: string, query?: string) => Promise<Entry[]>
 	getItem?: (id: number) => MediaItem | undefined
 	removeItem: (id: number) => void
 	selectImportItem: (id: number) => void
@@ -128,6 +132,8 @@ const defaultAppState = {
 	handleZoomOut: () => {},
 	handleSortByAuthorAsc: () => {},
 	handleSortByAuthorDesc: () => {},
+	handleMoveToTop: () => {},
+	handleMoveToBottom: () => {},
 	importMedia: () => {},
 	selectImportItem: (id: number) => {}
 }
@@ -135,13 +141,16 @@ const defaultAppState = {
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
+	const { field, setField, params } = useExtension()
+	const { galleryPath, configPath } = params
+
 	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
 	const [items, setItems] = useState<MediaItem[]>([])
 	const [importItems, setImportItems] = useState<MediaItem[]>([])
 	const [gridMode, setGridMode] = useState(true)
 	const [repo, setRepo] = useState<EnrichedRepository>()
-	const [chApi, setChApi] = useState<ChApi>()
+	const [chApi, setChApi] = useState<IChApi>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
@@ -291,22 +300,32 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 */
 	useEffect(() => {
 		;(async () => {
-			const { clientId, clientSecret } = credentials
+			if (params.clientId) {
+				const isGraphQL = false;
 
-			if (clientId) {
-				const gqlTest = new ChApi(
-					'https://auth.amplience.net/oauth/token',
-					'https://api.amplience.net/graphql'
-				)
-				await gqlTest.auth(clientId, clientSecret)
-				setChApi(gqlTest)
+				let api: IChApi;
 
-				const result = await gqlTest.allReposWithFolders()
+				if (isGraphQL) {
+					api = new GqlChApi(
+						'https://auth.amplience.net/oauth/token',
+						'https://api.amplience.net/graphql'
+					);
+				} else {
+					api = new RestChApi(
+						'https://auth.amplience.net/oauth/token',
+						'https://dam-api-internal.amplience.net/v1.5.0/'
+					);
+				}
+
+				await api.auth(params.clientId, params.clientSecret)
+				setChApi(api)
+
+				const result = await api.allReposWithFolders()
 				console.log(result)
 				setRepo(result[0])
 			}
 		})()
-	}, [])
+	}, [params])
 
 	/**
 	 * Drag-end-Drop action start
@@ -411,9 +430,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		})
 	}
 
-	const { field, setField, params } = useExtension()
-	const { galleryPath, configPath } = params
-
 	useEffect(() => {
 		if (field) {
 			const data = assetsToItems(field[galleryPath])
@@ -507,6 +523,18 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					//   offsetActiveElementIndex(1)
 					// } else if (event.key === 'ArrowUp' && !gridMode) {
 					//   offsetActiveElementIndex(-1)
+				} else if (event.key === 't') {
+					console.log(event.key)
+					const element = document.activeElement as HTMLElement
+					const id = parseInt(element.id)
+					const item: MediaItem | undefined = getItem(id)
+					console.log(item)
+					if (item) handleMoveToTop(item)
+				} else if (event.key === 'b') {
+					const element = document.activeElement as HTMLElement
+					const id = parseInt(element.id)
+					const item: MediaItem | undefined = getItem(id)
+					if (item) handleMoveToBottom(item)
 				}
 			} else if (importDrawerOpen) {
 				if (event.key.toLowerCase() === 'a') {
@@ -552,7 +580,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}
 
 				const entries = assets.map((asset) =>
-					convertToEntry(asset, defaultExifMap, {
+					convertToEntry(asset, params.exifMap, {
 						endpoint: 'nmrsaalphatest',
 						defaultHost: 'cdn.media.amplience.net'
 					})
@@ -608,6 +636,16 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
 				setItems(arrayMove(items, oldIndex, newIndex))
 			}
+		}
+
+		const handleMoveToTop = (media: MediaItem) => {
+			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
+			setItems(arrayMove(items, oldIndex, 0))
+		}
+
+		const handleMoveToBottom = (media: MediaItem) => {
+			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
+			setItems(arrayMove(items, oldIndex, items.length - 1))
 		}
 
 		/**
@@ -684,6 +722,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}, 500)
 			} else {
 				const newItems = structuredClone(items)
+				debugger
 				const newSelectedItems = importItems
 					.filter((item: MediaItem) => {
 						return (
@@ -884,6 +923,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleZoomOut,
 			handleSortByAuthorAsc,
 			handleSortByAuthorDesc,
+			handleMoveToTop,
+			handleMoveToBottom,
 			importMedia,
 			getEntries,
 			getItem,
