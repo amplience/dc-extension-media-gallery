@@ -39,8 +39,8 @@ const GridView = () => {
 								<Box
 									sx={{ mt: 1, ml: 1, mr: 1 }}
 									style={{ position: 'relative', cursor: 'grab' }}>
+									<div style={{width:'100%', aspectRatio:'3/2'}}>
 									<GenericImage item={item} w={248} zoomable={true} aspect={{w:3,h:2}} fillWidth={true}></GenericImage>
-									
 									<IconButton
 										size='small'
 										sx={{
@@ -99,6 +99,7 @@ const GridView = () => {
 										onClick={() => app.removeItem(item.id)}>
 										<DeleteOutline />
 									</IconButton>
+									</div>
 								</Box>
 								<ImageListItemBar
 									title={
