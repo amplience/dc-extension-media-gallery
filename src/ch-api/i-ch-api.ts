@@ -1,4 +1,4 @@
-import { AssetWithExif, EnrichedRepository } from "./gql-ch-api";
+import { AssetWithExif, EnrichedRepository } from "./shared";
 
 interface IChApi {
   auth(id: string, secret: string): Promise<void>;

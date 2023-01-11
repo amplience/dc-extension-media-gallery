@@ -8,7 +8,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import React, { useEffect, useState, useContext, ReactNode, Dispatch, SetStateAction } from 'react'
-import { AssetWithExif, EnrichedRepository, GqlChApi } from '../ch-api/gql-ch-api'
+import { GqlChApi } from '../ch-api/gql-ch-api'
 import { AlertMessage, MediaItem } from '../model'
 import { assetsToItems, convertToEntry, itemsToAssets } from '../model/conversion'
 import Entry from '../model/entry'
@@ -16,6 +16,7 @@ import { useExtension } from '../extension-context'
 import IChApi from '../ch-api/i-ch-api'
 import { RestChApi } from '../ch-api/rest-ch-api'
 import { indexOf } from 'lodash'
+import { AssetWithExif, EnrichedRepository } from '../ch-api/shared'
 
 type AppContextData = {
 	zoom: number

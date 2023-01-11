@@ -1,4 +1,4 @@
-import { EnrichedRepository, AssetWithExif, ExifMetadataProperties, MetadataResult, List as GqlList } from "./gql-ch-api";
+import { EnrichedRepository, AssetWithExif, ExifMetadataProperties, MetadataResult, Folder } from "./shared";
 import { AuthClient } from "../auth-client";
 import IChApi from "./i-ch-api";
 
@@ -19,7 +19,7 @@ interface Result<T> {
 }
 
 interface FolderBase {
-  children: Folder[];
+  children: RestFolder[];
   numFound: number;
   id: string;
   label: string;
@@ -27,7 +27,7 @@ interface FolderBase {
   numItems: string;
 }
 
-interface Folder extends FolderBase {
+interface RestFolder extends FolderBase {
   bucketId: string;
   status: string;
   type: "folder";
@@ -93,7 +93,7 @@ export class RestChApi extends AuthClient implements IChApi {
     return results;
   }
 
-  toEnrichedFolder(folders: Folder[]): any[] {
+  toEnrichedFolder(folders: RestFolder[]): Folder[] {
     return folders.map((rest) => ({
       id: rest.id,
       label: rest.label,
@@ -109,9 +109,9 @@ export class RestChApi extends AuthClient implements IChApi {
     }));
   }
 
-  toMetadata(relationships: ExifRelationship | undefined): GqlList<MetadataResult<ExifMetadataProperties>> | undefined {
+  toMetadata(relationships: ExifRelationship | undefined): MetadataResult<ExifMetadataProperties>[] {
     if (!relationships || relationships.length === 0) {
-      return undefined;
+      return [];
     }
 
     const data: MetadataResult<ExifMetadataProperties>[] = [];
@@ -125,9 +125,7 @@ export class RestChApi extends AuthClient implements IChApi {
       }
     }
 
-    return {
-      edges: data.map(item => ({ node: item }))
-    }
+    return data;
   }
 
   toAssetWithExif(assets: Asset[]): AssetWithExif[] {

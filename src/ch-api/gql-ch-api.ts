@@ -1,6 +1,24 @@
 import { GraphQLClient } from "../graphql-client";
 import IChApi from "./i-ch-api";
-import { queryAssetByFolder, assetEXIF, repositories, foldersByRepo, foldersByParent, exifByRepo, exifByFolder, assetEXIFBuilder } from "./queries";
+import {
+  queryAssetByFolder,
+  assetEXIF,
+  repositories,
+  foldersByRepo,
+  foldersByParent,
+  exifByRepo,
+  exifByFolder,
+  assetEXIFBuilder,
+} from "./queries";
+import {
+  AssetSearchItem,
+  AssetWithExif,
+  EnrichedRepository,
+  ExifMetadataProperties,
+  Folder,
+  MetadataResult,
+  Repository,
+} from "./shared";
 
 interface Edge<T> {
   node: T;
@@ -12,7 +30,7 @@ interface PageInfo {
   endCursor: string;
 }
 
-export interface List<T> {
+interface List<T> {
   edges: Edge<T>[];
 }
 
@@ -21,91 +39,54 @@ interface Paginated<T> extends List<T> {
   pageInfo: PageInfo;
 }
 
-interface AssetSearchItem {
-  id: string,
-  name: string;
-  label: string;
-  updatedDate: string;
-}
-
 interface FetchAssetSearch {
-  assetSearch: Paginated<AssetSearchItem>
-}
-
-interface MetadataProperties {
-  id: string;
-}
-
-export interface ExifMetadataProperties extends MetadataProperties {
-  software: string;
-  artist: string;
-  description: string;
-}
-
-export interface MetadataResult<T extends MetadataProperties> {
-  schemaName: string;
-  properties: T;
+  assetSearch: Paginated<AssetSearchItem>;
 }
 
 interface FetchExifMetadataAsset {
   id: string;
-  exifMetadata?: List<MetadataResult<ExifMetadataProperties>>
+  exifMetadata?: List<MetadataResult<ExifMetadataProperties>>;
 }
 
 interface FetchExifMetadata {
-  node: FetchExifMetadataAsset
-}
-
-interface Repository {
-  id: string;
-  label: string;
+  node: FetchExifMetadataAsset;
 }
 
 interface FetchRepositories {
   viewer: {
     mediaHubs: List<{
-      assetRepositories: Paginated<Repository>
-    }>
-  }
-}
-
-export interface Folder {
-  id: string;
-  label: string;
-  children?: Folder[]
+      assetRepositories: Paginated<Repository>;
+    }>;
+  };
 }
 
 interface FetchFoldersByRepo {
   node: {
-    id: string,
-    assetFolders: Paginated<Folder>
-  }
+    id: string;
+    assetFolders: Paginated<Folder>;
+  };
 }
 
 interface FetchFoldersByParent {
-  node: Folder
+  node: Folder;
 }
 
-export interface EnrichedRepository extends Repository {
-  folders: Folder[]
-}
-
-export interface AssetWithExif extends AssetSearchItem {
-  exifMetadata?: List<MetadataResult<ExifMetadataProperties>>
+interface AssetWithExifGql extends AssetSearchItem {
+  exifMetadata?: List<MetadataResult<ExifMetadataProperties>>;
 }
 
 interface FetchExifByRepo {
   node: {
     id: string;
-    assets: Paginated<AssetWithExif>;
-  }
+    assets: Paginated<AssetWithExifGql>;
+  };
 }
 
 interface FetchExifByFolder {
   node: {
     id: string;
-    assets: Paginated<AssetWithExif>;
-  }
+    assets: Paginated<AssetWithExifGql>;
+  };
 }
 
 export function getFirstListItem<T>(list: List<T> | undefined): T | undefined {
@@ -119,8 +100,18 @@ export function getFirstListItem<T>(list: List<T> | undefined): T | undefined {
 }
 
 export class GqlChApi extends GraphQLClient implements IChApi {
-  async fetchAssetsByFolder(repoId: string, folderId: string, query: string | undefined, after?: string): Promise<FetchAssetSearch> {
-    return await this.fetch(queryAssetByFolder, { repoId, folderId, query, after });
+  async fetchAssetsByFolder(
+    repoId: string,
+    folderId: string,
+    query: string | undefined,
+    after?: string
+  ): Promise<FetchAssetSearch> {
+    return await this.fetch(queryAssetByFolder, {
+      repoId,
+      folderId,
+      query,
+      after,
+    });
   }
 
   async fetchAssetEXIF(uuid: string): Promise<FetchExifMetadata> {
@@ -133,19 +124,22 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     for (let i = 0; i < uuids.length; i++) {
       request += `$asset${i}: ID!`;
       if (i < uuids.length - 1) {
-        request += ', ';
+        request += ", ";
       }
     }
 
-    request += ') {\n';
+    request += ") {\n";
 
     const params = {} as any;
     for (let i = 0; i < uuids.length; i++) {
-      request += `  asset${i}:${assetEXIFBuilder.replace('$uuid', `$asset${i}`)}\n`;
+      request += `  asset${i}:${assetEXIFBuilder.replace(
+        "$uuid",
+        `$asset${i}`
+      )}\n`;
       params[`asset${i}`] = uuids[i];
     }
 
-    request += '}';
+    request += "}";
 
     const response = await this.fetch(request, params);
 
@@ -162,7 +156,10 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     return await this.fetch(repositories, { after });
   }
 
-  async fetchFoldersByRepo(repoId: string, after?: string): Promise<FetchFoldersByRepo> {
+  async fetchFoldersByRepo(
+    repoId: string,
+    after?: string
+  ): Promise<FetchFoldersByRepo> {
     return await this.fetch(foldersByRepo, { repoId, after });
   }
 
@@ -170,17 +167,25 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     return await this.fetch(foldersByParent, { folderId });
   }
 
-  async fetchExifByRepo(repoId: string, after?: string): Promise<FetchExifByRepo> {
+  async fetchExifByRepo(
+    repoId: string,
+    after?: string
+  ): Promise<FetchExifByRepo> {
     return await this.fetch(exifByRepo, { repoId, after });
   }
 
-  async fetchExifByFolder(folderId: string, after?: string): Promise<FetchExifByFolder> {
+  async fetchExifByFolder(
+    folderId: string,
+    after?: string
+  ): Promise<FetchExifByFolder> {
     return await this.fetch(exifByFolder, { folderId, after });
   }
 
   // ---
 
-  async paginate<T>(getItems: (after?: string) => Promise<Paginated<T>>): Promise<T[]> {
+  async paginate<T>(
+    getItems: (after?: string) => Promise<Paginated<T>>
+  ): Promise<T[]> {
     const results: T[] = [];
 
     let lastPageInfo: PageInfo | undefined;
@@ -191,10 +196,13 @@ export class GqlChApi extends GraphQLClient implements IChApi {
         return results;
       }
 
-      results.push.apply(results, page.edges.map(edge => edge.node));
+      results.push.apply(
+        results,
+        page.edges.map((edge) => edge.node)
+      );
 
       lastPageInfo = page.pageInfo;
-    } while (lastPageInfo.hasNextPage)
+    } while (lastPageInfo.hasNextPage);
 
     return results;
   }
@@ -213,7 +221,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     });
   }
 
-  async assetEXIF(uuid: string): Promise<List<MetadataResult<ExifMetadataProperties>> | undefined> {
+  async assetEXIF(
+    uuid: string
+  ): Promise<List<MetadataResult<ExifMetadataProperties>> | undefined> {
     const result = await this.fetchAssetEXIF(uuid);
 
     return result.node.exifMetadata;
@@ -221,7 +231,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
 
   async recursiveFolderEnrich(folder: Folder) {
     if (!folder.children) {
-      folder.children = (await this.fetchFoldersByParent(folder.id)).node.children as Folder[];
+      folder.children = (await this.fetchFoldersByParent(folder.id)).node
+        .children as Folder[];
     }
 
     for (let child of folder.children) {
@@ -231,11 +242,15 @@ export class GqlChApi extends GraphQLClient implements IChApi {
 
   async allRepositories(): Promise<Repository[]> {
     // TODO: handle more than 50 repos (???)
-    return (await this.fetchRepositories()).viewer.mediaHubs.edges.map(edge => edge.node.assetRepositories.edges.map(repoEdge => repoEdge.node)).flat();
+    return (await this.fetchRepositories()).viewer.mediaHubs.edges
+      .map((edge) =>
+        edge.node.assetRepositories.edges.map((repoEdge) => repoEdge.node)
+      )
+      .flat();
   }
 
   async allReposWithFolders(): Promise<EnrichedRepository[]> {
-    const repos = await this.allRepositories() as EnrichedRepository[];
+    const repos = (await this.allRepositories()) as EnrichedRepository[];
 
     for (let repo of repos) {
       repo.folders = await this.allFoldersByRepo(repo.id);
@@ -248,10 +263,31 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     return repos;
   }
 
-  async getExifByFolder(repoId: string, folderId: string): Promise<AssetWithExif[]> {
-    let result: AssetWithExif[];
+  listToArray<T>(value?: List<T>): T[] {
+    if (value == null) {
+      return [];
+    }
 
-    if (folderId === "QXNzZXRGb2xkZXI6MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAw") {
+    return value.edges?.map((edge) => edge.node) ?? [];
+  }
+
+  toAssetWithExif(assets: AssetWithExifGql[]): AssetWithExif[] {
+    return assets.map((gql) => ({
+      ...gql,
+      exifMetadata: this.listToArray(gql.exifMetadata)
+    }));
+  }
+
+  async getExifByFolder(
+    repoId: string,
+    folderId: string
+  ): Promise<AssetWithExif[]> {
+    let result: AssetWithExifGql[];
+
+    if (
+      folderId ===
+      "QXNzZXRGb2xkZXI6MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAw"
+    ) {
       // No folder - use repo.
       result = await this.paginate(async (after?: string) => {
         return (await this.fetchExifByRepo(repoId, after)).node?.assets;
@@ -262,12 +298,12 @@ export class GqlChApi extends GraphQLClient implements IChApi {
       });
     }
 
-    return result;
+    return this.toAssetWithExif(result);
   }
 
   extractId(encoded: string): string {
     const decoded = atob(encoded);
-    const colon = decoded.indexOf(':');
+    const colon = decoded.indexOf(":");
 
     if (colon > -1) {
       return decoded.substring(colon + 1);
@@ -276,19 +312,36 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     return decoded;
   }
 
-  async queryAssetsExif({repoId, folderId, query}: {repoId: string, folderId: string, query?: string}): Promise<AssetWithExif[]> {
+  async queryAssetsExif({
+    repoId,
+    folderId,
+    query,
+  }: {
+    repoId: string;
+    folderId: string;
+    query?: string;
+  }): Promise<AssetWithExif[]> {
     const assetSearch = await this.paginate(async (after?: string) => {
-      return (await this.fetchAssetsByFolder(this.extractId(repoId), this.extractId(folderId), query, after)).assetSearch;
+      return (
+        await this.fetchAssetsByFolder(
+          this.extractId(repoId),
+          this.extractId(folderId),
+          query,
+          after
+        )
+      ).assetSearch;
     });
 
     if (assetSearch == null || assetSearch.length === 0) {
       return [];
     }
 
-    const exifs = await this.fetchAssetsEXIF(assetSearch.map(item => item.id));
+    const exifs = await this.fetchAssetsEXIF(
+      assetSearch.map((item) => item.id)
+    );
 
     for (let i = 0; i < assetSearch.length; i++) {
-      (assetSearch[i] as AssetWithExif).exifMetadata = exifs[i].exifMetadata;
+      (assetSearch[i] as AssetWithExif).exifMetadata = this.listToArray(exifs[i].exifMetadata);
     }
 
     return assetSearch as AssetWithExif[];

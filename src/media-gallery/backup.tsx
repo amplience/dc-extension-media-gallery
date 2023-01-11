@@ -86,13 +86,14 @@ import TreeItem from "@mui/lab/TreeItem";
 
 import { useEffect, useState } from "react";
 import { useExtension } from "../extension-context";
-import { GqlChApi, Folder, EnrichedRepository } from "../ch-api/gql-ch-api";
+import { GqlChApi } from "../ch-api/gql-ch-api";
 import { convertToEntry } from "../model/conversion";
 import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
 
 import Entry from '../model/entry';
+import { EnrichedRepository, Folder } from "../ch-api/shared";
 
 /**
  * Media item

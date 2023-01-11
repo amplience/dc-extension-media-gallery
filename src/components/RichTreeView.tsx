@@ -1,6 +1,6 @@
 import { ExpandMore, ChevronRight } from '@mui/icons-material'
 import { TreeItem, TreeView } from '@mui/lab'
-import { Folder } from 'dc-management-sdk-js'
+import { Folder } from '../ch-api/shared'
 
 const RichObjectTreeView = (props: any) => {
 	const renderTree = (node: any) => (
