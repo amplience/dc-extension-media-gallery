@@ -3,6 +3,7 @@ import { CloseOutlined, InfoOutlined } from '@mui/icons-material'
 import InfoPanel from './InfoPanel'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import GenericImage from './GenericImage'
 
 const ImageDialog = () => {
 	const app = useContext(AppContext)
@@ -18,16 +19,7 @@ const ImageDialog = () => {
 			}}>
 			<Box sx={{ p: 4 }}>
 				<Box sx={{ position: 'relative' }}>
-					<img
-						src={`${app.currentMedia?.img}?w=1024&h=686&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true`}
-						srcSet={`${app.currentMedia?.img}?w=2048&h=1366&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true 2x`}
-						alt={app.currentMedia?.title}
-						onClick={() => {
-							if (app.setFullscreenView) app.setFullscreenView(false)
-						}}
-						loading='lazy'
-						width={'100%'}
-					/>
+					<GenericImage item={app.currentMedia} w={1024} zoomable={false} aspect={{w:3,h:2}} lazy={true} fillWidth={true}></GenericImage>
 					<IconButton
 						aria-label={`close import drawer`}
 						size='small'

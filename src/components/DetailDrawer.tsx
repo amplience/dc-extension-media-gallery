@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import GenericImage from './GenericImage'
 
 const DetailDrawer = () => {
 	const app = useContext(AppContext)
@@ -54,16 +55,7 @@ const DetailDrawer = () => {
 						</IconButton>
 					</Box>
 				</Stack>
-				<img
-					src={`${app.currentMedia?.img}?w=1024&h=683&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true`}
-					srcSet={`${app.currentMedia?.img}?w=2048&h=1366&sm=clamp&fmt=auto&qlt=75&fmt.jpeg.interlaced=true 2x`}
-					alt={app.currentMedia?.title}
-					title='Click to zoom'
-					onClick={() => {
-						app.currentMedia && app.handleFullScreenView(app.currentMedia)
-					}}
-					loading='lazy'
-				/>
+				<GenericImage item={app.currentMedia} w={1024} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
 				<TextField
 					id='dateModified'
 					label='Date modified'

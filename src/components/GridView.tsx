@@ -12,6 +12,7 @@ import { Stack, Box, IconButton, ImageListItemBar, Typography, Tooltip } from '@
 import SortableListItem from '../sortable-list-item'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import GenericImage from './GenericImage'
 
 const GridView = () => {
 	const app = useContext(AppContext)
@@ -38,24 +39,8 @@ const GridView = () => {
 								<Box
 									sx={{ mt: 1, ml: 1, mr: 1 }}
 									style={{ position: 'relative', cursor: 'grab' }}>
-									<img
-										src={`${item.img}?w=${248 * app.zoom}&h=${
-											164 * app.zoom
-										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
-										srcSet={`${item.img}?w=${248 * app.zoom}&h=${
-											164 * app.zoom
-										}&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
-										alt={item.title}
-										loading='lazy'
-										style={{
-											margin: 'auto',
-											aspectRatio: '1.5/1',
-											cursor: 'zoom-in'
-										}}
-										title='Click to zoom'
-										id={item.id}
-										onClick={() => app.handleFullScreenView(item)}
-									/>
+									<GenericImage item={item} w={248} zoomable={true} aspect={{w:3,h:2}} fillWidth={true}></GenericImage>
+									
 									<IconButton
 										size='small'
 										sx={{

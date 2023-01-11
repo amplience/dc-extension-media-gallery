@@ -24,6 +24,7 @@ import {
 import SortableTableRow from '../sortable-table-row'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import GenericImage from './GenericImage'
 
 const ItemListView = () => {
 	const app = useContext(AppContext)
@@ -109,16 +110,9 @@ const ItemListView = () => {
 										borderBottom: 'none',
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
-									<img
-										src={`${item.img}?w=62&h=41&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
-										srcSet={`${item.img}?w=124&h=82&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
-										alt={item.title}
-										title='Click to zoom'
-										onClick={() => app.handleFullScreenView(item)}
-										style={{ cursor: 'zoom-in', margin: 'auto', width:'auto' }}
-										id={item.id}
-										loading='lazy'
-									/>
+									<div style={{width: '62px'}}>
+									<GenericImage item={item} w={62} zoomable={true} aspect={{w:3,h:2}}></GenericImage>
+									</div>
 								</TableCell>
 								<TableCell
 									align='left'

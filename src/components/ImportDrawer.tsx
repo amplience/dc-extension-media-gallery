@@ -21,6 +21,7 @@ import RichObjectTreeView from './RichTreeView'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import { assetsToItems } from '../model/conversion'
+import GenericImage from './GenericImage'
 
 const ImportDrawer = () => {
 	const app = useContext(AppContext)
@@ -94,15 +95,7 @@ const ImportDrawer = () => {
 							<ImageList cols={5}>
 								{app.importItems.map((item: any) => (
 									<ImageListItem key={item.img}>
-										<img
-											src={`${item.img}?w=150&h=100&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true`}
-											srcSet={`${item.img}?w=300&h=200&sm=clamp&fmt=auto&qlt=60&fmt.jpeg.interlaced=true 2x`}
-											alt={item.title}
-											onClick={() => app.handleFullScreenView(item)}
-											style={{ aspectRatio: 1.5 / 1, cursor: 'zoom-in' }}
-											title='Click to zoom'
-											loading='lazy'
-										/>
+										<GenericImage item={item} w={150} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
 										<ImageListItemBar
 											title={item.title}
 											subtitle={<span>by: {item.author}</span>}
