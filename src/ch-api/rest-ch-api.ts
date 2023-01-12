@@ -134,7 +134,7 @@ export class RestChApi extends AuthClient implements IChApi {
         id: rest.id,
         label: rest.label,
         name: rest.name,
-        updatedDate: rest.timestamp,
+        updatedDate: new Date(rest.timestamp).toISOString(),
         exifMetadata: this.toMetadata(rest.relationships.containsEXIF)
       }
     ))

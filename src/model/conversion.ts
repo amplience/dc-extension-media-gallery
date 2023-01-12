@@ -23,7 +23,7 @@ export function convertToEntry(
 ): Entry {
   const metadata = first(asset.exifMetadata)?.properties as any;
 
-  const idString = asset.id.length === 36 ? asset.id : atob(asset.id);
+  const idString = asset.id.length === 36 ? asset.id : (atob(asset.id).split(":")[1]);
 
   const result = {
     photo: {
@@ -31,12 +31,13 @@ export function convertToEntry(
         schema:
           "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link",
       },
-      id: idString.split(":")[1],
+      id: idString,
       name: asset.name,
       ...chConfiguration,
     },
     photographer: "Unknown",
     description: "No description.",
+    date: asset.updatedDate
   };
 
   if (metadata) {

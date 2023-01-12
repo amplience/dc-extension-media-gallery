@@ -10,4 +10,5 @@ export default interface Entry {
   }
   photographer: string;
   description: string;
+  date: string;
 }
