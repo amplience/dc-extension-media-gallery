@@ -2,10 +2,16 @@ import Entry from "./entry";
 import { AssetWithExif } from "../ch-api/shared";
 import ExifMap from "./exif-map";
 import { MediaItem } from ".";
+import Params from "../extension-context/params";
 
 export const defaultExifMap: ExifMap = {
   photographer: "artist",
   description: "description",
+};
+
+const defaultExifValues: any = {
+  artist: 'Unknown',
+  description: 'No Description.'
 };
 
 function first<T>(items: T[] | undefined): T | undefined {
@@ -25,7 +31,7 @@ export function convertToEntry(
 
   const idString = asset.id.length === 36 ? asset.id : (atob(asset.id).split(":")[1]);
 
-  const result = {
+  const result : Entry = {
     photo: {
       _meta: {
         schema:
@@ -35,18 +41,14 @@ export function convertToEntry(
       name: asset.name,
       ...chConfiguration,
     },
-    photographer: "Unknown",
-    description: "No description.",
     date: asset.updatedDate
   };
 
-  if (metadata) {
-    if (exifMap.photographer && metadata[exifMap.photographer]) {
-      result.photographer = metadata[exifMap.photographer];
-    }
-
-    if (exifMap.description && metadata[exifMap.description]) {
-      result.description = metadata[exifMap.description];
+  for (let key of Object.keys(exifMap)) {
+    if (metadata && metadata[exifMap[key]]) {
+      result[key] = metadata[exifMap[key]];
+    } else {
+      result[key] = defaultExifValues[exifMap[key]];
     }
   }
 
@@ -66,14 +68,14 @@ export function itemsToAssets(items: MediaItem[]): Entry[] {
   return items.map((item) => item.entry as Entry);
 }
 
-export function assetsToItems(assets: Entry[]): MediaItem[] {
+export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
   return assets.map((asset, index) => ({
     id: index + 1,
     selected: false,
     dateModified: "",
     img: assetToImg(asset),
-    title: asset.description,
-    author: asset.photographer,
+    title: asset[params.displayDescription],
+    author: asset[params.displayAuthor],
     entry: asset,
   }));
 }

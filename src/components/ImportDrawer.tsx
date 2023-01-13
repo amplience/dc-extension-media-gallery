@@ -24,9 +24,12 @@ import { AppContext } from "../app-context";
 import { useContext, useEffect, useState } from "react";
 import { assetsToItems } from "../model/conversion";
 import GenericImage from './GenericImage'
+import { useExtension } from "../extension-context";
 
 const ImportDrawer = () => {
   const app = useContext(AppContext);
+  const { params } = useExtension();
+
   const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
   const [folderId, setFolderId] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -39,7 +42,7 @@ const ImportDrawer = () => {
         setLoading(true);
         const entries = await app.getEntries(folderId, queryValue);
         if (!cancelled) {
-          app.setImportItems(assetsToItems(entries));
+          app.setImportItems(assetsToItems(entries, params));
           setLoading(false);
         }
       }
@@ -48,7 +51,7 @@ const ImportDrawer = () => {
     return () => { cancelled = true; }
 
     // shouldn't rerun when app changes
-  }, [queryValue, folderId, setLoading]);
+  }, [queryValue, folderId, setLoading, params]);
 
   return (
     <SwipeableDrawer

@@ -8,7 +8,7 @@ export default interface Entry {
     endpoint: string;
     defaultHost: string;
   }
-  photographer: string;
-  description: string;
   date: string;
+
+  [key: string]: any;
 }

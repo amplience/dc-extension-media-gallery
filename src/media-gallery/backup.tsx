@@ -87,7 +87,7 @@ import TreeItem from "@mui/lab/TreeItem";
 import { useEffect, useState } from "react";
 import { useExtension } from "../extension-context";
 import { GqlChApi } from "../ch-api/gql-ch-api";
-import { convertToEntry } from "../model/conversion";
+import { assetsToItems, convertToEntry } from "../model/conversion";
 import { Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import { SlideProps } from '@mui/material/Slide';
@@ -142,18 +142,6 @@ function assetToImg(asset: Entry): string {
   return `https://${vse ?? asset.photo.defaultHost}/i/${asset.photo.endpoint}/${asset.photo.name}`;
 }
 
-function assetsToItems(assets: Entry[]): MediaItem[] {
-  return assets.map((asset, index) => ({
-    id: index,
-    selected: false,
-    dateModified: '',
-    img: assetToImg(asset),
-    title: asset.description,
-    author: asset.photographer,
-    entry: asset
-  }));
-}
-
 function itemsToAssets(items: MediaItem[]): Entry[] {
   return items.map(item => item.entry as Entry);
 }
@@ -198,7 +186,7 @@ function MediaGallery() {
 
   useEffect(() => {
     if (field) {
-      const data = assetsToItems(field[galleryPath]);
+      const data = assetsToItems(field[galleryPath], params);
       setItems(data);
     }
   }, [field])
@@ -712,8 +700,8 @@ function MediaGallery() {
     tempMedia && setItems((prevState: MediaItem[]) => {
       return prevState.map((item: MediaItem) => {
         if (item.id === tempMedia.id) {
-          tempMedia.entry.description = tempMedia.title;
-          tempMedia.entry.photographer = tempMedia.author;
+          tempMedia.entry[params.displayDescription] = tempMedia.title;
+          tempMedia.entry[params.displayAuthor] = tempMedia.author;
           item = tempMedia;
         }
         return item
@@ -1622,7 +1610,7 @@ function MediaGallery() {
 
                   setDefaultFolder(repo.id, id);
 
-                  setImportItems(assetsToItems(entries));
+                  setImportItems(assetsToItems(entries, params));
                 }} />
               )}
               <Divider />

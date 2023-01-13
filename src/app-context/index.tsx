@@ -15,7 +15,6 @@ import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
 import IChApi from '../ch-api/i-ch-api'
 import { RestChApi } from '../ch-api/rest-ch-api'
-import { indexOf } from 'lodash'
 import { AssetWithExif, EnrichedRepository } from '../ch-api/shared'
 
 type AppContextData = {
@@ -433,10 +432,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	useEffect(() => {
 		if (field) {
-			const data = assetsToItems(field[galleryPath])
+			const data = assetsToItems(field[galleryPath], params)
 			setItems(data)
 		}
-	}, [field, galleryPath])
+	}, [field, galleryPath, params])
 
 	useEffect(() => {
 		if (field) {
@@ -766,7 +765,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			tempMedia &&
 				setItems((prevState: MediaItem[]) => {
 					return prevState.map((item: MediaItem) => {
-						if (item.id === tempMedia.id) item = tempMedia
+						if (item.id === tempMedia.id) {
+							tempMedia.entry[params.displayDescription] = tempMedia.title;
+							tempMedia.entry[params.displayAuthor] = tempMedia.author;
+							item = tempMedia;
+						}
 						return item
 					})
 				})
@@ -963,7 +966,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		configPath,
 		field,
 		setField,
-		galleryPath
+		galleryPath,
+		params
 	])
 
 	return <AppContext.Provider value={state}>{children}</AppContext.Provider>

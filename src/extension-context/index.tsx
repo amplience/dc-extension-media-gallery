@@ -16,7 +16,9 @@ const defaultParams = {
   clientSecret: '',
   configPath: 'galleryConfig',
   galleryPath: 'photoGallery',
-  exifMap: defaultExifMap
+  exifMap: defaultExifMap,
+  displayDescription: 'description',
+  displayAuthor: 'photographer'
 };
 
 const defaultExtensionState = {

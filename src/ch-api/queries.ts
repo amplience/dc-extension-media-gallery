@@ -48,9 +48,6 @@ query queryAssetByFolder($repoId: String!, $after: String) {
   }
 }`;
 
-// todo
-const assetByQuery = ``;
-
 export const assetEXIF = `
 query assetEXIF($uuid: ID!) {
   node(id: $uuid) {

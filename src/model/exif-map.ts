@@ -1,4 +1,3 @@
-export default interface ExifMap {
-  photographer?: string;
-  description?: string;
-}
+type ExifMap = { [key: string]: string }
+
+export default ExifMap;

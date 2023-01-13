@@ -5,5 +5,7 @@ export default interface Params {
     clientSecret: string,
     configPath: string,
     galleryPath: string,
-    exifMap: ExifMap
+    exifMap: ExifMap,
+    displayDescription: string,
+    displayAuthor: string
 }
