@@ -548,11 +548,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 		document.addEventListener('keydown', keyDownHandler)
 
-		const setDefaultFolder = (repoId: string, folderId: string) => {
+		const setDefaultFolder = (repoId: string, folderId: string, query?: string) => {
 			// Should also clear the last used query here if it's being replaced with a folder.
 
 			field[configPath].repoId = repoId
 			field[configPath].folderId = folderId
+			field[configPath].query = query
 
 			if (setField) {
 				setField()
@@ -565,7 +566,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const getEntries = async (id: string, query?: string): Promise<Entry[]> => {
 			if (chApi && repo) {
-				setDefaultFolder(repo.id, id)
+				setDefaultFolder(repo.id, id, query);
 				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
 

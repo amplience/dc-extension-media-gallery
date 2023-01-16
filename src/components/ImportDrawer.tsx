@@ -28,35 +28,51 @@ import { useExtension } from "../extension-context";
 
 const ImportDrawer = () => {
   const app = useContext(AppContext);
-  const { params } = useExtension();
+  const { params, field, oldConfig } = useExtension();
 
   const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
   const [folderId, setFolderId] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
+  let folder: string | undefined = undefined;
+  let query: string | undefined = undefined;
+
+  if (oldConfig) {
+    folder = oldConfig.folderId;
+    query = oldConfig.query;
+  }
+
   useEffect(() => {
-    let cancelled = false;
+    setFolderId(folder);
+    setQueryValue(query);
+    console.log('fk ' + query);
+  }, [folder, query]);
 
-    (async () => {
-      if (app.getEntries && app.setImportItems && folderId) {
-        setLoading(true);
-        const entries = await app.getEntries(folderId, queryValue);
-        if (!cancelled) {
-          app.setImportItems(assetsToItems(entries, params));
-          setLoading(false);
+  useEffect(() => {
+    if (app.importDrawerOpen) {
+      let cancelled = false;
+
+      (async () => {
+        if (app.getEntries && app.setImportItems && folderId) {
+          setLoading(true);
+          const entries = await app.getEntries(folderId, queryValue);
+          if (!cancelled) {
+            app.setImportItems(assetsToItems(entries, params));
+            setLoading(false);
+          }
         }
-      }
-    })();
-
-    return () => { cancelled = true; }
+      })();
+  
+      return () => { cancelled = true; }
+    }
 
     // shouldn't rerun when app changes
-  }, [queryValue, folderId, setLoading, params]);
+  }, [queryValue, folderId, setLoading, params, app.importDrawerOpen]);
 
   return (
     <SwipeableDrawer
       PaperProps={{
-        sx: { width: "90%", p: 2 },
+        sx: { width: "90%" },
       }}
       anchor={"left"}
       open={app.importDrawerOpen}
@@ -68,7 +84,7 @@ const ImportDrawer = () => {
       }}
     >
       <Stack spacing={2} sx={{ h: "100%" }}>
-        <Stack direction={"row"}>
+        <Stack direction={"row"} sx={{position:'sticky', top:0, backgroundColor:'white', zIndex:100, p:2}}>
           <Typography sx={{ pb: 2 }} variant="h5" component="h5">
             Import Media
           </Typography>
@@ -85,7 +101,7 @@ const ImportDrawer = () => {
             </IconButton>
           </Box>
         </Stack>
-        <Stack spacing={4}>
+        <Stack spacing={4} sx={{p:2}}>
           {/* Tree View */}
           {/* TODO: replace with a dropdown tree select */}
           {app.repo && (
@@ -94,11 +110,14 @@ const ImportDrawer = () => {
               onChange={async (id: string) => {
                 setFolderId(id);
               }}
+              selectedId={folderId}
             />
           )}
           <TextField
+            key={query}
             label="Query"
             helperText="Query to filter assets in the folder with."
+            defaultValue={query}
             onChange={(event) => {
               setQueryValue(event.target.value);
             }}
@@ -169,6 +188,7 @@ const ImportDrawer = () => {
           sx={{
             pb: 4,
             pt: 2,
+            p:2,
             position: "sticky",
             backgroundColor: "white",
             bottom: 0,
