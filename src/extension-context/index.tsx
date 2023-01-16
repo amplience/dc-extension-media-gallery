@@ -8,6 +8,7 @@ interface ExtensionContextData {
   params: Params,
   field?: any,
   sdk?: ContentFieldExtension,
+  oldConfig?: any,
   setField?: () => void
 }
 
@@ -35,18 +36,21 @@ export function ExtensionContextProvider({ children }: { children: ReactNode }) 
   useEffect(() => {
     getSdk().then(async (sdk) => {
       sdk.frame.startAutoResizer();
-      const field = await sdk.field.getValue();
+      const field: any = await sdk.field.getValue();
       const params: Params = {
         ...defaultParams,
         ...sdk.params.installation,
         ...sdk.params.instance,
       };
 
+      const oldConfig = field[params.configPath];
+
       let state: ExtensionContextData = {
         ...defaultExtensionState,
         field,
         sdk,
-        params
+        params,
+        oldConfig: { ...oldConfig }
       };
 
       state.setField = () => {

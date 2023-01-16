@@ -28,30 +28,46 @@ import { useExtension } from "../extension-context";
 
 const ImportDrawer = () => {
   const app = useContext(AppContext);
-  const { params } = useExtension();
+  const { params, field, oldConfig } = useExtension();
 
   const [queryValue, setQueryValue] = useState<string | undefined>(undefined);
   const [folderId, setFolderId] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
+  let folder: string | undefined = undefined;
+  let query: string | undefined = undefined;
+
+  if (oldConfig) {
+    folder = oldConfig.folderId;
+    query = oldConfig.query;
+  }
+
   useEffect(() => {
-    let cancelled = false;
+    setFolderId(folder);
+    setQueryValue(query);
+    console.log('fk ' + query);
+  }, [folder, query]);
 
-    (async () => {
-      if (app.getEntries && app.setImportItems && folderId) {
-        setLoading(true);
-        const entries = await app.getEntries(folderId, queryValue);
-        if (!cancelled) {
-          app.setImportItems(assetsToItems(entries, params));
-          setLoading(false);
+  useEffect(() => {
+    if (app.importDrawerOpen) {
+      let cancelled = false;
+
+      (async () => {
+        if (app.getEntries && app.setImportItems && folderId) {
+          setLoading(true);
+          const entries = await app.getEntries(folderId, queryValue);
+          if (!cancelled) {
+            app.setImportItems(assetsToItems(entries, params));
+            setLoading(false);
+          }
         }
-      }
-    })();
-
-    return () => { cancelled = true; }
+      })();
+  
+      return () => { cancelled = true; }
+    }
 
     // shouldn't rerun when app changes
-  }, [queryValue, folderId, setLoading, params]);
+  }, [queryValue, folderId, setLoading, params, app.importDrawerOpen]);
 
   return (
     <SwipeableDrawer
@@ -94,11 +110,14 @@ const ImportDrawer = () => {
               onChange={async (id: string) => {
                 setFolderId(id);
               }}
+              selectedId={folderId}
             />
           )}
           <TextField
+            key={query}
             label="Query"
             helperText="Query to filter assets in the folder with."
+            defaultValue={query}
             onChange={(event) => {
               setQueryValue(event.target.value);
             }}
