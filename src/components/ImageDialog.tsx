@@ -44,7 +44,7 @@ const ImageDialog = () => {
 					</IconButton>
 				</Box>
 				<Box
-					sx={{ height: '1000%' }}
+					sx={{ height: 'auto' }}
 					onClick={() => {
 						if (app.setFullscreenView) app.setFullscreenView(false)
 					}}
