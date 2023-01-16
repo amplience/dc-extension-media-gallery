@@ -39,8 +39,8 @@ const DetailDrawer = () => {
 				keepMounted: false
 			}}>
 			<Stack spacing={2} sx={{ h: '100%' }}>
-				<Stack direction={'row'}>
-					<Typography sx={{ pb: 2 }} variant='h5' component='h5'>
+				<Stack direction={'row'} sx={{position:'sticky', top:'-16px', backgroundColor:'white', zIndex:100, p:2}}>
+					<Typography sx={{ pb: 0 }} variant='h5' component='h5'>
 						Media Details
 					</Typography>
 					<Box sx={{ flexGrow: 1 }} />
@@ -114,7 +114,8 @@ const DetailDrawer = () => {
 						app.tempMedia && (app.tempMedia.title = event.target.value)
 					}}
 				/>
-				<Stack sx={{ pb: 4 }} direction={'row'}>
+				</Stack>
+				<Stack sx={{ pt: 2, pb: 4 }} direction={'row'}>
 					<Box sx={{ flexGrow: 1 }} />
 					<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
 						Save
@@ -127,7 +128,6 @@ const DetailDrawer = () => {
 						Cancel
 					</Button>
 				</Stack>
-			</Stack>
 		</SwipeableDrawer>
 	)
 }
