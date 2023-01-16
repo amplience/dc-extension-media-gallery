@@ -72,7 +72,7 @@ const ImportDrawer = () => {
   return (
     <SwipeableDrawer
       PaperProps={{
-        sx: { width: "90%", p: 2 },
+        sx: { width: "90%" },
       }}
       anchor={"left"}
       open={app.importDrawerOpen}
@@ -84,7 +84,7 @@ const ImportDrawer = () => {
       }}
     >
       <Stack spacing={2} sx={{ h: "100%" }}>
-        <Stack direction={"row"}>
+        <Stack direction={"row"} sx={{position:'sticky', top:0, backgroundColor:'white', zIndex:100, p:2}}>
           <Typography sx={{ pb: 2 }} variant="h5" component="h5">
             Import Media
           </Typography>
@@ -101,7 +101,7 @@ const ImportDrawer = () => {
             </IconButton>
           </Box>
         </Stack>
-        <Stack spacing={4}>
+        <Stack spacing={4} sx={{p:2}}>
           {/* Tree View */}
           {/* TODO: replace with a dropdown tree select */}
           {app.repo && (
@@ -188,6 +188,7 @@ const ImportDrawer = () => {
           sx={{
             pb: 4,
             pt: 2,
+            p:2,
             position: "sticky",
             backgroundColor: "white",
             bottom: 0,

@@ -34,10 +34,9 @@ const GenericImage: FC<Props> = ({ item, zoomable = false, w = 248, aspect = {w:
     <>
     
     <div style={{overflow: 'hidden', color:textCol}}>
-        <div style={{width: '100%', height:'auto', alignItems: 'center', justifyContent: 'center', display: `${imageLoading && loadingIcon ? 'block' : 'none'}`, aspectRatio: '3/2'}}>
+        <div style={{width: '100%', height:'auto', display: `${imageLoading && loadingIcon ? 'block' : 'none'}`, aspectRatio: '3/2', marginTop: '50px'}}>
           <CircularProgress style={{margin: 'auto', display: 'flex'}}/>
           <Typography variant='subtitle1' align="center" style={{margin: 'auto', display:"block"}}>Loading image...</Typography>
-          
         </div>
         <Skeleton variant="rectangular" animation="wave" width={'100%'} height={'auto'} sx={{ display: `${imageLoading && !loadingIcon ? 'block' : 'none'}`, marginLeft: 'auto',
             marginRight: 'auto', aspectRatio: '3/2'}} >
