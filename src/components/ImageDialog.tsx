@@ -19,7 +19,7 @@ const ImageDialog = () => {
 			}}>
 			<Box sx={{ p: 4 }}>
 				<Box sx={{ position: 'relative' }}>
-					<GenericImage item={app.currentMedia} w={1024} zoomable={false} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
+					<GenericImage item={app.currentMedia} w={1024} zoomable={false} aspect={{w:3,h:2}} lazy={false} fillWidth={true} loadingIcon={true} textCol={'white'}></GenericImage>
 					<IconButton
 						aria-label={`close import drawer`}
 						size='small'

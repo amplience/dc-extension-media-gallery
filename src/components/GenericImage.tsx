@@ -1,4 +1,5 @@
-import { Skeleton } from "@mui/material";
+import { CircularProgress, Skeleton, Typography } from "@mui/material";
+import { style } from "@mui/system";
 import React, { FC, useContext, useState } from "react";
 import { AppContext } from "../app-context";
 
@@ -11,12 +12,14 @@ type Props = {
     h:number
   },
   lazy?:Boolean,
-  fillWidth?:Boolean
+  fillWidth?:Boolean,
+  loadingIcon?:Boolean,
+  textCol?:string
 };
 
 
 
-const GenericImage: FC<Props> = ({ item, zoomable = false, w = 248, aspect = {w:3,h:2}, lazy = true, fillWidth = false }) => {
+const GenericImage: FC<Props> = ({ item, zoomable = false, w = 248, aspect = {w:3,h:2}, lazy = true, fillWidth = false, loadingIcon = false, textCol = 'black' }) => {
   const app = useContext(AppContext)
   const [imageLoading, setImageLoading] = useState(true)
 
@@ -30,8 +33,13 @@ const GenericImage: FC<Props> = ({ item, zoomable = false, w = 248, aspect = {w:
   return (
     <>
     
-    <div style={{overflow: 'hidden'}}>
-        <Skeleton variant="rectangular" width={'100%'} height={'auto'} sx={{ bgcolor: 'grey.900', display: `${imageLoading ? 'block' : 'none'}`, marginLeft: 'auto',
+    <div style={{overflow: 'hidden', color:textCol}}>
+        <div style={{width: '100%', height:'auto', alignItems: 'center', justifyContent: 'center', display: `${imageLoading && loadingIcon ? 'block' : 'none'}`, aspectRatio: '3/2'}}>
+          <CircularProgress style={{margin: 'auto', display: 'flex'}}/>
+          <Typography variant='subtitle1' align="center" style={{margin: 'auto', display:"block"}}>Loading image...</Typography>
+          
+        </div>
+        <Skeleton variant="rectangular" animation="wave" width={'100%'} height={'auto'} sx={{ display: `${imageLoading && !loadingIcon ? 'block' : 'none'}`, marginLeft: 'auto',
             marginRight: 'auto', aspectRatio: '3/2'}} >
         </Skeleton>
         <img
