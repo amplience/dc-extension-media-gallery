@@ -90,6 +90,7 @@ type AppContextData = {
 	selectImportItem: (id: number) => void
 	selectItem: (id: number) => void
 	saveItem?: () => void
+	dragOrder: (active: any, over: any) => void
 }
 
 const defaultAppState = {
@@ -135,7 +136,8 @@ const defaultAppState = {
 	handleMoveToTop: () => {},
 	handleMoveToBottom: () => {},
 	importMedia: () => {},
-	selectImportItem: (id: number) => {}
+	selectImportItem: (id: number) => {},
+	dragOrder: (active: any, over: any) => {}
 }
 
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
@@ -155,7 +157,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
 	const sortOpen = Boolean(sortAnchorEl)
-	const [dragging, setDragging] = useState(false)
 	const [fullscreenView, setFullscreenView] = useState(false)
 	const [contextMedia, setContextMedia] = useState<MediaItem | null>(null)
 	const [currentMedia, setCurrentMedia] = useState<MediaItem | null>(null)
@@ -167,6 +168,13 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		mouseX: number
 		mouseY: number
 	} | null>(null)
+
+	const dragOrder = (active: any, over: any) => {
+		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
+		const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
+		//setItems(arrayMove(items, oldIndex, newIndex))
+		setItems((prev: MediaItem[]) => (prev = arrayMove(items, oldIndex, newIndex)))
+	}
 
 	/**
 	 * re-calculate cols
@@ -301,20 +309,20 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	useEffect(() => {
 		;(async () => {
 			if (params.clientId) {
-				const isGraphQL = false;
+				const isGraphQL = false
 
-				let api: IChApi;
+				let api: IChApi
 
 				if (isGraphQL) {
 					api = new GqlChApi(
 						'https://auth.amplience.net/oauth/token',
 						'https://api.amplience.net/graphql'
-					);
+					)
 				} else {
 					api = new RestChApi(
 						'https://auth.amplience.net/oauth/token',
 						'https://dam-api-internal.amplience.net/v1.5.0/'
-					);
+					)
 				}
 
 				await api.auth(params.clientId, params.clientSecret)
@@ -326,14 +334,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 		})()
 	}, [params])
-
-	/**
-	 * Drag-end-Drop action start
-	 * @param event
-	 */
-	const dragStart = (event: any) => {
-		setDragging(true)
-	}
 
 	/**
 	 * Remove an item from the collection
@@ -453,7 +453,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				!importDrawerOpen &&
 				!detailDrawerOpen &&
 				!sortOpen &&
-				!dragging &&
+				//!dragging &&
 				!contextMenu
 			if (nonModalMode) {
 				if (event.key.toLowerCase() === 'i') {
@@ -624,20 +624,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 		}
 
-		/**
-		 * Drag-end-Drop action end
-		 * @param event
-		 */
-		const dragEnd = (event: any) => {
-			setDragging(false)
-			const { active, over } = event
-			if (active.id !== over.id) {
-				const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
-				const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
-				setItems(arrayMove(items, oldIndex, newIndex))
-			}
-		}
-
 		const handleMoveToTop = (media: MediaItem) => {
 			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
 			setItems(arrayMove(items, oldIndex, 0))
@@ -766,9 +752,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				setItems((prevState: MediaItem[]) => {
 					return prevState.map((item: MediaItem) => {
 						if (item.id === tempMedia.id) {
-							tempMedia.entry[params.displayDescription] = tempMedia.title;
-							tempMedia.entry[params.displayAuthor] = tempMedia.author;
-							item = tempMedia;
+							tempMedia.entry[params.displayDescription] = tempMedia.title
+							tempMedia.entry[params.displayAuthor] = tempMedia.author
+							item = tempMedia
 						}
 						return item
 					})
@@ -884,8 +870,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			sortAnchorEl,
 			setSortAnchorEl,
 			sortOpen,
-			dragging,
-			setDragging,
+			//dragging,
+			//setDragging,
 			fullscreenView,
 			setFullscreenView,
 			contextMedia,
@@ -902,8 +888,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setCurrentAlert,
 			contextMenu,
 			setContextMenu,
-			dragStart,
-			dragEnd,
+			//dragStart,
+			//dragEnd,
 			handleContextClose,
 			handleContextMenu,
 			handleDetailView,
@@ -936,7 +922,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			selectImportItem,
 			selectItem,
 			saveItem,
-			sensors
+			sensors,
+			dragOrder
 		}
 
 		setState({ ...state })
@@ -954,7 +941,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		importDrawerOpen,
 		sortAnchorEl,
 		sortOpen,
-		dragging,
+		//dragging,
 		fullscreenView,
 		contextMedia,
 		currentMedia,

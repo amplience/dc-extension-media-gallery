@@ -4,7 +4,7 @@ import {
 	restrictToWindowEdges,
 	restrictToParentElement
 } from '@dnd-kit/modifiers'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import {
 	CheckBoxOutlined,
 	CheckBoxOutlineBlank,
@@ -23,17 +23,43 @@ import {
 } from '@mui/material'
 import SortableTableRow from '../sortable-table-row'
 import { AppContext } from '../app-context'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
+import { MediaItem } from '../model'
 
 const ItemListView = () => {
 	const app = useContext(AppContext)
+
+	const [dragging, setDragging] = useState(false)
+
+	/**
+	 * Drag-end-Drop action start
+	 * @param event
+	 */
+	const dragStart = (event: any) => {
+		setDragging(true)
+	}
+
+	/**
+	 * Drag-end-Drop action end
+	 * @param event
+	 */
+	const dragEnd = (event: any) => {
+		setDragging(false)
+		const { active, over } = event
+		if (active.id !== over.id) {
+			const oldIndex = app.items.findIndex((item: MediaItem) => item.id === active.id)
+			const newIndex = app.items.findIndex((item: MediaItem) => item.id === over.id)
+			app.items = arrayMove(app.items, oldIndex, newIndex)
+			app.dragOrder(active, over)
+		}
+	}
 	return (
 		<DndContext
 			sensors={app.sensors}
 			collisionDetection={closestCenter}
-			onDragStart={app.dragStart}
-			onDragEnd={app.dragEnd}
+			onDragStart={dragStart}
+			onDragEnd={dragEnd}
 			modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}>
 			<SortableContext items={app.items} strategy={verticalListSortingStrategy}>
 				<Table>
@@ -110,8 +136,12 @@ const ItemListView = () => {
 										borderBottom: 'none',
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
-									<div style={{width: '62px'}}>
-									<GenericImage item={item} w={62} zoomable={true} aspect={{w:3,h:2}}></GenericImage>
+									<div style={{ width: '62px' }}>
+										<GenericImage
+											item={item}
+											w={62}
+											zoomable={true}
+											aspect={{ w: 3, h: 2 }}></GenericImage>
 									</div>
 								</TableCell>
 								<TableCell
