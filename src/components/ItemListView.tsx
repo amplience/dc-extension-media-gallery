@@ -138,10 +138,10 @@ const ItemListView = () => {
 										borderBottom: 'none',
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
-									<div style={{ width: '62px' }}>
+									<div style={{ width: '140px' }}>
 										<GenericImage
 											item={item}
-											w={62}
+											w={140}
 											zoomable={true}
 											aspect={{ w: 3, h: 2 }}></GenericImage>
 									</div>
