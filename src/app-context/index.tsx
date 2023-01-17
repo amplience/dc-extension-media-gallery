@@ -720,6 +720,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					})
 					.map((item: MediaItem) => {
 						item.selected = false
+						item.disabled = false
 						return item
 					})
 				setTimeout(() => {
