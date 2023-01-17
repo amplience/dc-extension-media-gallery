@@ -60,7 +60,7 @@ const ImportDrawer = () => {
           if (!cancelled) {
             app.setImportItems(assetsToItems(entries, params)
               .map((item: MediaItem) => {
-                if (app.items.filter((item2: MediaItem) => item2.id === item.id).length > 0) {
+                if (app.items.filter((item2: MediaItem) => item2.entry.photo.id === item.entry.photo.id).length > 0) {
                   item.disabled = true
                 }
                 return item
