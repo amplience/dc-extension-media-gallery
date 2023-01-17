@@ -413,7 +413,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const handleSelectAllImportItems = () => {
 		setImportItems((prevState: MediaItem[]) => {
 			return prevState.map((element: MediaItem) => {
-				element.selected = true
+				if (!element.disabled) { 
+					element.selected = true
+				}
 				return element
 			})
 		})
@@ -715,7 +717,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					.filter((item: MediaItem) => {
 						return (
 							item.selected &&
-							items.filter((item2: MediaItem) => item2.id === item.id).length === 0
+							items.filter((item2: MediaItem) => item2.entry.photo.id === item.entry.photo.id).length === 0
 						)
 					})
 					.map((item: MediaItem) => {
