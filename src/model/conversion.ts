@@ -72,6 +72,7 @@ export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
   return assets.map((asset, index) => ({
     id: index + 1,
     selected: false,
+    disabled: false,
     dateModified: "",
     img: assetToImg(asset),
     title: asset[params.displayDescription],
