@@ -101,7 +101,7 @@ const ImportDrawer = () => {
             </IconButton>
           </Box>
         </Stack>
-        <Stack spacing={4} sx={{p:2}}>
+        <Stack spacing={4} sx={{p:2, paddingTop:0}}>
           {/* Tree View */}
           {/* TODO: replace with a dropdown tree select */}
           {app.repo && (
