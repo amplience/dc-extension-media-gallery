@@ -19,7 +19,7 @@ const InfoPanel = () => {
 			<Table size='small'>
 				<TableBody>
 					<TableRow>
-						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
+						<TableCell sx={{ pr: 2, pl: 0, pt: 0, pb: 0, borderBottom: 'none' }}>
 							<Typography variant='caption'>Date modified</Typography>
 						</TableCell>
 						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
