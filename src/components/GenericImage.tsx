@@ -78,7 +78,7 @@ const GenericImage: FC<Props> = ({
         />
         {
          item.updated &&
-         <Chip size="small" label="updated" color="warning" style={{position: 'absolute', top: 8, right: 5}} />
+         <Chip size="small" icon={<AutorenewOutlinedIcon />} label="updated" color="warning" style={{position: 'absolute', top: 8, right: 5}} />
         //  <AutorenewOutlinedIcon color='warning' /> 
         }
       </div>
