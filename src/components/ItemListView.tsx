@@ -38,6 +38,7 @@ const ItemListView = () => {
 	 */
 	const dragStart = (event: any) => {
 		setDragging(true)
+		if (app.setDragging) app.setDragging(true)
 	}
 
 	/**
@@ -46,6 +47,7 @@ const ItemListView = () => {
 	 */
 	const dragEnd = (event: any) => {
 		setDragging(false)
+		if (app.setDragging) app.setDragging(false)
 		const { active, over } = event
 		if (active.id !== over.id) {
 			const oldIndex = app.items.findIndex((item: MediaItem) => item.id === active.id)
@@ -146,10 +148,10 @@ const ItemListView = () => {
 										borderBottom: 'none',
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}>
-									<div style={{ width: '62px' }}>
+									<div style={{ width: '140px' }}>
 										<GenericImage
 											item={item}
-											w={62}
+											w={140}
 											zoomable={true}
 											aspect={{ w: 3, h: 2 }}></GenericImage>
 									</div>

@@ -26,6 +26,7 @@ const GridView = () => {
 	 */
 	const dragStart = (event: any) => {
 		setDragging(true)
+		if (app.setDragging) app.setDragging(true)
 	}
 
 	/**
@@ -34,6 +35,7 @@ const GridView = () => {
 	 */
 	const dragEnd = (event: any) => {
 		setDragging(false)
+		if (app.setDragging) app.setDragging(false)
 		const { active, over } = event
 		if (active.id !== over.id) {
 			const oldIndex = app.items.findIndex((item: MediaItem) => item.id === active.id)

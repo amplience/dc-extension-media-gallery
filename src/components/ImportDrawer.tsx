@@ -25,6 +25,7 @@ import { useContext, useEffect, useState } from "react";
 import { assetsToItems } from "../model/conversion";
 import GenericImage from './GenericImage'
 import { useExtension } from "../extension-context";
+import { MediaItem } from "../model";
 
 const ImportDrawer = () => {
   const app = useContext(AppContext);
@@ -57,7 +58,14 @@ const ImportDrawer = () => {
           setLoading(true);
           const entries = await app.getEntries(folderId, queryValue);
           if (!cancelled) {
-            app.setImportItems(assetsToItems(entries, params));
+            app.setImportItems(assetsToItems(entries, params)
+              .map((item: MediaItem) => {
+                if (app.items.filter((item2: MediaItem) => item2.entry.photo.id === item.entry.photo.id).length > 0) {
+                  item.disabled = true
+                }
+                return item
+              }));
+            
             setLoading(false);
           }
         }
@@ -83,7 +91,7 @@ const ImportDrawer = () => {
         if (app.setImportDrawerOpen) app.setImportDrawerOpen(true);
       }}
     >
-      <Stack spacing={2} sx={{ h: "100%" }}>
+      <Stack spacing={2} sx={{ h: "100%", p: 0 }}>
         <Stack direction={"row"} sx={{position:'sticky', top:0, backgroundColor:'white', zIndex:100, p:2}}>
           <Typography sx={{ pb: 2 }} variant="h5" component="h5">
             Import Media
@@ -101,7 +109,7 @@ const ImportDrawer = () => {
             </IconButton>
           </Box>
         </Stack>
-        <Stack spacing={4} sx={{p:2}}>
+        <Stack spacing={4} sx={{p:2, paddingTop:0}}>
           {/* Tree View */}
           {/* TODO: replace with a dropdown tree select */}
           {app.repo && (
@@ -153,17 +161,27 @@ const ImportDrawer = () => {
             ) : (
               app.importItems && (
                 <ImageList cols={5}>
-                  {app.importItems.map((item: any) => (
+                  {app.importItems.map((item: MediaItem) => (
                     <ImageListItem key={item.img}>
-                      <GenericImage item={item} w={150} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
+                      <GenericImage 
+                        item={item} 
+                        w={150} 
+                        disabled={item.disabled}
+                        zoomable={true} 
+                        aspect={{w:3,h:2}} 
+                        lazy={false} 
+                        fillWidth={true}
+                      />
                       <ImageListItemBar
                         title={item.title}
                         subtitle={<span>by: {item.author}</span>}
+                        style={{color: `${item.disabled ? '#bbb' : '#000'}`}}
                         position="below"
                         actionIcon={
                           <IconButton
                             aria-label={`select ${item.title}`}
                             title="Select"
+                            disabled={item.disabled}
                             onClick={() => {
                               app.selectImportItem(item.id);
                             }}

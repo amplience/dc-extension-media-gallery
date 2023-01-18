@@ -6,6 +6,7 @@ import { AppContext } from "../app-context";
 type Props = {
   item: any,
   zoomable?: Boolean,
+  disabled?: Boolean,
   w?:number,
   aspect?:{
     w:number,
@@ -17,9 +18,17 @@ type Props = {
   textCol?:string
 };
 
-
-
-const GenericImage: FC<Props> = ({ item, zoomable = false, w = 248, aspect = {w:3,h:2}, lazy = true, fillWidth = false, loadingIcon = false, textCol = 'black' }) => {
+const GenericImage: FC<Props> = ({ 
+    item, 
+    zoomable = false, 
+    disabled = false,
+    w = 248, 
+    aspect = {w:3,h:2}, 
+    lazy = true, 
+    fillWidth = false, 
+    loadingIcon = false, 
+    textCol = 'black' 
+  }) => {
   const app = useContext(AppContext)
   const [imageLoading, setImageLoading] = useState(true)
 
@@ -47,7 +56,7 @@ const GenericImage: FC<Props> = ({ item, zoomable = false, w = 248, aspect = {w:
           alt={item.title}
           style={{
             transition: 'opacity 0.5s ease-out',
-            opacity: `${imageLoading ? 0 : 100}`,
+            opacity: `${imageLoading ? 0 : (disabled ? 0.5 : 1)}`,
             position: `${imageLoading ? 'absolute' : 'relative'}`,
             maxWidth: '100%',
             maxHeight: '100%',

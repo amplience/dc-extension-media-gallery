@@ -148,6 +148,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
+	const [dragging, setDragging] = useState(false)
 	const [items, setItems] = useState<MediaItem[]>([])
 	const [importItems, setImportItems] = useState<MediaItem[]>([])
 	const [gridMode, setGridMode] = useState(true)
@@ -412,7 +413,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const handleSelectAllImportItems = () => {
 		setImportItems((prevState: MediaItem[]) => {
 			return prevState.map((element: MediaItem) => {
-				element.selected = true
+				if (!element.disabled) { 
+					element.selected = true
+				}
 				return element
 			})
 		})
@@ -453,7 +456,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				!importDrawerOpen &&
 				!detailDrawerOpen &&
 				!sortOpen &&
-				//!dragging &&
+				!dragging &&
 				!contextMenu
 			if (nonModalMode) {
 				if (event.key.toLowerCase() === 'i') {
@@ -566,7 +569,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const getEntries = async (id: string, query?: string): Promise<Entry[]> => {
 			if (chApi && repo) {
-				setDefaultFolder(repo.id, id, query);
+				setDefaultFolder(repo.id, id, query)
 				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
 
@@ -714,11 +717,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					.filter((item: MediaItem) => {
 						return (
 							item.selected &&
-							items.filter((item2: MediaItem) => item2.id === item.id).length === 0
+							items.filter((item2: MediaItem) => item2.entry.photo.id === item.entry.photo.id).length === 0
 						)
 					})
 					.map((item: MediaItem) => {
 						item.selected = false
+						item.disabled = false
 						return item
 					})
 				setTimeout(() => {
@@ -871,8 +875,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			sortAnchorEl,
 			setSortAnchorEl,
 			sortOpen,
-			//dragging,
-			//setDragging,
+			dragging,
+			setDragging,
 			fullscreenView,
 			setFullscreenView,
 			contextMedia,
@@ -942,7 +946,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		importDrawerOpen,
 		sortAnchorEl,
 		sortOpen,
-		//dragging,
+		dragging,
 		fullscreenView,
 		contextMedia,
 		currentMedia,

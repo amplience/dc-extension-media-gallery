@@ -4,6 +4,7 @@ import Entry from './entry'
 export interface MediaItem {
 	id: number
 	selected: boolean
+	disabled: boolean
 	dateModified: string
 	img: string
 	title: string
