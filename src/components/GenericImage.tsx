@@ -2,7 +2,6 @@ import { CircularProgress, Skeleton, Typography } from "@mui/material";
 import { style } from "@mui/system";
 import React, { FC, useContext, useState } from "react";
 import { AppContext } from "../app-context";
-
 type Props = {
   item: any,
   zoomable?: Boolean,
@@ -62,12 +61,12 @@ const GenericImage: FC<Props> = ({
             maxHeight: '100%',
             width: `${fillWidth ? '100%' : 'auto'}`,
             aspectRatio: '3/2',
-            cursor: "zoom-in",
+            cursor: `${zoomable ? 'zoom-in' : 'auto'}`,
             backgroundColor:'#ff00000'
           }}
           loading={lazy ? 'lazy' : 'eager'}
-          title="Click to zoom"
-          id={item.id}
+          title={zoomable ? 'Click to zoom' : item.entry.photo.name}
+          id={item.id as string}
           onClick={() => app.handleFullScreenView(item)}
           onLoad={() => handleImageLoaded()} 
         />

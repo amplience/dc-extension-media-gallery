@@ -55,7 +55,7 @@ const DetailDrawer = () => {
 						</IconButton>
 					</Box>
 				</Stack>
-				<GenericImage item={app.currentMedia} w={1024} zoomable={false} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
+				<GenericImage item={app.currentMedia} w={1024} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
 				<TextField
 					id='dateModified'
 					label='Date modified'
