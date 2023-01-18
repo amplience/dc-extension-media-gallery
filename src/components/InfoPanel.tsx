@@ -20,6 +20,16 @@ const InfoPanel = () => {
 				<TableBody>
 					<TableRow>
 						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
+							<Typography variant='caption'>Name</Typography>
+						</TableCell>
+						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
+							<Typography variant='caption'>
+								{app.currentMedia?.entry.photo.name}
+							</Typography>
+						</TableCell>
+					</TableRow>
+					<TableRow>
+						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
 							<Typography variant='caption'>Date modified</Typography>
 						</TableCell>
 						<TableCell sx={{ p: 0, borderBottom: 'none' }}>

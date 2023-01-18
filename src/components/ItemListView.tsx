@@ -93,6 +93,16 @@ const ItemListView = () => {
 								}}
 								component='th'
 								align='left'>
+								Name
+							</TableCell>
+							<TableCell
+								sx={{
+									borderBottom: 'none',
+									color: 'white',
+									fontWeight: 'bold'
+								}}
+								component='th'
+								align='left'>
 								Title
 							</TableCell>
 							<TableCell
@@ -173,6 +183,20 @@ const ItemListView = () => {
 										<DeleteOutline />
 									</IconButton>
 								</TableCell>
+								<Tooltip title={item.entry.photo.name} followCursor={true}>
+									<TableCell
+										sx={{
+											cursor: 'pointer',
+											borderBottom: 'none',
+											bgcolor: `${item.selected ? '#444' : ''}`,
+											color: 'white'
+										}}
+										id={item.id}
+										onClick={() => app.selectItem(item.id)}
+										align='left'>
+										{item.entry.photo.name}
+									</TableCell>
+								</Tooltip>
 								<Tooltip title={item.title} followCursor={true}>
 									<TableCell
 										sx={{
