@@ -18,6 +18,7 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Badge,
 } from "@mui/material";
 import RichObjectTreeView from "./RichTreeView";
 import { AppContext } from "../app-context";
@@ -61,7 +62,12 @@ const ImportDrawer = () => {
             app.setImportItems(assetsToItems(entries, params)
               .map((item: MediaItem) => {
                 if (app.items.filter((item2: MediaItem) => item2.id === item.id).length > 0) {
-                  item.disabled = true
+                  if (Math.random() > 0.7) {
+                    item.title += ` (updated)`
+                    item.updated = true
+                  } else {
+                    item.disabled = true
+                  }
                 }
                 return item
               }));
@@ -136,6 +142,16 @@ const ImportDrawer = () => {
               <Box sx={{ flexGrow: 1 }} />
               <IconButton
                 size="small"
+                aria-label={`select all updated`}
+                title="Select all updated"
+                onClick={app.handleSelectAllUpdatedImportItems}
+              >
+                <Badge color="warning" variant="dot">
+                  <GridViewSharp />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="small"
                 aria-label={`select all`}
                 title="Select all"
                 onClick={app.handleSelectAllImportItems}
@@ -175,7 +191,7 @@ const ImportDrawer = () => {
                       <ImageListItemBar
                         title={item.title}
                         subtitle={<span>by: {item.author}</span>}
-                        style={{color: `${item.disabled ? '#bbb' : '#000'}`}}
+                        style={{color: `${item.disabled ? '#bbb' : (item.updated ? 'orange' : '#000')}`}}
                         position="below"
                         actionIcon={
                           <IconButton

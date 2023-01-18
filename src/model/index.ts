@@ -5,6 +5,7 @@ export interface MediaItem {
 	id: string
 	selected: boolean
 	disabled: boolean
+	updated: boolean
 	dateModified: string
 	img: string
 	title: string

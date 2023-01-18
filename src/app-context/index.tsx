@@ -66,6 +66,7 @@ type AppContextData = {
 	handleResetItems: () => void
 	handleSelectAll: () => void
 	handleSelectAllImportItems: () => void
+	handleSelectAllUpdatedImportItems: () => void
 	handleSelectNone: () => void
 	handleSelectNoneImportItems: () => void
 	handleSnackClose: () => void
@@ -120,6 +121,7 @@ const defaultAppState = {
 	handleRemoveSelected: () => {},
 	handleResetItems: () => {},
 	handleSelectAllImportItems: () => {},
+	handleSelectAllUpdatedImportItems: () => {},
 	handleSelectNoneImportItems: () => {},
 	handleSnackClose: () => {},
 	handleSnackOpen: () => {},
@@ -422,6 +424,20 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}
 
 	/**
+	 * Select all updated import items
+	 */
+		const handleSelectAllUpdatedImportItems = () => {
+			setImportItems((prevState: MediaItem[]) => {
+				return prevState.map((element: MediaItem) => {
+					if (!element.disabled && element.updated) { 
+						element.selected = true
+					}
+					return element
+				})
+			})
+		}
+
+	/**
 	 * De-select all import items
 	 */
 	const handleSelectNoneImportItems = () => {
@@ -540,6 +556,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					handleSelectAllImportItems()
 				} else if (event.key.toLowerCase() === 'n') {
 					handleSelectNoneImportItems()
+				} else if (event.key.toLowerCase() === 'u') {
+					handleSelectAllUpdatedImportItems()
 				}
 			} else if (fullscreenView && event.key.toLowerCase() === 'i') {
 				setInfoPanelOpen(!infoPanelOpen)
@@ -710,19 +728,19 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				const newItems = structuredClone(items)
 				debugger
 				const newSelectedItems = importItems
-					.filter((item: MediaItem) => {
-						return (
-							item.selected &&
-							items.filter((item2: MediaItem) => item2.id === item.id).length === 0
-						)
-					})
+					.filter((item: MediaItem) => item.selected)
 					.map((item: MediaItem) => {
 						item.selected = false
 						item.disabled = false
+						item.updated = false
 						return item
 					})
 				setTimeout(() => {
-					setItems(newItems.concat(structuredClone(newSelectedItems)))
+					setItems(newItems
+						// filtering out existing items, so updated items can be added
+						// TODO: replace existing items
+						.filter((item: MediaItem) => newSelectedItems.filter((item2) => item.id === item2.id).length === 0)
+						.concat(structuredClone(newSelectedItems)))
 				}, 500)
 				if (newSelectedItems.length > 0) {
 					setCurrentAlert({
@@ -900,6 +918,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleResetItems,
 			handleSelectAll,
 			handleSelectAllImportItems,
+			handleSelectAllUpdatedImportItems,
 			handleSelectNone,
 			handleSelectNoneImportItems,
 			handleSnackClose,

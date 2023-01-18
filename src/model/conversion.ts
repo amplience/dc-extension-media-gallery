@@ -73,6 +73,7 @@ export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
     id: asset.photo.id,
     selected: false,
     disabled: false,
+    updated: false,
     dateModified: asset.date,
     img: assetToImg(asset),
     title: asset[params.displayDescription],
