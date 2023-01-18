@@ -2,7 +2,7 @@ import { AlertColor } from '@mui/material'
 import Entry from './entry'
 
 export interface MediaItem {
-	id: number
+	id: string
 	selected: boolean
 	disabled: boolean
 	dateModified: string

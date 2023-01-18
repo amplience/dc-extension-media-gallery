@@ -70,7 +70,7 @@ export function itemsToAssets(items: MediaItem[]): Entry[] {
 
 export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
   return assets.map((asset, index) => ({
-    id: index + 1,
+    id: asset.photo.id,
     selected: false,
     disabled: false,
     dateModified: asset.date,

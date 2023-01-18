@@ -85,10 +85,10 @@ type AppContextData = {
 	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
 	getEntries?: (id: string, query?: string) => Promise<Entry[]>
-	getItem?: (id: number) => MediaItem | undefined
-	removeItem: (id: number) => void
-	selectImportItem: (id: number) => void
-	selectItem: (id: number) => void
+	getItem?: (id: string) => MediaItem | undefined
+	removeItem: (id: string) => void
+	selectImportItem: (id: string) => void
+	selectItem: (id: string) => void
 	saveItem?: () => void
 	dragOrder: (active: any, over: any) => void
 }
@@ -110,8 +110,8 @@ const defaultAppState = {
 	contextMenu: null,
 	handleDetailView: (media: MediaItem) => {},
 	handleFullScreenView: (media: MediaItem) => {},
-	selectItem: (id: number) => {},
-	removeItem: (id: number) => {},
+	selectItem: (id: string) => {},
+	removeItem: (id: string) => {},
 	handleContextMenu: (event: React.MouseEvent) => {},
 	handleContextClose: () => {},
 	handleImport: () => {},
@@ -136,7 +136,7 @@ const defaultAppState = {
 	handleMoveToTop: () => {},
 	handleMoveToBottom: () => {},
 	importMedia: () => {},
-	selectImportItem: (id: number) => {},
+	selectImportItem: (id: string) => {},
 	dragOrder: (active: any, over: any) => {}
 }
 
@@ -340,7 +340,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Remove an item from the collection
 	 * @param id
 	 */
-	const removeItem = (id: number) => {
+	const removeItem = (id: string) => {
 		setItems((prevState: MediaItem[]) => {
 			return prevState.filter((item: MediaItem) => id !== item.id)
 		})
@@ -350,7 +350,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Select an item in the collection
 	 * @param id
 	 */
-	const selectItem = (id: number) => {
+	const selectItem = (id: string) => {
 		setItems((prevState: MediaItem[]) => {
 			return prevState.map((item: MediaItem) => {
 				const newItem = structuredClone(item)
@@ -366,7 +366,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Select an item in the import collection
 	 * @param id
 	 */
-	const selectImportItem = (id: number) => {
+	const selectImportItem = (id: string) => {
 		setImportItems((prevState: MediaItem[]) => {
 			return prevState.map((item: MediaItem) => {
 				if (item.id === id) item.selected = !item.selected
@@ -475,35 +475,33 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					setGridMode(false)
 				} else if (event.key.toLowerCase() === 'v') {
 					const element = document.activeElement as HTMLElement
-					const id = parseInt(element.id)
-					const item = getItem(id)
+					const item = getItem(element.id)
 					if (item) {
 						handleFullScreenView(item)
 					}
 				} else if (event.key.toLowerCase() === 'e') {
 					const element = document.activeElement as HTMLElement
-					const id = parseInt(element.id)
-					const item = getItem(id)
+					const item = getItem(element.id)
 					if (item) {
 						handleDetailView(item)
 					}
 				} else if (event.key === 'r') {
 					const element = document.activeElement as HTMLElement
-					const id = parseInt(element.id)
-					if (id) {
-						removeItem(id)
+					if (element.id) {
+						removeItem(element.id)
 					}
 				} else if (event.key === ' ') {
 					event.preventDefault()
 					const element = document.activeElement as HTMLElement
-					const id = parseInt(element.id)
-					if (id) {
-						selectItem(id) // Not working
+					if (element.id) {
+						selectItem(element.id)
 					}
 				} else if (event.key.toLowerCase() === 'm') {
 					const element = document.activeElement as HTMLElement
-					const id = element.id
-					setContextMedia(items.find((item) => item.id === parseInt(id)) || null)
+					const item = getItem(element.id)
+					if (item) {
+						setContextMedia(item)
+					}
 					setContextMenu({
 						mouseX: element.getBoundingClientRect().x + 50,
 						mouseY: element.getBoundingClientRect().y + 50
@@ -529,14 +527,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				} else if (event.key === 't') {
 					console.log(event.key)
 					const element = document.activeElement as HTMLElement
-					const id = parseInt(element.id)
-					const item: MediaItem | undefined = getItem(id)
+					const item: MediaItem | undefined = getItem(element.id)
 					console.log(item)
 					if (item) handleMoveToTop(item)
 				} else if (event.key === 'b') {
 					const element = document.activeElement as HTMLElement
-					const id = parseInt(element.id)
-					const item: MediaItem | undefined = getItem(id)
+					const item: MediaItem | undefined = getItem(element.id)
 					if (item) handleMoveToBottom(item)
 				}
 			} else if (importDrawerOpen) {
@@ -642,7 +638,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * Get an item from the collection
 		 * @param id
 		 */
-		const getItem = (id: number) => {
+		const getItem = (id: string) => {
 			return items.find((item: MediaItem) => id === item.id)
 		}
 
@@ -676,7 +672,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				if (event.target.id) {
 					const filteredItems = items.filter(
 						(element: MediaItem) =>
-							parseInt((event.target as HTMLElement).id) === element.id
+							(event.target as HTMLElement).id === element.id
 					)
 					console.log(filteredItems)
 					if (filteredItems.length > 0) {
@@ -717,7 +713,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					.filter((item: MediaItem) => {
 						return (
 							item.selected &&
-							items.filter((item2: MediaItem) => item2.entry.photo.id === item.entry.photo.id).length === 0
+							items.filter((item2: MediaItem) => item2.id === item.id).length === 0
 						)
 					})
 					.map((item: MediaItem) => {
