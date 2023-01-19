@@ -79,6 +79,7 @@ type AppContextData = {
 	handleSortClose: () => void
 	handleZoomIn: () => void
 	handleZoomOut: () => void
+	handleResetZoom: () => void
 	handleSortByAuthorAsc: () => void
 	handleSortByAuthorDesc: () => void
 	handleMoveToTop: (media: MediaItem) => void
@@ -133,6 +134,7 @@ const defaultAppState = {
 	handleSortClose: () => {},
 	handleZoomIn: () => {},
 	handleZoomOut: () => {},
+	handleResetZoom:() => {},
 	handleSortByAuthorAsc: () => {},
 	handleSortByAuthorDesc: () => {},
 	handleMoveToTop: () => {},
@@ -488,6 +490,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				} else if (event.key.toLowerCase() === 'g') {
 					setGridMode(true)
 				} else if (event.key.toLowerCase() === 'l') {
+					handleResetZoom()
 					setGridMode(false)
 				} else if (event.key.toLowerCase() === 'v') {
 					const element = document.activeElement as HTMLElement
@@ -650,6 +653,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			if (zoom > 1 / 2) {
 				setZoom(zoom / 2)
 			}
+		}
+
+		const handleResetZoom = () => {
+			setZoom(1)
 		}
 
 		const handleMoveToTop = (media: MediaItem) => {
@@ -945,6 +952,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSortClose,
 			handleZoomIn,
 			handleZoomOut,
+			handleResetZoom,
 			handleSortByAuthorAsc,
 			handleSortByAuthorDesc,
 			handleMoveToTop,

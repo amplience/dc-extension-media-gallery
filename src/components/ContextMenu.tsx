@@ -310,6 +310,7 @@ const ContextMenu = () => {
 					onClick={() => {
 						if (app.setGridMode) {
 							app.handleContextClose()
+							app.handleResetZoom()
 							app.setGridMode(false)
 						}
 					}}>
