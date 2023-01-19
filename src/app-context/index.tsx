@@ -75,6 +75,8 @@ type AppContextData = {
 	handleSnackOpen: () => void
 	handleSortByDateAsc: () => void
 	handleSortByDateDesc: () => void
+	handleSortByNameAsc: () => void
+	handleSortByNameDesc: () => void
 	handleSortClick: (event: React.MouseEvent<HTMLElement>) => void
 	handleSortClose: () => void
 	handleZoomIn: () => void
@@ -129,6 +131,8 @@ const defaultAppState = {
 	handleSnackOpen: () => {},
 	handleSortByDateAsc: () => {},
 	handleSortByDateDesc: () => {},
+	handleSortByNameAsc: () => {},
+	handleSortByNameDesc: () => {},
 	handleSortClick: (event: React.MouseEvent<HTMLElement>) => {},
 	handleSortClose: () => {},
 	handleZoomIn: () => {},
@@ -817,6 +821,33 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
+		 * Sort by Name asc
+		 */
+		const handleSortByNameAsc = () => {
+			setItems((prevState: MediaItem[]) => {
+				return prevState
+					.slice()
+					.sort(
+						(a: MediaItem, b: MediaItem) =>
+							a.entry.photo.name > b.entry.photo.name ? 1 : b.entry.photo.name > a.entry.photo.name ? -1 : 0
+					)
+			})
+			handleSortClose()
+		}
+
+		const handleSortByNameDesc = () => {
+			setItems((prevState: MediaItem[]) => {
+				return prevState
+					.slice()
+					.sort(
+						(a: MediaItem, b: MediaItem) =>
+							b.entry.photo.name > a.entry.photo.name ? 1 : a.entry.photo.name > b.entry.photo.name ? -1 : 0
+					)
+			})
+			handleSortClose()
+		}
+
+		/**
 		 * Sort by date asc
 		 */
 		const handleSortByDateAsc = () => {
@@ -930,6 +961,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSelectNoneImportItems,
 			handleSnackClose,
 			handleSnackOpen,
+			handleSortByNameAsc,
+			handleSortByNameDesc,
 			handleSortByDateAsc,
 			handleSortByDateDesc,
 			handleSortClick,

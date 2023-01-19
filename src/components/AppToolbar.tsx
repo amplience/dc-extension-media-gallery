@@ -142,6 +142,18 @@ const AppToolbar = () => {
 						}
 					}}>
 					<ListSubheader>Sort By</ListSubheader>
+					<MenuItem dense autoFocus onClick={app.handleSortByNameAsc}>
+						<ListItemIcon>
+							<ArrowUpwardOutlined fontSize='small' />
+						</ListItemIcon>
+						<ListItemText>Name Asc</ListItemText>
+					</MenuItem>
+					<MenuItem dense onClick={app.handleSortByNameDesc}>
+						<ListItemIcon>
+							<ArrowDownwardOutlined fontSize='small' />
+						</ListItemIcon>
+						<ListItemText>Name Desc</ListItemText>
+					</MenuItem>
 					<MenuItem dense autoFocus onClick={app.handleSortByDateAsc}>
 						<ListItemIcon>
 							<ArrowUpwardOutlined fontSize='small' />
