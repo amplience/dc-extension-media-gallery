@@ -73,7 +73,6 @@ const ImportDrawer = () => {
 											if (_.isEqual(fItem, item)) {
 												item.disabled = true
 											} else {
-												item.title += ` (updated)`
 												item.updated = true
 											}
 										}
@@ -197,9 +196,9 @@ const ImportDrawer = () => {
 							</div>
 						) : (
 							app.importItems && (
-								<ImageList cols={4}>
+								<ImageList cols={5}>
 									{app.importItems.map((item: MediaItem) => (
-										<ImageListItem style={{ width: '180px' }}>
+										<ImageListItem style={{ width: '200px' }}>
 											<Box
 												key={item.img}
 												sx={{ mt: 1, ml: 1, mr: 1 }}
