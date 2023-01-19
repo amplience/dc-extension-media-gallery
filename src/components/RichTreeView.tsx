@@ -81,11 +81,12 @@ const RichObjectTreeView = (props: any) => {
   const selected = findItem(props.folders, props.selectedId);
 
   return (
-    <FormControl>
+    <FormControl style={{width: '100%'}}>
       <InputLabel id="asset-folder-label">Asset Folder</InputLabel>
       <Select
         id="asset-folder-label"
         label="Asset Folder"
+        size="small"
         open={false}
         onOpen={openPopover}
         ref={popoverAnchor}

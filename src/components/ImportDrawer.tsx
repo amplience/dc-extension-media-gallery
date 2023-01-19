@@ -116,12 +116,12 @@ const ImportDrawer = () => {
 						top: 0,
 						backgroundColor: 'white',
 						zIndex: 100,
-						p: 2
+						p: 1
 					}}>
-					<Typography sx={{ pb: 2 }} variant='h5' component='h5'>
+					<Typography sx={{pb: 2}} variant='h5' component='h5'>
 						Import Media
 					</Typography>
-					<Box sx={{ flexGrow: 1 }} />
+          <Box style={{flexGrow: 1}} />
 					<Box>
 						<IconButton
 							aria-label={`close import drawer`}
@@ -133,31 +133,45 @@ const ImportDrawer = () => {
 						</IconButton>
 					</Box>
 				</Stack>
-				<Stack spacing={4} sx={{ p: 2, paddingTop: 0 }}>
-					{/* Tree View */}
-					{/* TODO: replace with a dropdown tree select */}
-					{app.repo && (
-						<RichObjectTreeView
-							folders={app.repo?.folders}
-							onChange={async (id: string) => {
-								setFolderId(id)
-							}}
-							selectedId={folderId}
-						/>
-					)}
-					<TextField
-						key={query}
-						label='Query'
-						helperText='Query to filter assets in the folder with.'
-						defaultValue={query}
-						onChange={(event) => {
-							setQueryValue(event.target.value)
-						}}></TextField>
-					<Divider />
-					<Stack sx={{ w: '100%' }}>
-						<Stack sx={{ pb: 4 }} direction={'row'}>
-							<Box sx={{ flexGrow: 1 }} />
-							<IconButton
+				<Stack spacing={4} sx={{ p: 0, paddingTop: 0 }}>
+          <Stack
+            direction={'row'}
+            spacing={2}
+            sx={{
+              position: 'sticky',
+              top: 50,
+              backgroundColor: 'white',
+              zIndex: 100,
+              p: 1
+            }
+          }>
+            {/* Tree View */}
+            {/* TODO: replace with a dropdown tree select */}
+            {app.repo && (
+            <Box style={{width: '40%'}}>
+              <RichObjectTreeView
+                folders={app.repo?.folders}
+                onChange={async (id: string) => {
+                  setFolderId(id)
+                }}
+                selectedId={folderId}
+              />
+              </Box>
+            )}
+            <TextField
+              key={query}
+              style={{width: '40%'}}
+              size='small'
+              label='Query'
+              helperText='Query to filter assets in the folder with.'
+              defaultValue={query}
+              onChange={(event) => {
+                setQueryValue(event.target.value)
+              }}
+            />
+            <Box style={{flexGrow: 1}} />
+            <Box style={{paddingBottom: 2}}>
+              <IconButton
 								size='small'
 								aria-label={`select all updated`}
 								title='Select all updated'
@@ -180,8 +194,9 @@ const ImportDrawer = () => {
 								onClick={app.handleSelectNoneImportItems}>
 								<GridViewOutlined />
 							</IconButton>
-						</Stack>
-
+              </Box>
+          </Stack>
+					<Stack sx={{ w: '100%' }}>
 						{/* Import image list */}
 						{/* TODO: move to flex wrap */}
 						{loading ? (
