@@ -1,5 +1,10 @@
+const expiryOffset = 10; // 10 seconds
+
 export class AuthClient {
   private token?: string;
+  private expiryTime!: number;
+  private id!: string;
+  private secret!: string;
 
   constructor(private authUrl: string, private url: string) {}
 
@@ -23,8 +28,12 @@ export class AuthClient {
         .join("&"),
     });
 
-    // TODO: handle expiry
-    this.token = (await response.json()).access_token;
+    const token = (await response.json());
+
+    this.token = token.access_token;
+    this.expiryTime = (Date.now() / 1000) + token.expires_in;
+    this.id = id;
+    this.secret = secret;
   }
 
   encodeParams = (params: any) => {
@@ -40,12 +49,21 @@ export class AuthClient {
     return result.length > 0 ? '?' + result.join('&') : '';
   }
 
+  async checkToken() {
+    const currentTime = (Date.now() / 1000) + expiryOffset;
+
+    if (currentTime > this.expiryTime) {
+      await this.auth(this.id, this.secret);
+    }
+  }
+
   async fetchUrl(url: string, method: 'GET' | 'POST', body: any, params?: any) {
     if (this.token == null) {
       throw new Error("Not authenticated.");
     }
 
-    // TODO: check if token needs renewed
+    await this.checkToken();
+
     let target = this.url + url;
 
     if (params) {
