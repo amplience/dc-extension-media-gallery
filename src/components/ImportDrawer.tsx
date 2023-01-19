@@ -160,7 +160,7 @@ const ImportDrawer = () => {
             )}
             <TextField
               key={query}
-              style={{width: '40%'}}
+              style={{width: '35%'}}
               size='small'
               label='Query'
               helperText='Query to filter assets in the folder with.'
@@ -211,7 +211,14 @@ const ImportDrawer = () => {
 							</div>
 						) : (
 							app.importItems && (
-								<ImageList cols={5}>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    p: 1
+                  }}>
 									{app.importItems.map((item: MediaItem) => (
 										<ImageListItem style={{ width: '200px' }}>
 											<Box
@@ -283,7 +290,7 @@ const ImportDrawer = () => {
 											/>
 										</ImageListItem>
 									))}
-								</ImageList>
+                </Box>
 							)
 						)}
 					</Stack>
