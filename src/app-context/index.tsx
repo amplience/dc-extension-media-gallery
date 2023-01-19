@@ -20,6 +20,8 @@ import { AssetWithExif, EnrichedRepository } from '../ch-api/shared'
 type AppContextData = {
 	zoom: number
 	setZoom?: Dispatch<SetStateAction<number>>
+	initialItems: MediaItem[]
+	setInitialItems?: Dispatch<SetStateAction<MediaItem[]>>
 	items: MediaItem[]
 	setItems?: Dispatch<SetStateAction<MediaItem[]>>
 	importItems: MediaItem[] | null
@@ -98,6 +100,7 @@ type AppContextData = {
 const defaultAppState = {
 	zoom: 1,
 	items: [],
+	initialItems: [],
 	importItems: [],
 	gridMode: true,
 	fullscreenView: false,
@@ -153,6 +156,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [state, setState] = useState<AppContextData>(defaultAppState)
 	const [zoom, setZoom] = useState(1)
 	const [dragging, setDragging] = useState(false)
+	const [initialItems, setInitialItems] = useState<MediaItem[]>([])
 	const [items, setItems] = useState<MediaItem[]>([])
 	const [importItems, setImportItems] = useState<MediaItem[]>([])
 	const [gridMode, setGridMode] = useState(true)
@@ -455,6 +459,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		if (field) {
 			const data = assetsToItems(field[galleryPath], params)
 			setItems(data)
+			if (initialItems.length === 0) {
+				setInitialItems(data)
+			}
 		}
 	}, [field, galleryPath, params])
 
@@ -592,6 +599,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 				// reset does nothing
 				await sdk.field.reset()
+				setItems(initialItems)
 				setField()
 			}
 			//setItems([])
@@ -895,6 +903,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setZoom,
 			items,
 			setItems,
+			initialItems,
+			setInitialItems,
 			importItems,
 			setImportItems,
 			gridMode,
