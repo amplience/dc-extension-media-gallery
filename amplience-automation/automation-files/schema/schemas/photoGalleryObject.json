@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/photoGalleryObject-schema.json",
+  "schemaId": "https://blackmould.com/photoGalleryObject",
+  "validationLevel": "CONTENT_TYPE"
+}
