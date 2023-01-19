@@ -180,7 +180,10 @@ const AppToolbar = () => {
 						aria-label={`list mode`}
 						title='List view'
 						onClick={() => {
-							if (app.setGridMode) app.setGridMode(false)
+							if (app.setGridMode){
+								app.handleResetZoom()
+								app.setGridMode(false)
+							} 
 						}}>
 						<ViewHeadlineOutlined />
 					</IconButton>
