@@ -153,6 +153,7 @@ const ItemListView = () => {
 											item={item}
 											w={140}
 											zoomable={true}
+											forceNoZoom={true}
 											aspect={{ w: 3, h: 2 }}></GenericImage>
 									</div>
 								</TableCell>

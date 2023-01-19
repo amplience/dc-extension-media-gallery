@@ -181,7 +181,6 @@ const AppToolbar = () => {
 						title='List view'
 						onClick={() => {
 							if (app.setGridMode){
-								app.handleResetZoom()
 								app.setGridMode(false)
 							} 
 						}}>

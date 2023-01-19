@@ -7,6 +7,7 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 type Props = {
   item: any,
   zoomable?: Boolean,
+  forceNoZoom?:Boolean,
   disabled?: Boolean,
   updated?: Boolean,
   w?: number,
@@ -24,6 +25,7 @@ const GenericImage: FC<Props> = ({
   item,
   zoomable = false,
   disabled = false,
+  forceNoZoom = false,
   updated = false,
   w = 248,
   aspect = { w: 3, h: 2 },
@@ -35,8 +37,8 @@ const GenericImage: FC<Props> = ({
   const app = useContext(AppContext)
   const [imageLoading, setImageLoading] = useState(true)
 
-  const realWidth: number = zoomable ? w * app.zoom : w;
-  const realHeight: number = zoomable ? ((w / aspect.w) * aspect.h) * app.zoom : ((w / aspect.w) * aspect.h);
+  const realWidth: number = zoomable ? w * (forceNoZoom ? 1 : app.zoom) : w;
+  const realHeight: number = zoomable ? ((w / aspect.w) * aspect.h) * (forceNoZoom ? 1 : app.zoom) : ((w / aspect.w) * aspect.h);
 
   const handleImageLoaded = () => {
     setImageLoading(false)
