@@ -50,7 +50,6 @@ const ImportDrawer = () => {
 	useEffect(() => {
 		setFolderId(folder)
 		setQueryValue(query)
-		console.log('fk ' + query)
 	}, [folder, query])
 
 	useEffect(() => {
@@ -70,10 +69,10 @@ const ImportDrawer = () => {
 								if (filtered.length > 0) {
 									filtered.forEach((fItem: MediaItem) => {
 										if (fItem.id === item.id) {
-											if (_.isEqual(fItem, item)) {
-												item.disabled = true
-											} else {
+											if (fItem.dateModified < item.dateModified) {
 												item.updated = true
+											} else {
+												item.disabled = true
 											}
 										}
 									})
@@ -171,6 +170,13 @@ const ImportDrawer = () => {
             />
             <Box style={{flexGrow: 1}} />
             <Box style={{paddingBottom: 2}}>
+							<IconButton
+								size='small'
+								aria-label={`select all`}
+								title='Select all'
+								onClick={app.handleSelectAllImportItems}>
+								<GridViewSharp />
+							</IconButton>
               <IconButton
 								size='small'
 								aria-label={`select all updated`}
@@ -179,13 +185,6 @@ const ImportDrawer = () => {
 								<Badge color='warning' variant='dot'>
 									<GridViewSharp />
 								</Badge>
-							</IconButton>
-							<IconButton
-								size='small'
-								aria-label={`select all`}
-								title='Select all'
-								onClick={app.handleSelectAllImportItems}>
-								<GridViewSharp />
 							</IconButton>
 							<IconButton
 								size='small'
@@ -284,8 +283,19 @@ const ImportDrawer = () => {
 															: item.updated
 															? 'orange'
 															: '#000'
-													}`
+													}`,
+                          padding: '3px'
 												}}
+                        sx={{
+                          mb: 1,
+                          ml: 1,
+                          mr: 1,
+                          cursor: 'pointer',
+                          bgcolor: `${item.selected ? '#ddd' : ''}`
+                        }}
+                        onClick={() => {
+                          app.selectImportItem(item.id)
+                        }}
 												position='below'
 											/>
 										</ImageListItem>

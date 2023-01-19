@@ -735,7 +735,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}, 500)
 			} else {
 				const newItems = structuredClone(items)
-				debugger
 				const newSelectedItems = importItems
 					.filter((item: MediaItem) => item.selected)
 					.map((item: MediaItem) => {
