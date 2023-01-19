@@ -145,7 +145,7 @@ const defaultAppState = {
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
-	const { field, setField, params } = useExtension()
+	const { field, setField, params, sdk } = useExtension()
 	const { galleryPath, configPath } = params
 
 	const [state, setState] = useState<AppContextData>(defaultAppState)
@@ -415,7 +415,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const handleSelectAllImportItems = () => {
 		setImportItems((prevState: MediaItem[]) => {
 			return prevState.map((element: MediaItem) => {
-				if (!element.disabled) { 
+				if (!element.disabled) {
 					element.selected = true
 				}
 				return element
@@ -426,16 +426,16 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	/**
 	 * Select all updated import items
 	 */
-		const handleSelectAllUpdatedImportItems = () => {
-			setImportItems((prevState: MediaItem[]) => {
-				return prevState.map((element: MediaItem) => {
-					if (!element.disabled && element.updated) { 
-						element.selected = true
-					}
-					return element
-				})
+	const handleSelectAllUpdatedImportItems = () => {
+		setImportItems((prevState: MediaItem[]) => {
+			return prevState.map((element: MediaItem) => {
+				if (!element.disabled && element.updated) {
+					element.selected = true
+				}
+				return element
 			})
-		}
+		})
+	}
 
 	/**
 	 * De-select all import items
@@ -578,6 +578,30 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
+		 * Reset collection
+		 */
+		const handleResetItems = async () => {
+			if (field && sdk && setField) {
+				//console.log('field: ', field)
+
+				// resetValue does not exist. docs incorrect
+				//await sdk.field.resetValue()
+
+				// reset does nothing
+				await sdk.field.reset()
+				setField()
+			}
+			//setItems([])
+			setCurrentAlert({
+				severity: 'success',
+				message: 'Collection reset successfully!'
+			})
+			setTimeout(() => {
+				handleSnackOpen()
+			}, 500)
+		}
+
+		/**
 		 * Getting assets from Content Hub
 		 * @param id
 		 */
@@ -608,20 +632,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 
 			return []
-		}
-
-		/**
-		 * Reset collection
-		 */
-		const handleResetItems = () => {
-			setItems([])
-			setCurrentAlert({
-				severity: 'success',
-				message: 'Collection reset successfully!'
-			})
-			setTimeout(() => {
-				handleSnackOpen()
-			}, 500)
 		}
 
 		/**
@@ -689,8 +699,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			if (event.target instanceof HTMLElement) {
 				if (event.target.id) {
 					const filteredItems = items.filter(
-						(element: MediaItem) =>
-							(event.target as HTMLElement).id === element.id
+						(element: MediaItem) => (event.target as HTMLElement).id === element.id
 					)
 					console.log(filteredItems)
 					if (filteredItems.length > 0) {
@@ -736,11 +745,17 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 						return item
 					})
 				setTimeout(() => {
-					setItems(newItems
-						// filtering out existing items, so updated items can be added
-						// TODO: replace existing items
-						.filter((item: MediaItem) => newSelectedItems.filter((item2) => item.id === item2.id).length === 0)
-						.concat(structuredClone(newSelectedItems)))
+					setItems(
+						newItems
+							// filtering out existing items, so updated items can be added
+							// TODO: replace existing items
+							.filter(
+								(item: MediaItem) =>
+									newSelectedItems.filter((item2) => item.id === item2.id)
+										.length === 0
+							)
+							.concat(structuredClone(newSelectedItems))
+					)
 				}, 500)
 				if (newSelectedItems.length > 0) {
 					setCurrentAlert({
