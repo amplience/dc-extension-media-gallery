@@ -599,7 +599,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 				// reset does nothing
 				await sdk.field.reset()
-				setItems(initialItems)
+				setItems(initialItems.map((item) => { 
+					item.selected = false 
+					return item
+				}))
 				setField()
 			}
 			//setItems([])
