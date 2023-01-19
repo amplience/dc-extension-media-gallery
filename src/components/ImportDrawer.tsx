@@ -29,6 +29,7 @@ import { assetsToItems } from '../model/conversion'
 import GenericImage from './GenericImage'
 import { useExtension } from '../extension-context'
 import { MediaItem } from '../model'
+import _ from 'lodash'
 
 const ImportDrawer = () => {
 	const app = useContext(AppContext)
@@ -63,16 +64,20 @@ const ImportDrawer = () => {
 					if (!cancelled) {
 						app.setImportItems(
 							assetsToItems(entries, params).map((item: MediaItem) => {
-								if (
-									app.items.filter((item2: MediaItem) => item2.id === item.id)
-										.length > 0
-								) {
-									if (Math.random() > 0.7) {
-										item.title += ` (updated)`
-										item.updated = true
-									} else {
-										item.disabled = true
-									}
+								const filtered = app.items.filter(
+									(item2: MediaItem) => item2.id === item.id
+								)
+								if (filtered.length > 0) {
+									filtered.forEach((fItem: MediaItem) => {
+										if (fItem.id === item.id) {
+											if (_.isEqual(fItem, item)) {
+												item.disabled = true
+											} else {
+												item.title += ` (updated)`
+												item.updated = true
+											}
+										}
+									})
 								}
 								return item
 							})
@@ -231,6 +236,7 @@ const ImportDrawer = () => {
 													}}
 													aria-label={`select ${item.title}`}
 													title='Select'
+													disabled={item.disabled}
 													onClick={() => {
 														app.selectImportItem(item.id)
 													}}>
