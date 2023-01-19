@@ -30,9 +30,31 @@ import {
 import { MediaItem } from '../model'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import { useExtension } from '../extension-context'
 
 const AppToolbar = () => {
 	const app = useContext(AppContext)
+	const { params } = useExtension()
+
+	const metaSort = params.metadataMap.filter(meta => meta.sortable).map(meta => {
+		return (
+			<>
+				<MenuItem dense onClick={() => app.handleSortByMetaAsc(meta.target)} key={`${meta.target}-asc`}>
+					<ListItemIcon>
+						<ArrowUpwardOutlined fontSize='small' />
+					</ListItemIcon>
+					<ListItemText>{meta.label} Asc</ListItemText>
+				</MenuItem>
+				<MenuItem dense onClick={() => app.handleSortByMetaDesc(meta.target)} key={`${meta.target}-desc`}>
+					<ListItemIcon>
+						<ArrowDownwardOutlined fontSize='small' />
+					</ListItemIcon>
+					<ListItemText>{meta.label} Desc</ListItemText>
+				</MenuItem>
+			</>
+		)
+	})
+
 	return (
 		<AppBar position='sticky'>
 			<Toolbar variant='dense'>
@@ -132,30 +154,7 @@ const AppToolbar = () => {
 						</ListItemIcon>
 						<ListItemText>Date Modified Desc</ListItemText>
 					</MenuItem>
-					<MenuItem dense onClick={app.handleSortByAuthorAsc}>
-						<ListItemIcon>
-							<ArrowUpwardOutlined fontSize='small' />
-						</ListItemIcon>
-						<ListItemText>Author Asc</ListItemText>
-					</MenuItem>
-					<MenuItem dense onClick={app.handleSortByAuthorDesc}>
-						<ListItemIcon>
-							<ArrowDownwardOutlined fontSize='small' />
-						</ListItemIcon>
-						<ListItemText>Author Desc</ListItemText>
-					</MenuItem>
-					<MenuItem dense onClick={app.handleSortByCaptionAsc}>
-						<ListItemIcon>
-							<ArrowUpwardOutlined fontSize='small' />
-						</ListItemIcon>
-						<ListItemText>Caption Asc</ListItemText>
-					</MenuItem>
-					<MenuItem dense onClick={app.handleSortByCaptionDesc}>
-						<ListItemIcon>
-							<ArrowDownwardOutlined fontSize='small' />
-						</ListItemIcon>
-						<ListItemText>Caption Desc</ListItemText>
-					</MenuItem>
+					{metaSort}
 				</Menu>
 				<Divider orientation='vertical' variant='middle' sx={{ ml: 1, mr: 1 }} flexItem />
 				<IconButton

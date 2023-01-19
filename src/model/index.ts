@@ -8,8 +8,6 @@ export interface MediaItem {
 	updated: boolean
 	dateModified: string
 	img: string
-	title: string
-	author: string
 	entry: Entry
 }
 

@@ -56,7 +56,7 @@ const ContextMenu = () => {
 							overflow: 'hidden',
 							textOverflow: 'ellipsis'
 						}}>
-						{app.contextMedia.title}
+						{app.contextMedia.entry.photo.name}
 					</ListSubheader>
 					{!app.contextMedia.selected && (
 						<MenuItem

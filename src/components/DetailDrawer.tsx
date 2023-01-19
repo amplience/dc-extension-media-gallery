@@ -18,9 +18,73 @@ import {
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import GenericImage from './GenericImage'
+import { useExtension } from '../extension-context'
+import { map } from 'lodash'
+import { MetadataMapEntry } from '../model/metadata-map'
 
 const DetailDrawer = () => {
 	const app = useContext(AppContext)
+
+	const { params } = useExtension();
+
+	const getIcon = (meta: MetadataMapEntry) => {
+		switch (meta.icon) {
+			case 'author':
+				return <PhotoCameraFrontOutlined />
+			case 'text':
+				return <NotesOutlined />
+			default:
+				return <NotesOutlined />;
+		}
+	}
+
+	const metaEdit = params.metadataMap.filter(meta => meta.visibility.indexOf('edit') !== -1).map(meta => {
+		switch (meta.type) {
+			case 'string':
+				return (<TextField
+					key={meta.target}
+					id={meta.target}
+					label={meta.label}
+					variant='standard'
+					defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position='start'>
+								{getIcon(meta)}
+							</InputAdornment>
+						)
+					}}
+					onChange={(event) => {
+						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
+					}}
+				/>)
+			case 'multiline':
+				return (<TextField
+					key={meta.target}
+					multiline
+					rows={4}
+					id='caption'
+					label='Caption'
+					variant='standard'
+					defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
+					InputProps={{
+						startAdornment: (
+							<InputAdornment
+								style={{ display: 'flex', flexDirection: 'column-reverse' }}
+								position='start'>
+								{getIcon(meta)}
+							</InputAdornment>
+						)
+					}}
+					onChange={(event) => {
+						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
+					}}
+				/>)
+			default:
+				return <></>
+		}
+	});
+
 	return (
 		<SwipeableDrawer
 			PaperProps={{
@@ -78,42 +142,7 @@ const DetailDrawer = () => {
 						new Date(app.currentMedia.dateModified).toLocaleString()
 					}
 				/>
-				<TextField
-					id='author'
-					label='Author'
-					variant='standard'
-					defaultValue={app.currentMedia?.author}
-					InputProps={{
-						startAdornment: (
-							<InputAdornment position='start'>
-								<PhotoCameraFrontOutlined />
-							</InputAdornment>
-						)
-					}}
-					onChange={(event) => {
-						app.tempMedia && (app.tempMedia.author = event.target.value)
-					}}
-				/>
-				<TextField
-					multiline
-					rows={4}
-					id='caption'
-					label='Caption'
-					variant='standard'
-					defaultValue={app.currentMedia?.title}
-					InputProps={{
-						startAdornment: (
-							<InputAdornment
-								style={{ display: 'flex', flexDirection: 'column-reverse' }}
-								position='start'>
-								<NotesOutlined />
-							</InputAdornment>
-						)
-					}}
-					onChange={(event) => {
-						app.tempMedia && (app.tempMedia.title = event.target.value)
-					}}
-				/>
+				{metaEdit}
 				</Stack>
 				<Stack sx={{ pt: 2, pb: 4 }} direction={'row'}>
 					<Box sx={{ flexGrow: 1 }} />

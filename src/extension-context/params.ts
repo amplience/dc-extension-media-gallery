@@ -1,11 +1,9 @@
-import ExifMap from "../model/exif-map"
+import { MetadataMap } from "../model/metadata-map"
 
 export default interface Params {
     clientId: string,
     clientSecret: string,
     configPath: string,
     galleryPath: string,
-    exifMap: ExifMap,
-    displayDescription: string,
-    displayAuthor: string
+    metadataMap: MetadataMap
 }

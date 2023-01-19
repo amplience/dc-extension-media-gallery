@@ -26,9 +26,11 @@ import { AppContext } from '../app-context'
 import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
+import { useExtension } from '../extension-context'
 
 const ItemListView = () => {
 	const app = useContext(AppContext)
+	const { params } = useExtension()
 
 	const [dragging, setDragging] = useState(false)
 
@@ -56,6 +58,22 @@ const ItemListView = () => {
 			app.dragOrder(active, over)
 		}
 	}
+
+	const listMeta = params.metadataMap.filter(meta => meta.visibility.indexOf('list') !== -1);
+
+	const metaHeaders = listMeta.map(meta => {
+		return (<TableCell
+			sx={{
+				borderBottom: 'none',
+				color: 'white',
+				fontWeight: 'bold'
+			}}
+			component='th'
+			align='left'>
+			{meta.label}
+		</TableCell>)
+	})
+
 	return (
 		<DndContext
 			sensors={app.sensors}
@@ -97,31 +115,29 @@ const ItemListView = () => {
 								align='left'>
 								Name
 							</TableCell>
-							<TableCell
-								sx={{
-									borderBottom: 'none',
-									color: 'white',
-									fontWeight: 'bold'
-								}}
-								component='th'
-								align='left'>
-								Title
-							</TableCell>
-							<TableCell
-								sx={{
-									borderBottom: 'none',
-									color: 'white',
-									fontWeight: 'bold'
-								}}
-								component='th'
-								align='left'>
-								Author
-							</TableCell>
+							{metaHeaders}
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{app.items.map((item: any, index: number) => (
-							<SortableTableRow key={item.img} id={item.id}>
+						{app.items.map((item: any, index: number) => {
+							const metaBody = listMeta.map(meta => {
+								return (<Tooltip title={item.entry[meta.target]} followCursor={true}>
+									<TableCell
+										sx={{
+											cursor: 'pointer',
+											borderBottom: 'none',
+											bgcolor: `${item.selected ? '#444' : ''}`,
+											color: 'white'
+										}}
+										id={item.id}
+										onClick={() => app.selectItem(item.id)}
+										align='left'>
+										{item.entry[meta.target]}
+									</TableCell>
+								</Tooltip>)
+							})
+
+							return (<SortableTableRow key={item.img} id={item.id}>
 								<TableCell
 									id={item.id}
 									sx={{
@@ -200,36 +216,10 @@ const ItemListView = () => {
 										{item.entry.photo.name}
 									</TableCell>
 								</Tooltip>
-								<Tooltip title={item.title} followCursor={true}>
-									<TableCell
-										sx={{
-											cursor: 'pointer',
-											borderBottom: 'none',
-											bgcolor: `${item.selected ? '#444' : ''}`,
-											color: 'white'
-										}}
-										id={item.id}
-										onClick={() => app.selectItem(item.id)}
-										align='left'>
-										{item.title}
-									</TableCell>
-								</Tooltip>
-								<Tooltip title={item.author} followCursor={true}>
-									<TableCell
-										sx={{
-											cursor: 'pointer',
-											borderBottom: 'none',
-											bgcolor: `${item.selected ? '#444' : ''}`,
-											color: 'white'
-										}}
-										id={item.id}
-										onClick={() => app.selectItem(item.id)}
-										align='left'>
-										{item.author}
-									</TableCell>
-								</Tooltip>
+								{metaBody}
 							</SortableTableRow>
-						))}
+						)
+						})}
 					</TableBody>
 				</Table>
 			</SortableContext>

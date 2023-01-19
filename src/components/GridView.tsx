@@ -14,9 +14,11 @@ import { AppContext } from '../app-context'
 import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
+import { useExtension } from '../extension-context'
 
 const GridView = () => {
 	const app = useContext(AppContext)
+	const { params } = useExtension();
 
 	const [dragging, setDragging] = useState(false)
 
@@ -109,7 +111,7 @@ const GridView = () => {
 												bottom: 4,
 												left: 4
 											}}
-											aria-label={`select ${item.title}`}
+											aria-label={`select ${item.entry.photo.name}`}
 											title='Select'
 											onClick={() => {
 												app.selectItem(item.id)
@@ -137,18 +139,24 @@ const GridView = () => {
 								</Box>
 								<ImageListItemBar
 									title={
-										<Tooltip title={item.title} followCursor={true}>
+										<Tooltip title={item.entry.photo.name} followCursor={true}>
 											<Typography variant='subtitle1' noWrap>
-												{item.title}
+												{item.entry.photo.name}
 											</Typography>
 										</Tooltip>
 									}
 									subtitle={
-										<Tooltip title={item.author} followCursor={true}>
-											<Typography variant='subtitle2' noWrap>
-												by: {item.author}
-											</Typography>
-										</Tooltip>
+										<>
+											{
+												params.metadataMap.filter(meta => meta.visibility.indexOf('grid') !== -1).map(meta => {
+													return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
+														<Typography variant='subtitle2' noWrap>
+															{item.entry[meta.target]}
+														</Typography>
+													</Tooltip>)
+												})
+											}
+										</>
 									}
 									sx={{
 										p: 0,

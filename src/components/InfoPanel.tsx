@@ -1,9 +1,31 @@
 import { Box, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import { useExtension } from '../extension-context'
 
 const InfoPanel = () => {
 	const app = useContext(AppContext)
+	const { params } = useExtension();
+
+	const metaInfo = params.metadataMap.filter(meta => meta.visibility.indexOf('info') !== -1).map(meta => {
+		return (<TableRow>
+			<TableCell sx={{ pr: 2, pl: 0, pt: 0, pb: 0, borderBottom: 'none' }}>
+				<Typography
+					sx={{ fontWeight: 'bold', fontSize: '1rem' }}
+					variant='caption'>
+					{meta.label}
+				</Typography>
+			</TableCell>
+			<TableCell sx={{ p: 0, borderBottom: 'none' }}>
+				<Typography
+					sx={{ fontStyle: 'italic', fontSize: '1rem' }}
+					variant='caption'>
+					{app.currentMedia?.entry[meta.target]}
+				</Typography>
+			</TableCell>
+		</TableRow>)
+	});
+
 	return (
 		<Box
 			sx={{
@@ -47,38 +69,8 @@ const InfoPanel = () => {
 							</Typography>
 						</TableCell>
 					</TableRow>
-					<TableRow>
-						<TableCell sx={{ pr: 2, pl: 0, pt: 0, pb: 0, borderBottom: 'none' }}>
-							<Typography
-								sx={{ fontWeight: 'bold', fontSize: '1rem' }}
-								variant='caption'>
-								Author
-							</Typography>
-						</TableCell>
-						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
-							<Typography
-								sx={{ fontStyle: 'italic', fontSize: '1rem' }}
-								variant='caption'>
-								{app.currentMedia?.author}
-							</Typography>
-						</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell sx={{ pr: 2, pl: 0, pt: 0, pb: 0, borderBottom: 'none' }}>
-							<Typography
-								sx={{ fontWeight: 'bold', fontSize: '1rem' }}
-								variant='caption'>
-								Caption
-							</Typography>
-						</TableCell>
-						<TableCell sx={{ p: 0, borderBottom: 'none' }}>
-							<Typography
-								sx={{ fontStyle: 'italic', fontSize: '1rem' }}
-								variant='caption'>
-								{app.currentMedia?.title}
-							</Typography>
-						</TableCell>
-					</TableRow>
+
+					{metaInfo}
 				</TableBody>
 			</Table>
 		</Box>

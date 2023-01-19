@@ -218,8 +218,8 @@ const ImportDrawer = () => {
                     flexWrap: 'wrap',
                     p: 1
                   }}>
-									{app.importItems.map((item: MediaItem) => (
-										<ImageListItem style={{ width: '200px' }}>
+									{app.importItems.map((item: MediaItem, index: number) => (
+										<ImageListItem style={{ width: '200px' }} key={item.id}>
 											<Box
 												key={item.img}
 												sx={{ mt: 1, ml: 1, mr: 1 }}
@@ -254,7 +254,7 @@ const ImportDrawer = () => {
 														bottom: 4,
 														left: 4
 													}}
-													aria-label={`select ${item.title}`}
+													aria-label={`select ${item.entry.photo.name}`}
 													title='Select'
 													disabled={item.disabled}
 													onClick={() => {
@@ -269,13 +269,25 @@ const ImportDrawer = () => {
 											</Box>
 											<ImageListItemBar
 												title={
-													<Tooltip title={item.title} followCursor={true}>
+													<Tooltip title={item.entry.photo.name} followCursor={true}>
 														<Typography variant='subtitle1' noWrap>
-															{item.title}
+															{item.entry.photo.name}
 														</Typography>
 													</Tooltip>
 												}
-												subtitle={<span>by: {item.author}</span>}
+												subtitle={
+                          <>
+                            {
+                              params.metadataMap.filter(meta => meta.visibility.indexOf('import') !== -1).map(meta => {
+                                return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
+                                  <Typography variant='subtitle2' noWrap>
+                                    {item.entry[meta.target]}
+                                  </Typography>
+                                </Tooltip>)
+                              })
+                            }
+                          </>
+                        }
 												style={{
 													color: `${
 														item.disabled

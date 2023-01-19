@@ -47,8 +47,8 @@ type AppContextData = {
 	setContextMedia?: Dispatch<SetStateAction<MediaItem | null>>
 	currentMedia: MediaItem | null
 	setCurrentMedia?: Dispatch<SetStateAction<MediaItem | null>>
-	tempMedia?: MediaItem | null
-	setTempMedia?: Dispatch<SetStateAction<MediaItem | null>>
+	tempMedia?: Entry | null
+	setTempMedia?: Dispatch<SetStateAction<Entry | null>>
 	snackOpen?: boolean
 	setSnackOpen?: Dispatch<SetStateAction<boolean>>
 	infoPanelOpen?: boolean
@@ -73,8 +73,6 @@ type AppContextData = {
 	handleSelectNoneImportItems: () => void
 	handleSnackClose: () => void
 	handleSnackOpen: () => void
-	handleSortByCaptionAsc: () => void
-	handleSortByCaptionDesc: () => void
 	handleSortByDateAsc: () => void
 	handleSortByDateDesc: () => void
 	handleSortClick: (event: React.MouseEvent<HTMLElement>) => void
@@ -82,8 +80,8 @@ type AppContextData = {
 	handleZoomIn: () => void
 	handleZoomOut: () => void
 	handleResetZoom: () => void
-	handleSortByAuthorAsc: () => void
-	handleSortByAuthorDesc: () => void
+	handleSortByMetaAsc: (key: string) => void
+	handleSortByMetaDesc: (key: string) => void
 	handleMoveToTop: (media: MediaItem) => void
 	handleMoveToBottom: (media: MediaItem) => void
 	importMedia: () => void
@@ -129,8 +127,6 @@ const defaultAppState = {
 	handleSelectNoneImportItems: () => {},
 	handleSnackClose: () => {},
 	handleSnackOpen: () => {},
-	handleSortByCaptionAsc: () => {},
-	handleSortByCaptionDesc: () => {},
 	handleSortByDateAsc: () => {},
 	handleSortByDateDesc: () => {},
 	handleSortClick: (event: React.MouseEvent<HTMLElement>) => {},
@@ -138,8 +134,8 @@ const defaultAppState = {
 	handleZoomIn: () => {},
 	handleZoomOut: () => {},
 	handleResetZoom:() => {},
-	handleSortByAuthorAsc: () => {},
-	handleSortByAuthorDesc: () => {},
+	handleSortByMetaAsc: (key: string) => {},
+	handleSortByMetaDesc: (key: string) => {},
 	handleMoveToTop: () => {},
 	handleMoveToBottom: () => {},
 	importMedia: () => {},
@@ -169,7 +165,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [fullscreenView, setFullscreenView] = useState(false)
 	const [contextMedia, setContextMedia] = useState<MediaItem | null>(null)
 	const [currentMedia, setCurrentMedia] = useState<MediaItem | null>(null)
-	const [tempMedia, setTempMedia] = useState<MediaItem | null>(null)
+	const [tempMedia, setTempMedia] = useState<Entry | null>(null)
 	const [snackOpen, setSnackOpen] = useState(false)
 	const [infoPanelOpen, setInfoPanelOpen] = useState(false)
 	const [currentAlert, setCurrentAlert] = useState<AlertMessage | null>(null)
@@ -253,7 +249,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 */
 	const handleDetailView = (media: MediaItem) => {
 		setCurrentMedia(media)
-		setTempMedia(structuredClone(media))
+		const temp = structuredClone(media.entry)
+		temp.id = media.id
+		setTempMedia(temp)
 		setDetailDrawerOpen(true)
 	}
 
@@ -636,7 +634,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}
 
 				const entries = assets.map((asset) =>
-					convertToEntry(asset, params.exifMap, {
+					convertToEntry(asset, params.metadataMap, {
 						endpoint: 'nmrsaalphatest',
 						defaultHost: 'cdn.media.amplience.net'
 					})
@@ -803,9 +801,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				setItems((prevState: MediaItem[]) => {
 					return prevState.map((item: MediaItem) => {
 						if (item.id === tempMedia.id) {
-							tempMedia.entry[params.displayDescription] = tempMedia.title
-							tempMedia.entry[params.displayAuthor] = tempMedia.author
-							item = tempMedia
+							delete tempMedia.id
+							item.entry = tempMedia
 						}
 						return item
 					})
@@ -850,53 +847,29 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
-		 * Sort by author asc
+		 * Sort by meta field asc
 		 */
-		const handleSortByAuthorAsc = () => {
+		const handleSortByMetaAsc = (key: string) => {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
 					.slice()
 					.sort((a: any, b: any) =>
-						a.author > b.author ? 1 : b.author > a.author ? -1 : 0
+						a.entry[key] > b.entry[key] ? 1 : b.entry[key] > a.entry[key] ? -1 : 0
 					)
 			})
 			handleSortClose()
 		}
 
 		/**
-		 * Sort by author desc
+		 * Sort by meta field desc
 		 */
-		const handleSortByAuthorDesc = () => {
+		const handleSortByMetaDesc = (key: string) => {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
 					.slice()
 					.sort((a: any, b: any) =>
-						b.author > a.author ? 1 : a.author > b.author ? -1 : 0
+						b.entry[key] > a.entry[key] ? 1 : a.entry[key] > b.entry[key] ? -1 : 0
 					)
-			})
-			handleSortClose()
-		}
-
-		/**
-		 * Sort by caption asc
-		 */
-		const handleSortByCaptionAsc = () => {
-			setItems((prevState: MediaItem[]) => {
-				return prevState
-					.slice()
-					.sort((a: any, b: any) => (a.title > b.title ? 1 : b.title > a.title ? -1 : 0))
-			})
-			handleSortClose()
-		}
-
-		/**
-		 * Sort by caption desc
-		 */
-		const handleSortByCaptionDesc = () => {
-			setItems((prevState: MediaItem[]) => {
-				return prevState
-					.slice()
-					.sort((a: any, b: any) => (b.title > a.title ? 1 : a.title > b.title ? -1 : 0))
 			})
 			handleSortClose()
 		}
@@ -957,8 +930,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSelectNoneImportItems,
 			handleSnackClose,
 			handleSnackOpen,
-			handleSortByCaptionAsc,
-			handleSortByCaptionDesc,
 			handleSortByDateAsc,
 			handleSortByDateDesc,
 			handleSortClick,
@@ -966,8 +937,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleZoomIn,
 			handleZoomOut,
 			handleResetZoom,
-			handleSortByAuthorAsc,
-			handleSortByAuthorDesc,
+			handleSortByMetaAsc,
+			handleSortByMetaDesc,
 			handleMoveToTop,
 			handleMoveToBottom,
 			importMedia,
