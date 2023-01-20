@@ -770,7 +770,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 							.map((item: MediaItem) => {
 								const match = newSelectedItems.find((item2: MediaItem) => item.id === item2.id)
 								if (match) {
-									item = structuredClone(match)
+									item = match
 								}
 								return item
 							})
