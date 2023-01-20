@@ -766,14 +766,19 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				setTimeout(() => {
 					setItems(
 						newItems
-							// filtering out existing items, so updated items can be added
-							// TODO: replace existing items
-							.filter(
+							// Update items in place
+							.map((item: MediaItem) => {
+								const match = newSelectedItems.find((item2: MediaItem) => item.id === item2.id)
+								if (match) {
+									item = structuredClone(match)
+								}
+								return item
+							})
+							// Add new items
+							.concat(structuredClone(newSelectedItems.filter(
 								(item: MediaItem) =>
-									newSelectedItems.filter((item2) => item.id === item2.id)
-										.length === 0
-							)
-							.concat(structuredClone(newSelectedItems))
+									newItems.filter((item2: MediaItem) => item.id === item2.id).length === 0
+							)))
 					)
 				}, 500)
 				if (newSelectedItems.length > 0) {
