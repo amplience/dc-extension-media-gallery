@@ -76,6 +76,8 @@ const ImportDrawer = () => {
 										if (fItem.id === item.id) {
 											if (fItem.dateModified < item.dateModified) {
 												item.updated = true
+											} else if (!(_.isEqual(fItem.entry, item.entry))) {
+												item.updated = true
 											} else {
 												item.disabled = true
 											}
