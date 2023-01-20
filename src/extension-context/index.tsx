@@ -41,6 +41,10 @@ export function ExtensionContextProvider({ children }: { children: ReactNode }) 
         ...sdk.params.instance,
       };
 
+      if (params.vse == null) {
+        params.vse = sdk.visualisation;
+      }
+
       const oldConfig = field[params.configPath];
 
       let state: ExtensionContextData = {

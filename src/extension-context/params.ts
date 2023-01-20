@@ -5,5 +5,6 @@ export default interface Params {
     clientSecret: string,
     configPath: string,
     galleryPath: string,
-    metadataMap: MetadataMap
+    metadataMap: MetadataMap,
+    vse?: string
 }

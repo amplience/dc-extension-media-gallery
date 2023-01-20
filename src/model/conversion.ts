@@ -84,10 +84,7 @@ export function convertToEntry(
   return result;
 }
 
-export function assetToImg(asset: Entry): string {
-  // TODO: pass vse as argument
-  const vse = "1v8j1gmgsolq81dxx8zx7pdehf.staging.bigcontent.io";
-
+export function assetToImg(asset: Entry, vse?: string): string {
   return `https://${vse ?? asset.photo.defaultHost}/i/${asset.photo.endpoint}/${
     asset.photo.name
   }`;
@@ -105,7 +102,7 @@ export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
     updated: false,
     outOfSync: false,
     dateModified: asset.date,
-    img: assetToImg(asset),
+    img: assetToImg(asset, params.vse),
     entry: asset,
   }));
 }
