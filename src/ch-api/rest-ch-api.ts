@@ -155,15 +155,20 @@ export class RestChApi extends AuthClient implements IChApi {
     repoId: string,
     folderId: string
   ): Promise<AssetWithExif[]> {
-    const q =
-      folderId !== "00000000-0000-0000-0000-000000000000"
-        ? `folder:${folderId} AND type:image`
-        : `folder:${repoId} AND type:image`;
+    let q: string | undefined;
+
+    if (folderId !== 'root') {
+      q = `folder:${folderId} AND type:image`;
+    } else {
+      q = `type:image`;
+    }
 
     return this.toAssetWithExif(
       await this.paginate<Asset>("assets", "GET", undefined, {
         q,
+        bucket: repoId,
         select: "meta:exif",
+        n: 100
       })
     );
   }
@@ -177,17 +182,20 @@ export class RestChApi extends AuthClient implements IChApi {
     folderId: string;
     query?: string | undefined;
   }): Promise<AssetWithExif[]> {
-    let q =
-      folderId !== "00000000-0000-0000-0000-000000000000"
-        ? `folder:${folderId}`
-        : `folder:${repoId}`;
+    let q: string | undefined;
 
-    q = `(${query}) AND (${q})`;
+    if (folderId !== 'root') {
+      q = `(${query}) AND (folder:${folderId} AND type:image)`;
+    } else {
+      q = `(${query}) AND type:image`;
+    }
 
     return this.toAssetWithExif(
       await this.paginate<Asset>("assets", "GET", undefined, {
         q,
+        bucket: repoId,
         select: "meta:exif",
+        n: 100
       })
     );
   }

@@ -249,7 +249,7 @@ const ImportDrawer = () => {
                     p: 1
                   }}>
 									{app.importItems.map((item: MediaItem, index: number) => (
-										<ImageListItem style={{ width: '200px' }} key={item.id}>
+										<ImageListItem style={{ width: '200px' }} key={index}>
 											<Box
 												key={item.img}
 												sx={{ mt: 1, ml: 1, mr: 1 }}
