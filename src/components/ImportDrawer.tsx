@@ -364,7 +364,7 @@ const ImportDrawer = () => {
 										))}
 									{
 										isEmpty && (
-											<Alert sx={{ margin: 'auto' }} severity="info">This folder has no image assets in. Please select another folder and refine your query</Alert>
+											<Alert sx={{ margin: 'auto' }} severity="info">This {folderId === repoId ? 'repo' : 'folder'} has no image assets in it. Please select another folder and refine your query.</Alert>
 										)
 									}
 								</Box>
