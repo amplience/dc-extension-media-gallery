@@ -304,7 +304,9 @@ const ImportDrawer = () => {
 																? '#bbb'
 																: item.updated
 																	? 'orange'
-																	: '#000'
+																	: item.outOfSync
+																		? 'green'
+																		:'#000'
 															}`,
 														padding: '3px'
 													}}
