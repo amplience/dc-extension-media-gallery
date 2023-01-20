@@ -121,6 +121,27 @@ const DetailDrawer = () => {
 				</Stack>
 				<GenericImage item={app.currentMedia} w={1024} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
 				<TextField
+					id='name'
+					label='Name'
+					variant='standard'
+					InputProps={{
+						readOnly: true,
+						startAdornment: (
+							<InputAdornment position='start'>
+								<NotesOutlined />
+							</InputAdornment>
+						),
+						endAdornment: (
+							<InputAdornment position='start'>
+								<LockOutlined />
+							</InputAdornment>
+						)
+					}}
+					defaultValue={
+						app.currentMedia?.entry?.photo?.name
+					}
+				/>
+				<TextField
 					id='dateModified'
 					label='Date modified'
 					variant='standard'
@@ -144,7 +165,17 @@ const DetailDrawer = () => {
 				/>
 				{metaEdit}
 				</Stack>
-				<Stack sx={{ pt: 2, pb: 4 }} direction={'row'}>
+				<Stack 
+					sx={{
+						pb: 4,
+						pt: 2,
+						p: 2,
+						position: 'sticky',
+						backgroundColor: 'white',
+						bottom: 0
+					}} 
+					direction={'row'}
+				>
 					<Box sx={{ flexGrow: 1 }} />
 					<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
 						Save

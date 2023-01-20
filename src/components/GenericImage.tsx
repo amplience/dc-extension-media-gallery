@@ -10,6 +10,7 @@ type Props = {
   forceNoZoom?:Boolean,
   disabled?: Boolean,
   updated?: Boolean,
+  outOfSync?: Boolean,
   w?: number,
   aspect?: {
     w: number,
@@ -27,6 +28,7 @@ const GenericImage: FC<Props> = ({
   disabled = false,
   forceNoZoom = false,
   updated = false,
+  outOfSync = false,
   w = 248,
   aspect = { w: 3, h: 2 },
   lazy = true,
@@ -81,6 +83,11 @@ const GenericImage: FC<Props> = ({
         {
          updated &&
          <Chip size="small" icon={<AutorenewOutlinedIcon />} label="updated" color="warning" style={{position: 'absolute', top: 8, right: 5}} />
+        //  <AutorenewOutlinedIcon color='warning' /> 
+        }
+        {
+         outOfSync &&
+         <Chip size="small" icon={<AutorenewOutlinedIcon />} label="out-of-sync" color="success" style={{position: 'absolute', top: 8, right: 5}} />
         //  <AutorenewOutlinedIcon color='warning' /> 
         }
       </div>

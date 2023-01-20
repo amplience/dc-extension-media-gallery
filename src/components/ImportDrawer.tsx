@@ -20,7 +20,8 @@ import {
 	TextField,
 	CircularProgress,
 	Badge,
-	Tooltip
+	Tooltip,
+	Alert
 } from '@mui/material'
 import RichObjectTreeView from './RichTreeView'
 import { AppContext } from '../app-context'
@@ -62,10 +63,12 @@ const ImportDrawer = () => {
 	const [repoId, setRepoId] = useState<string | undefined>(undefined)
 	const [folderId, setFolderId] = useState<string | undefined>(undefined)
 	const [loading, setLoading] = useState(false)
+	const [isEmpty, setIsEmpty] = useState(false)
 
   let repo: string | undefined = undefined;
 	let folder: string | undefined = undefined
 	let query: string | undefined = undefined
+
 
 	if (oldConfig) {
     repo = oldConfig.repoId
@@ -86,8 +89,10 @@ const ImportDrawer = () => {
 			;(async () => {
 				if (app.getEntries && app.setImportItems && repoId && folderId) {
 					setLoading(true)
+          setIsEmpty(false)
 					const entries = await app.getEntries(repoId, folderId === repoId ? 'root' : folderId, queryValue)
 					if (!cancelled) {
+            setIsEmpty(entries.length === 0);
 						app.setImportItems(
 							assetsToItems(entries, params).map((item: MediaItem) => {
 								const filtered = app.items.filter(
@@ -96,22 +101,23 @@ const ImportDrawer = () => {
 								if (filtered.length > 0) {
 									filtered.forEach((fItem: MediaItem) => {
 										if (fItem.id === item.id) {
-											if (fItem.dateModified < item.dateModified) {
-												item.updated = true
-											} else {
-												item.disabled = true
-											}
+                      if (fItem.dateModified < item.dateModified) {
+                        item.updated = true
+                      } else if (!(_.isEqual(fItem.entry, item.entry))) {
+                        item.outOfSync = true
+                      } else {
+                        item.disabled = true
+                      }
 										}
-									})
+                  })
 								}
 								return item
-							})
-						)
+							}))
 
-						setLoading(false)
+							setLoading(false)
+						}
 					}
-				}
-			})()
+				})()
 
 			return () => {
 				cancelled = true
@@ -144,10 +150,10 @@ const ImportDrawer = () => {
 						zIndex: 100,
 						p: 1
 					}}>
-					<Typography sx={{pb: 2}} variant='h5' component='h5'>
+					<Typography sx={{ pb: 2 }} variant='h5' component='h5'>
 						Import Media
 					</Typography>
-          <Box style={{flexGrow: 1}} />
+					<Box style={{ flexGrow: 1 }} />
 					<Box>
 						<IconButton
 							aria-label={`close import drawer`}
@@ -160,46 +166,46 @@ const ImportDrawer = () => {
 					</Box>
 				</Stack>
 				<Stack spacing={4} sx={{ p: 0, paddingTop: 0 }}>
-          <Stack
-            direction={'row'}
-            spacing={2}
-            sx={{
-              position: 'sticky',
-              top: 50,
-              backgroundColor: 'white',
-              zIndex: 100,
-              p: 1
-            }
-          }>
-            {/* Tree View */}
-            {/* TODO: replace with a dropdown tree select */}
-            {app.repos && (
-            <Box style={{width: '40%'}}>
-              <RichObjectTreeView
-                folders={app.repos}
-                onChange={async (id: string) => {
-                  const repoId = getRepoId(app.repos as EnrichedRepository[], id)
+					<Stack
+						direction={'row'}
+						spacing={2}
+						sx={{
+							position: 'sticky',
+							top: 50,
+							backgroundColor: 'white',
+							zIndex: 100,
+							p: 1
+						}
+						}>
+						{/* Tree View */}
+						{/* TODO: replace with a dropdown tree select */}
+						{app.repos && (
+							<Box style={{ width: '40%' }}>
+								<RichObjectTreeView
+									folders={app.repos}
+									onChange={async (id: string) => {
+                    const repoId = getRepoId(app.repos as EnrichedRepository[], id)
 
-                  setRepoId(repoId)
-                  setFolderId(id)
-                }}
-                selectedId={folderId || repoId}
-              />
-              </Box>
-            )}
-            <TextField
-              key={query}
-              style={{width: '35%'}}
-              size='small'
-              label='Query'
-              helperText='Query to filter assets in the folder with.'
-              defaultValue={query}
-              onChange={(event) => {
-                setQueryValue(event.target.value)
-              }}
-            />
-            <Box style={{flexGrow: 1}} />
-            <Box style={{paddingBottom: 2}}>
+                    setRepoId(repoId)
+                    setFolderId(id)
+									}}
+									selectedId={folderId}
+								/>
+							</Box>
+						)}
+						<TextField
+							key={query}
+							style={{ width: '30%' }}
+							size='small'
+							label='Query'
+							helperText='Query to filter assets in the folder with.'
+							defaultValue={query}
+							onChange={(event) => {
+								setQueryValue(event.target.value)
+							}}
+						/>
+						<Box style={{ flexGrow: 1 }} />
+						<Box style={{ paddingBottom: 2 }}>
 							<IconButton
 								size='small'
 								aria-label={`select all`}
@@ -207,7 +213,7 @@ const ImportDrawer = () => {
 								onClick={app.handleSelectAllImportItems}>
 								<GridViewSharp />
 							</IconButton>
-              <IconButton
+							<IconButton
 								size='small'
 								aria-label={`select all updated`}
 								title='Select all updated'
@@ -218,13 +224,22 @@ const ImportDrawer = () => {
 							</IconButton>
 							<IconButton
 								size='small'
+								aria-label={`select all out-of-sync`}
+								title='Select all out-of-sync'
+								onClick={app.handleSelectAllOutOfSyncImportItems}>
+								<Badge color='success' variant='dot'>
+									<GridViewSharp />
+								</Badge>
+							</IconButton>
+							<IconButton
+								size='small'
 								aria-label={`select none`}
 								title='Select none'
 								onClick={app.handleSelectNoneImportItems}>
 								<GridViewOutlined />
 							</IconButton>
-              </Box>
-          </Stack>
+						</Box>
+					</Stack>
 					<Stack sx={{ w: '100%' }}>
 						{/* Import image list */}
 						{/* TODO: move to flex wrap */}
@@ -240,110 +255,119 @@ const ImportDrawer = () => {
 							</div>
 						) : (
 							app.importItems && (
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    p: 1
-                  }}>
-									{app.importItems.map((item: MediaItem, index: number) => (
-										<ImageListItem style={{ width: '200px' }} key={index}>
-											<Box
-												key={item.img}
-												sx={{ mt: 1, ml: 1, mr: 1 }}
-												style={{ position: 'relative' }}>
-												<GenericImage
-													item={item}
-													w={150}
-													disabled={item.disabled}
-                          updated={item.updated}
-													zoomable={true}
-													aspect={{ w: 3, h: 2 }}
-													lazy={false}
-													fillWidth={true}
-												/>
-												<IconButton
-													size='small'
-													sx={{
-														color: 'white',
-														position: 'absolute',
-														top: 4,
-														left: 4
+								<Box
+									sx={{
+										width: '100%',
+										display: 'flex',
+										flexDirection: 'row',
+										flexWrap: 'wrap',
+										p: 1
+									}}>
+
+									{
+										app.importItems.map((item: MediaItem, index: number) => (
+											<ImageListItem style={{ width: '200px' }} key={item.id}>
+												<Box
+													key={item.img}
+													sx={{ mt: 1, ml: 1, mr: 1 }}
+													style={{ position: 'relative' }}>
+													<GenericImage
+														item={item}
+														w={150}
+														disabled={item.disabled}
+														updated={item.updated}
+														outOfSync={item.outOfSync}
+														zoomable={true}
+														aspect={{ w: 3, h: 2 }}
+														lazy={false}
+														fillWidth={true}
+													/>
+													<IconButton
+														size='small'
+														sx={{
+															color: 'white',
+															position: 'absolute',
+															top: 4,
+															left: 4
+														}}
+														aria-label={`view fullscreen`}
+														title='Click to zoom'
+														onClick={() => app.handleFullScreenView(item)}>
+														<VisibilityOutlined />
+													</IconButton>
+													<IconButton
+														size='small'
+														sx={{
+															color: 'white',
+															position: 'absolute',
+															bottom: 4,
+															left: 4
+														}}
+														aria-label={`select ${item.entry.photo.name}`}
+														title='Select'
+														disabled={item.disabled}
+														onClick={() => {
+															app.selectImportItem(item.id)
+														}}>
+														{item.selected ? (
+															<CheckBoxOutlined />
+														) : (
+															<CheckBoxOutlineBlank />
+														)}
+													</IconButton>
+												</Box>
+												<ImageListItemBar
+													title={
+														<Tooltip title={item.entry.photo.name} followCursor={true}>
+															<Typography variant='subtitle1' noWrap>
+																{item.entry.photo.name}
+															</Typography>
+														</Tooltip>
+													}
+													subtitle={
+														<>
+															{
+																params.metadataMap.filter(meta => meta.visibility.indexOf('import') !== -1).map(meta => {
+																	return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
+																		<Typography variant='subtitle2' noWrap>
+																			{item.entry[meta.target]}
+																		</Typography>
+																	</Tooltip>)
+																})
+															}
+														</>
+													}
+													style={{
+														color: `${item.disabled
+																? '#bbb'
+																: item.updated
+																	? 'orange'
+																	: item.outOfSync
+																		? 'green'
+																		:'#000'
+															}`,
+														padding: '3px'
 													}}
-													aria-label={`view fullscreen`}
-													title='Click to zoom'
-													onClick={() => app.handleFullScreenView(item)}>
-													<VisibilityOutlined />
-												</IconButton>
-												<IconButton
-													size='small'
 													sx={{
-														color: 'white',
-														position: 'absolute',
-														bottom: 4,
-														left: 4
+														mb: 1,
+														ml: 1,
+														mr: 1,
+														cursor: 'pointer',
+														bgcolor: `${item.selected ? '#ddd' : ''}`
 													}}
-													aria-label={`select ${item.entry.photo.name}`}
-													title='Select'
-													disabled={item.disabled}
 													onClick={() => {
 														app.selectImportItem(item.id)
-													}}>
-													{item.selected ? (
-														<CheckBoxOutlined />
-													) : (
-														<CheckBoxOutlineBlank />
-													)}
-												</IconButton>
-											</Box>
-											<ImageListItemBar
-												title={
-													<Tooltip title={item.entry.photo.name} followCursor={true}>
-														<Typography variant='subtitle1' noWrap>
-															{item.entry.photo.name}
-														</Typography>
-													</Tooltip>
-												}
-												subtitle={
-                          <>
-                            {
-                              params.metadataMap.filter(meta => meta.visibility.indexOf('import') !== -1).map(meta => {
-                                return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
-                                  <Typography variant='subtitle2' noWrap>
-                                    {item.entry[meta.target]}
-                                  </Typography>
-                                </Tooltip>)
-                              })
-                            }
-                          </>
-                        }
-												style={{
-													color: `${
-														item.disabled
-															? '#bbb'
-															: item.updated
-															? 'orange'
-															: '#000'
-													}`,
-                          padding: '3px'
-												}}
-                        sx={{
-                          mb: 1,
-                          ml: 1,
-                          mr: 1,
-                          cursor: 'pointer',
-                          bgcolor: `${item.selected ? '#ddd' : ''}`
-                        }}
-                        onClick={() => {
-                          app.selectImportItem(item.id)
-                        }}
-												position='below'
-											/>
-										</ImageListItem>
-									))}
-                </Box>
+													}}
+													position='below'
+												/>
+											</ImageListItem>
+										))}
+									{
+										isEmpty && (
+											<Alert sx={{ margin: 'auto' }} severity="info">This folder has no image assets in. Please select another folder and refine your query</Alert>
+										)
+									}
+								</Box>
 							)
 						)}
 					</Stack>

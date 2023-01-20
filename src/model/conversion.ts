@@ -103,6 +103,7 @@ export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
     selected: false,
     disabled: false,
     updated: false,
+    outOfSync: false,
     dateModified: asset.date,
     img: assetToImg(asset),
     entry: asset,
