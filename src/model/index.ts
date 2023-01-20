@@ -6,6 +6,7 @@ export interface MediaItem {
 	selected: boolean
 	disabled: boolean
 	updated: boolean
+	outOfSync: boolean
 	dateModified: string
 	img: string
 	entry: Entry

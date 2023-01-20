@@ -761,6 +761,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 						item.selected = false
 						item.disabled = false
 						item.updated = false
+						item.outOfSync = false
 						return item
 					})
 				setTimeout(() => {
