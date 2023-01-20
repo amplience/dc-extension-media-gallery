@@ -228,6 +228,7 @@ const ImportDrawer = () => {
 													item={item}
 													w={150}
 													disabled={item.disabled}
+                          updated={item.updated}
 													zoomable={true}
 													aspect={{ w: 3, h: 2 }}
 													lazy={false}

@@ -24,6 +24,7 @@ const ImageDialog = () => {
 						item={app.currentMedia}
 						w={1024}
 						zoomable={false}
+						updated={false}
 						aspect={{ w: 3, h: 2 }}
 						lazy={false}
 						fillWidth={true}
