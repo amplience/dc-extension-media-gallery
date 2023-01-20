@@ -157,8 +157,8 @@ export class RestChApi extends AuthClient implements IChApi {
   ): Promise<AssetWithExif[]> {
     const q =
       folderId !== "00000000-0000-0000-0000-000000000000"
-        ? `folder:${folderId}`
-        : `folder:${repoId}`;
+        ? `folder:${folderId} AND type:image`
+        : `folder:${repoId} AND type:image`;
 
     return this.toAssetWithExif(
       await this.paginate<Asset>("assets", "GET", undefined, {
