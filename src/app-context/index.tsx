@@ -69,6 +69,7 @@ type AppContextData = {
 	handleSelectAll: () => void
 	handleSelectAllImportItems: () => void
 	handleSelectAllUpdatedImportItems: () => void
+	handleSelectAllOutOfSyncImportItems: () => void
 	handleSelectNone: () => void
 	handleSelectNoneImportItems: () => void
 	handleSnackClose: () => void
@@ -126,6 +127,7 @@ const defaultAppState = {
 	handleResetItems: () => {},
 	handleSelectAllImportItems: () => {},
 	handleSelectAllUpdatedImportItems: () => {},
+	handleSelectAllOutOfSyncImportItems: () => {},
 	handleSelectNoneImportItems: () => {},
 	handleSnackClose: () => {},
 	handleSnackOpen: () => {},
@@ -446,6 +448,20 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}
 
 	/**
+	 * Select all out-of-sync import items
+	 */
+	const handleSelectAllOutOfSyncImportItems = () => {
+		setImportItems((prevState: MediaItem[]) => {
+			return prevState.map((element: MediaItem) => {
+				if (!element.disabled && element.outOfSync) {
+					element.selected = true
+				}
+				return element
+			})
+		})
+	}
+
+	/**
 	 * De-select all import items
 	 */
 	const handleSelectNoneImportItems = () => {
@@ -570,6 +586,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					handleSelectNoneImportItems()
 				} else if (event.key.toLowerCase() === 'u') {
 					handleSelectAllUpdatedImportItems()
+				} else if (event.key.toLowerCase() === 'o') {
+					handleSelectAllOutOfSyncImportItems()
 				}
 			} else if (fullscreenView && event.key.toLowerCase() === 'i') {
 				setInfoPanelOpen(!infoPanelOpen)
@@ -963,6 +981,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSelectAll,
 			handleSelectAllImportItems,
 			handleSelectAllUpdatedImportItems,
+			handleSelectAllOutOfSyncImportItems,
 			handleSelectNone,
 			handleSelectNoneImportItems,
 			handleSnackClose,

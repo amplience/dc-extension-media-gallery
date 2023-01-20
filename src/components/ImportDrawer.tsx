@@ -166,7 +166,7 @@ const ImportDrawer = () => {
 						)}
 						<TextField
 							key={query}
-							style={{ width: '35%' }}
+							style={{ width: '30%' }}
 							size='small'
 							label='Query'
 							helperText='Query to filter assets in the folder with.'
@@ -190,6 +190,15 @@ const ImportDrawer = () => {
 								title='Select all updated'
 								onClick={app.handleSelectAllUpdatedImportItems}>
 								<Badge color='warning' variant='dot'>
+									<GridViewSharp />
+								</Badge>
+							</IconButton>
+							<IconButton
+								size='small'
+								aria-label={`select all out-of-sync`}
+								title='Select all out-of-sync'
+								onClick={app.handleSelectAllOutOfSyncImportItems}>
+								<Badge color='success' variant='dot'>
 									<GridViewSharp />
 								</Badge>
 							</IconButton>
