@@ -28,8 +28,8 @@ type AppContextData = {
 	setImportItems?: Dispatch<SetStateAction<MediaItem[]>>
 	gridMode: boolean
 	setGridMode?: Dispatch<SetStateAction<boolean>>
-	repo?: EnrichedRepository | null
-	setRepo?: Dispatch<SetStateAction<EnrichedRepository | undefined>>
+	repos?: EnrichedRepository[] | null
+	setRepos?: Dispatch<SetStateAction<EnrichedRepository[] | undefined>>
 	chApi?: any
 	setChApi?: Dispatch<SetStateAction<IChApi | undefined>>
 	detailDrawerOpen?: boolean
@@ -88,7 +88,7 @@ type AppContextData = {
 	handleMoveToBottom: (media: MediaItem) => void
 	importMedia: () => void
 	sensors?: SensorDescriptor<SensorOptions>[]
-	getEntries?: (id: string, query?: string) => Promise<Entry[]>
+	getEntries?: (repoId: string, id: string, query?: string) => Promise<Entry[]>
 	getItem?: (id: string) => MediaItem | undefined
 	removeItem: (id: string) => void
 	selectImportItem: (id: string) => void
@@ -160,7 +160,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [items, setItems] = useState<MediaItem[]>([])
 	const [importItems, setImportItems] = useState<MediaItem[]>([])
 	const [gridMode, setGridMode] = useState(true)
-	const [repo, setRepo] = useState<EnrichedRepository>()
+	const [repos, setRepos] = useState<EnrichedRepository[]>()
 	const [chApi, setChApi] = useState<IChApi>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
@@ -341,7 +341,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 				const result = await api.allReposWithFolders()
 				console.log(result)
-				setRepo(result[0])
+				setRepos(result)
 			}
 		})()
 	}, [params])
@@ -621,20 +621,20 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * Getting assets from Content Hub
 		 * @param id
 		 */
-		const getEntries = async (id: string, query?: string): Promise<Entry[]> => {
-			if (chApi && repo) {
-				setDefaultFolder(repo.id, id, query)
+		const getEntries = async (repoId: string, id: string, query?: string): Promise<Entry[]> => {
+			if (chApi && repoId) {
+				setDefaultFolder(repoId, id, query)
 				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
 
 				if (query && query !== '') {
 					assets = await chApi.queryAssetsExif({
 						folderId: id,
-						repoId: repo.id,
+						repoId: repoId,
 						query
 					})
 				} else {
-					assets = await chApi.getExifByFolder(repo.id, id)
+					assets = await chApi.getExifByFolder(repoId, id)
 				}
 
 				const entries = assets.map((asset) =>
@@ -921,8 +921,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setImportItems,
 			gridMode,
 			setGridMode,
-			repo,
-			setRepo,
+			repos,
+			setRepos,
 			chApi,
 			setChApi,
 			detailDrawerOpen,
@@ -999,7 +999,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		items,
 		importItems,
 		gridMode,
-		repo,
+		repos,
 		chApi,
 		detailDrawerOpen,
 		importDrawerOpen,

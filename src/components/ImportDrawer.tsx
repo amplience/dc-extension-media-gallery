@@ -30,36 +30,63 @@ import GenericImage from './GenericImage'
 import { useExtension } from '../extension-context'
 import { MediaItem } from '../model'
 import _ from 'lodash'
+import { EnrichedRepository, Folder } from '../ch-api/shared'
+
+const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
+  if (folders) {
+    for (let folder of folders) {
+      if (folder.id === id || containsFolder(folder.children, id)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+const getRepoId = (repos: EnrichedRepository[], id: string): string | undefined => {
+  for (let repo of repos) {
+    if (repo.id === id || containsFolder(repo.folders, id)) {
+      return repo.id;
+    }
+  }
+
+  return undefined;
+}
 
 const ImportDrawer = () => {
 	const app = useContext(AppContext)
 	const { params, field, oldConfig } = useExtension()
 
 	const [queryValue, setQueryValue] = useState<string | undefined>(undefined)
+	const [repoId, setRepoId] = useState<string | undefined>(undefined)
 	const [folderId, setFolderId] = useState<string | undefined>(undefined)
 	const [loading, setLoading] = useState(false)
 
+  let repo: string | undefined = undefined;
 	let folder: string | undefined = undefined
 	let query: string | undefined = undefined
 
 	if (oldConfig) {
+    repo = oldConfig.repoId
 		folder = oldConfig.folderId
 		query = oldConfig.query
 	}
 
 	useEffect(() => {
+    setRepoId(repo)
 		setFolderId(folder)
 		setQueryValue(query)
-	}, [folder, query])
+	}, [repo, folder, query])
 
 	useEffect(() => {
 		if (app.importDrawerOpen) {
 			let cancelled = false
 
 			;(async () => {
-				if (app.getEntries && app.setImportItems && folderId) {
+				if (app.getEntries && app.setImportItems && repoId && folderId) {
 					setLoading(true)
-					const entries = await app.getEntries(folderId, queryValue)
+					const entries = await app.getEntries(repoId, folderId === repoId ? 'root' : folderId, queryValue)
 					if (!cancelled) {
 						app.setImportItems(
 							assetsToItems(entries, params).map((item: MediaItem) => {
@@ -92,7 +119,7 @@ const ImportDrawer = () => {
 		}
 
 		// shouldn't rerun when app changes
-	}, [queryValue, folderId, setLoading, params, app.importDrawerOpen])
+	}, [queryValue, folderId, repoId, setLoading, params, app.importDrawerOpen])
 
 	return (
 		<SwipeableDrawer
@@ -146,14 +173,17 @@ const ImportDrawer = () => {
           }>
             {/* Tree View */}
             {/* TODO: replace with a dropdown tree select */}
-            {app.repo && (
+            {app.repos && (
             <Box style={{width: '40%'}}>
               <RichObjectTreeView
-                folders={app.repo?.folders}
+                folders={app.repos}
                 onChange={async (id: string) => {
+                  const repoId = getRepoId(app.repos as EnrichedRepository[], id)
+
+                  setRepoId(repoId)
                   setFolderId(id)
                 }}
-                selectedId={folderId}
+                selectedId={folderId || repoId}
               />
               </Box>
             )}

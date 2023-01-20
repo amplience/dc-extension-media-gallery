@@ -11,8 +11,8 @@ const buildExpanded = (node: any, id: string, list: string[]): boolean => {
     return true;
   }
 
-  if (Array.isArray(node.children)) {
-    for (let child of node.children) {
+  if (Array.isArray(children(node))) {
+    for (let child of children(node)) {
       if (buildExpanded(child, id, list)) {
         list.splice(1, 0, node.id);
         return true;
@@ -30,7 +30,7 @@ const findItem = (nodes: any, id: string): any => {
         return node;
       }
 
-      const child = findItem(node.children, id);
+      const child = findItem(children(node), id);
 
       if (child != null) {
         return child;
@@ -39,6 +39,10 @@ const findItem = (nodes: any, id: string): any => {
   }
 
   return undefined;
+}
+
+const children = (collection: any) => {
+  return collection.children ?? collection.folders;
 }
 
 const RichObjectTreeView = (props: any) => {
@@ -51,7 +55,7 @@ const RichObjectTreeView = (props: any) => {
   useEffect(() => {
     if (props.selectedId) {
       const newExpanded = ["root"];
-      for (const folder of props.folders) {
+      for (const folder of children(props)) {
         buildExpanded(folder, props.selectedId, newExpanded);
       }
 
@@ -60,7 +64,7 @@ const RichObjectTreeView = (props: any) => {
         setExpanded(newExpanded);
       }
     }
-  }, [props.selectedId, props.folders, sequenceNumber, expanded]);
+  }, [props.selectedId, children(props), sequenceNumber, expanded]);
 
   const openPopover = () => {
     setOpen(true);
@@ -72,13 +76,13 @@ const RichObjectTreeView = (props: any) => {
 
   const renderTree = (node: any) => (
     <TreeItem key={node.id} nodeId={node.id} label={node.label}>
-      {Array.isArray(node.children)
-        ? node.children.map((childNode: any) => renderTree(childNode))
+      {Array.isArray(children(node))
+        ? children(node).map((childNode: any) => renderTree(childNode))
         : null}
     </TreeItem>
   );
 
-  const selected = findItem(props.folders, props.selectedId);
+  const selected = findItem(children(props), props.selectedId);
 
   return (
     <FormControl style={{width: '100%'}}>
@@ -116,7 +120,7 @@ const RichObjectTreeView = (props: any) => {
           }}
         >
           <TreeItem nodeId="root" label="Content Hub">
-            {props.folders.map((folder: Folder) => renderTree(folder))}
+            {children(props).map((folder: Folder) => renderTree(folder))}
           </TreeItem>
         </TreeView>
       </Popover>
