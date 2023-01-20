@@ -20,7 +20,8 @@ import {
 	TextField,
 	CircularProgress,
 	Badge,
-	Tooltip
+	Tooltip,
+	Alert
 } from '@mui/material'
 import RichObjectTreeView from './RichTreeView'
 import { AppContext } from '../app-context'
@@ -38,9 +39,11 @@ const ImportDrawer = () => {
 	const [queryValue, setQueryValue] = useState<string | undefined>(undefined)
 	const [folderId, setFolderId] = useState<string | undefined>(undefined)
 	const [loading, setLoading] = useState(false)
+	const [isEmpty, setIsEmpty] = useState(false)
 
 	let folder: string | undefined = undefined
 	let query: string | undefined = undefined
+
 
 	if (oldConfig) {
 		folder = oldConfig.folderId
@@ -59,8 +62,10 @@ const ImportDrawer = () => {
 			;(async () => {
 				if (app.getEntries && app.setImportItems && folderId) {
 					setLoading(true)
+					setIsEmpty(false)
 					const entries = await app.getEntries(folderId, queryValue)
 					if (!cancelled) {
+						setIsEmpty(entries.length === 0);
 						app.setImportItems(
 							assetsToItems(entries, params).map((item: MediaItem) => {
 								const filtered = app.items.filter(
@@ -218,7 +223,9 @@ const ImportDrawer = () => {
                     flexWrap: 'wrap',
                     p: 1
                   }}>
-									{app.importItems.map((item: MediaItem, index: number) => (
+					
+									{
+									app.importItems.map((item: MediaItem, index: number) => (
 										<ImageListItem style={{ width: '200px' }} key={item.id}>
 											<Box
 												key={item.img}
@@ -313,6 +320,11 @@ const ImportDrawer = () => {
 											/>
 										</ImageListItem>
 									))}
+									{
+										isEmpty && (
+											<Alert sx={{margin:'auto'}} severity="info">This folder has no image assets in. Please select another folder and refine your query</Alert>
+										)
+									}
                 </Box>
 							)
 						)}
