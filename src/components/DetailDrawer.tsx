@@ -121,6 +121,27 @@ const DetailDrawer = () => {
 				</Stack>
 				<GenericImage item={app.currentMedia} w={1024} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
 				<TextField
+					id='name'
+					label='Name'
+					variant='standard'
+					InputProps={{
+						readOnly: true,
+						startAdornment: (
+							<InputAdornment position='start'>
+								<NotesOutlined />
+							</InputAdornment>
+						),
+						endAdornment: (
+							<InputAdornment position='start'>
+								<LockOutlined />
+							</InputAdornment>
+						)
+					}}
+					defaultValue={
+						app.currentMedia?.entry?.photo?.name
+					}
+				/>
+				<TextField
 					id='dateModified'
 					label='Date modified'
 					variant='standard'
