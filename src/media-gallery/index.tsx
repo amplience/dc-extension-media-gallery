@@ -72,7 +72,7 @@ function MediaGallery() {
 				onClose={handleClose}
         		aria-describedby="error-dialog-description"
 			>
-				<DialogTitle>Fatal Error</DialogTitle>
+				<DialogTitle>Error</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="error-dialog-description">
 						<Alert severity='error' sx={{marginBottom: '15px'}}>
