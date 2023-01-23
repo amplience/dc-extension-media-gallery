@@ -15,7 +15,7 @@ import Entry from '../model/entry'
 import { useExtension } from '../extension-context'
 import IChApi from '../ch-api/i-ch-api'
 import { RestChApi } from '../ch-api/rest-ch-api'
-import { AssetWithExif, EnrichedRepository } from '../ch-api/shared'
+import { AssetWithExif, EnrichedRepository, sortRepos } from '../ch-api/shared'
 
 type AppContextData = {
 	zoom: number
@@ -342,6 +342,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				setChApi(api)
 
 				const result = await api.allReposWithFolders()
+				sortRepos(result);
+
 				console.log(result)
 				setRepos(result)
 			}
