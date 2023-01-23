@@ -97,6 +97,7 @@ type AppContextData = {
 	saveItem?: () => void
 	dragOrder: (active: any, over: any) => void,
 	error?: string
+	setError: (error: string | undefined) => void
 }
 
 const defaultAppState = {
@@ -147,7 +148,8 @@ const defaultAppState = {
 	handleMoveToBottom: () => {},
 	importMedia: () => {},
 	selectImportItem: (id: string) => {},
-	dragOrder: (active: any, over: any) => {}
+	dragOrder: (active: any, over: any) => {},
+	setError: (error: string | undefined) => {}
 }
 
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
@@ -1020,7 +1022,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			saveItem,
 			sensors,
 			dragOrder,
-			error
+			error,
+			setError
 		}
 
 		setState({ ...state })

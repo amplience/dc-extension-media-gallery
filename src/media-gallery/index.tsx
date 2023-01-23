@@ -1,6 +1,6 @@
 import './media-gallery.css'
 
-import { Alert, Box, Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import ImageDialog from '../components/ImageDialog'
 import AppToolbar from '../components/AppToolbar'
 import GridView from '../components/GridView'
@@ -27,6 +27,10 @@ const errorCodeToMessage = (code: string | undefined): string => {
 
 function MediaGallery() {
 	const app = useContext(AppContext)
+
+	const handleClose = () => {
+		app.setError(undefined);
+	}
 
 	return (
 		<>
@@ -65,6 +69,7 @@ function MediaGallery() {
 
 			<Dialog
 				open={app.error != null}
+				onClose={handleClose}
         		aria-describedby="error-dialog-description"
 			>
 				<DialogTitle>Fatal Error</DialogTitle>
@@ -76,6 +81,11 @@ function MediaGallery() {
 						Please check the documentation to ensure the extension has been configured correctly.
 					</DialogContentText>
 				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose} autoFocus>
+						OK
+					</Button>
+				</DialogActions>
 			</Dialog>
 		</>
 	)
