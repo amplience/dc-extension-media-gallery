@@ -130,7 +130,7 @@ const ImportDrawer = () => {
 	return (
 		<SwipeableDrawer
 			PaperProps={{
-				sx: { width: '90%' }
+				sx: { width: '90%',  overflowX: 'clip', overflowY: 'auto' }
 			}}
 			anchor={'left'}
 			open={app.importDrawerOpen}
