@@ -75,6 +75,7 @@ const AppToolbar = () => {
 					aria-label={`import`}
 					size='small'
 					title='Import'
+					disabled={app.chApi == null}
 					onClick={app.handleImport}>
 					<AddPhotoAlternateOutlined />
 				</IconButton>
