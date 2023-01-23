@@ -97,7 +97,8 @@ type AppContextData = {
 	saveItem?: () => void
 	dragOrder: (active: any, over: any) => void,
 	error?: string
-	setError: (error: string | undefined) => void
+	setError: (error: string | undefined) => void,
+	entries: Entry[]
 }
 
 const defaultAppState = {
@@ -149,7 +150,8 @@ const defaultAppState = {
 	importMedia: () => {},
 	selectImportItem: (id: string) => {},
 	dragOrder: (active: any, over: any) => {},
-	setError: (error: string | undefined) => {}
+	setError: (error: string | undefined) => {},
+	entries: []
 }
 
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
@@ -184,6 +186,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		mouseX: number
 		mouseY: number
 	} | null>(null)
+
+	const [entries, setEntries] = useState<Entry[]>([])
 
 	const dragOrder = (active: any, over: any) => {
 		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
@@ -354,9 +358,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				setChApi(api)
 
 				const result = await api.allReposWithFolders()
-				sortRepos(result);
-
-				console.log(result)
+				sortRepos(result)
 				setRepos(result)
 			}
 		})()
@@ -505,6 +507,15 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 		}
 	}, [field, galleryPath, setField, items])
+
+	useEffect(() => {
+		if (chApi) {
+			const config = field[params.configPath];
+			if (config && config.repoId && config.folderId && state.getEntries) {
+				state.getEntries(config.repoId, config.folderId, config.query);
+			}
+		}
+	}, [chApi])
 
 	useEffect(() => {
 		const keyDownHandler = (event: KeyboardEvent) => {
@@ -675,6 +686,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 						defaultHost: 'cdn.media.amplience.net'
 					})
 				)
+
+				setEntries(entries);
 
 				return entries
 			}
@@ -1023,7 +1036,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			sensors,
 			dragOrder,
 			error,
-			setError
+			setError,
+			entries
 		}
 
 		setState({ ...state })
@@ -1055,7 +1069,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		setField,
 		galleryPath,
 		params,
-		error
+		error,
+		entries
 	])
 
 	return <AppContext.Provider value={state}>{children}</AppContext.Provider>
