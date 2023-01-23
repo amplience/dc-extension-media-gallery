@@ -164,6 +164,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [gridMode, setGridMode] = useState(true)
 	const [repos, setRepos] = useState<EnrichedRepository[]>()
 	const [chApi, setChApi] = useState<IChApi>()
+	const [endpoint, setEndpoint] = useState<string>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
@@ -339,6 +340,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				}
 
 				await api.auth(params.clientId, params.clientSecret)
+				setEndpoint(await api.getEndpoint());
 				setChApi(api)
 
 				const result = await api.allReposWithFolders()
@@ -642,7 +644,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * @param id
 		 */
 		const getEntries = async (repoId: string, id: string, query?: string): Promise<Entry[]> => {
-			if (chApi && repoId) {
+			if (chApi && repoId && endpoint) {
 				setDefaultFolder(repoId, id, query)
 				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
@@ -659,7 +661,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 				const entries = assets.map((asset) =>
 					convertToEntry(asset, params.metadataMap, {
-						endpoint: 'nmrsaalphatest',
+						endpoint: endpoint,
 						defaultHost: 'cdn.media.amplience.net'
 					})
 				)

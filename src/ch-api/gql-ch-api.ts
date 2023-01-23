@@ -346,4 +346,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
 
     return assetSearch as AssetWithExif[];
   }
+
+  async getEndpoint(): Promise<string> {
+    // TODO
+    return 'nmrsaalphatest';
+  }
 }

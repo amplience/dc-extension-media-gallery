@@ -61,6 +61,15 @@ interface Asset {
   }
 }
 
+interface Settings {
+  di: {
+    endpoints: {
+      path: string,
+      dynamicHost: string
+    }[]
+  }
+}
+
 export class RestChApi extends AuthClient implements IChApi {
   apiUrl = "http://dam-api-internal.amplience.net/v1.5.0/";
 
@@ -198,5 +207,11 @@ export class RestChApi extends AuthClient implements IChApi {
         n: 100
       })
     );
+  }
+
+  async getEndpoint(): Promise<string> {
+    const response = (await this.fetchUrl('settings', 'GET', undefined)) as Result<Settings>;
+
+    return response.content.di.endpoints[0].path;
   }
 }
