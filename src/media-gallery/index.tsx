@@ -1,6 +1,6 @@
 import './media-gallery.css'
 
-import { Box } from '@mui/material'
+import { Alert, Box, Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import ImageDialog from '../components/ImageDialog'
 import AppToolbar from '../components/AppToolbar'
 import GridView from '../components/GridView'
@@ -12,8 +12,22 @@ import ContextMenu from '../components/ContextMenu'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 
+const errorCodeToMessage = (code: string | undefined): string => {
+	switch (code) {
+		case 'client_id_invalid':
+			return 'Couldn\'t authenticate with Content Hub: Client ID is invalid.\nMake sure it has been provided in the extension parameters.'
+		case 'client_secret_invalid':
+			return 'Couldn\'t authenticate with Content Hub: Client secret is invalid.\nMake sure you are using the proper secret for this client.'
+		case undefined:
+			return 'Unknown error.'
+		default:
+			return code
+	}
+}
+
 function MediaGallery() {
 	const app = useContext(AppContext)
+
 	return (
 		<>
 			{/* Image full screen view */}
@@ -48,6 +62,21 @@ function MediaGallery() {
 
 			{/* Snack Bar for alerts */}
 			<AppSnack />
+
+			<Dialog
+				open={app.error != null}
+        		aria-describedby="error-dialog-description"
+			>
+				<DialogTitle>Fatal Error</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="error-dialog-description">
+						<Alert severity='error' sx={{marginBottom: '15px'}}>
+							{errorCodeToMessage(app.error)}
+						</Alert>
+						Please check the documentation to ensure the extension has been configured correctly.
+					</DialogContentText>
+				</DialogContent>
+			</Dialog>
 		</>
 	)
 }

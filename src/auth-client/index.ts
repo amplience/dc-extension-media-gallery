@@ -30,6 +30,10 @@ export class AuthClient {
 
     const token = (await response.json());
 
+    if (token.error) {
+      throw new Error(token.error_description);
+    }
+
     this.token = token.access_token;
     this.expiryTime = (Date.now() / 1000) + token.expires_in;
     this.id = id;

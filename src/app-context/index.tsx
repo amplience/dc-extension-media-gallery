@@ -95,7 +95,8 @@ type AppContextData = {
 	selectImportItem: (id: string) => void
 	selectItem: (id: string) => void
 	saveItem?: () => void
-	dragOrder: (active: any, over: any) => void
+	dragOrder: (active: any, over: any) => void,
+	error?: string
 }
 
 const defaultAppState = {
@@ -165,6 +166,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [repos, setRepos] = useState<EnrichedRepository[]>()
 	const [chApi, setChApi] = useState<IChApi>()
 	const [endpoint, setEndpoint] = useState<string>()
+	const [error, setError] = useState<string>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
@@ -339,8 +341,14 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					)
 				}
 
-				await api.auth(params.clientId, params.clientSecret)
-				setEndpoint(await api.getEndpoint());
+				try {
+					await api.auth(params.clientId, params.clientSecret)
+				} catch (e: any) {
+					setError(e.message)
+					return;
+				}
+
+				setEndpoint(await api.getEndpoint())
 				setChApi(api)
 
 				const result = await api.allReposWithFolders()
@@ -1011,7 +1019,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			selectItem,
 			saveItem,
 			sensors,
-			dragOrder
+			dragOrder,
+			error
 		}
 
 		setState({ ...state })
@@ -1042,7 +1051,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		field,
 		setField,
 		galleryPath,
-		params
+		params,
+		error
 	])
 
 	return <AppContext.Provider value={state}>{children}</AppContext.Provider>
