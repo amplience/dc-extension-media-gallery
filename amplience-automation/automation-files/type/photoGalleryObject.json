@@ -3,7 +3,10 @@
   "status": "ACTIVE",
   "settings": {
     "label": "Media Gallery Object",
-    "icons": [],
+    "icons": [{
+      "size" : 256,
+      "url" : "https://ampproduct.a.bigcontent.io/v1/static/icons-dc-extension-media-gallery"
+    }],
     "visualizations": [
       {
         "label": "JSON",
