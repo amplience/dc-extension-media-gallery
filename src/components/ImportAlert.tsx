@@ -65,10 +65,12 @@ const ImportAlert = () => {
   return (
     <Alert
       severity="info"
+      onClick={() => app.setImportDrawerOpen && app.setImportDrawerOpen(true)}
       sx={{
         transition: "0.5s margin",
         marginTop: alertOffset + "px",
         height: "36px",
+        cursor: "pointer"
       }}
     >
       Import panel has changes: {messages.join(', ')}
