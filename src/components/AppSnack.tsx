@@ -8,8 +8,8 @@ const AppSnack = () => {
 	return (
 		<Snackbar
 			anchorOrigin={{
-				vertical: 'top',
-				horizontal: 'left'
+				vertical: 'bottom',
+				horizontal: 'right'
 			}}
 			open={app.snackOpen}
 			autoHideDuration={3000}
