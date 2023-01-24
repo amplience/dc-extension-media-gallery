@@ -12,11 +12,13 @@ const ImportAlert = () => {
 
   const [updated, setUpdated] = useState(0);
   const [outOfSync, setOutOfSync] = useState(0);
+  const [available, setAvailable] = useState(0);
 
   useEffect(() => {
     if (app.entries && app.items) {
       let updatedCount = 0;
       let outOfSyncCount = 0;
+      let availableCount = 0;
 
       assetsToItems(app.entries, params).forEach((item: MediaItem) => {
         const filtered = app.items.filter(
@@ -32,11 +34,14 @@ const ImportAlert = () => {
               }
             }
           });
+        } else {
+          availableCount++;
         }
       });
 
       setUpdated(updatedCount);
       setOutOfSync(outOfSyncCount);
+      setAvailable(availableCount);
     }
   }, [app.entries, app.items, params]);
 
@@ -44,6 +49,10 @@ const ImportAlert = () => {
   const alertOffset = showAlert ? 0 : -48;
 
   const messages = [];
+
+  if (available > 0) {
+    messages.push(`${available} not yet imported`)
+  }
 
   if (updated > 0) {
     messages.push(`${updated} updated since last import`)
