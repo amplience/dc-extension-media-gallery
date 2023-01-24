@@ -11,6 +11,7 @@ import AppSnack from '../components/AppSnack'
 import ContextMenu from '../components/ContextMenu'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import ImportAlert from '../components/ImportAlert'
 
 const errorCodeToMessage = (code: string | undefined): string => {
 	switch (code) {
@@ -40,6 +41,8 @@ function MediaGallery() {
 			<Box style={{ width: '100%' }}>
 				{/* Toolbar */}
 				<AppToolbar />
+
+				<ImportAlert />
 
 				{/* Context Menu */}
 				<ContextMenu />
