@@ -16,9 +16,29 @@ You can perform the following actions from the toolbar:
 | ![Zoom in icon](../media/icon-zoom-in.png) ![Zoom out icon](../media/icon-zoom-out.png) | zoom in, zoom out in grid view |
 | ![List view icon](../media/icon-list.png) ![Grid view icon](../media/icon-grid.png) | switch betwen list and grid view |
 
+> Note: the application logo on the left can be clicked to open the context menu
+
 ## Import media
 
-WIP
+If you have previsouly imported media from a specific folder, and potentially a query, an alert bar provides information about:
+- available items: items in the folder not in your media collection yet
+- updated items: items that have been updated in Content Hub
+- out-of-sync items: iterms that you have manullay updated locally in your collection
+
+![Import alert bar](../media/import-alert-bar.png)
+
+When opening the import drawer, you can do the following actions:
+- navigate and choose a folder in Content Hub
+- once a folder is selected, you can refine your selection using a query
+- you can see available, updated and out-of-sync items
+- you can select all, all updated, all out-of-sync items or deselect all
+- you can import your selection or cancel and close the drawer
+
+![Import drawer selection](../media/import-drawer-selection.png)
+
+After import, a notification will display the number of items imported, and the import alert bar will be updated or closed if nothing can be imported from your last folder / query selection:
+
+![Import alert bar after import](../media/import-alert-bar-after-import.png)
 
 ## View media
 
@@ -32,7 +52,7 @@ You can quickly view an item full-width by clicking on its thumbnail in **grid**
 
 You can edit an item details by clicking on the view icon in grid or list view. You can also use the `e` keyboard shortcut when focusing on an item, or use the context menu when right clicking on an item.
 
-Date modified is read only and you can edit author and caption. Once saved, a notification will appear.
+Date modified and name are read only and you can view or edit additional metadata if available, for instance author and caption. Once saved, a notification will appear.
 
 ## Grid View
 
@@ -124,9 +144,8 @@ You can automatically sort the collection by:
 
 -   modified date ascending
 -   modified date descending
--   author ascending
--   author descending
--   caption ascending
--   caption descending
+-   name ascending
+-   name descending
+-   additional metadata ascending and descending
 
 After a collection has been sorted, you can manually re-order using drag-and-drop.
