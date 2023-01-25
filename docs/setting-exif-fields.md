@@ -107,3 +107,152 @@ Additional metadata in `import` view:
 
 ![Metadata in import view](../media/metadata-import-view.png)
 
+## More detailed example
+
+Installation parameters:
+
+```json
+{
+  "clientId": "2f1f5720-8acc-43b5-9f67-bab73ba7524a",
+  "clientSecret": "2a6d15b2a29459ddabfe6da0870e884a8ac2717966e67273d6425c88d319a7ef",
+  "configPath": "galleryConfig",
+  "galleryPath": "photoGallery",
+  "metadataMap": [
+    {
+      "source": "exif/taken",
+      "target": "taken",
+      "label": "Date Captured",
+      "editable": false,
+      "sortable": true,
+      "type": "date",
+      "visibility": [
+        "edit",
+        "import",
+        "grid",
+        "list",
+        "info"
+      ]
+    },
+    {
+      "source": "exif/artist",
+      "target": "photographer",
+      "label": "Photographer",
+      "editable": true,
+      "sortable": true,
+      "type": "string",
+      "icon": "author",
+      "visibility": [
+        "edit",
+        "import",
+        "grid",
+        "list",
+        "info"
+      ]
+    },
+    {
+      "source": "exif/description",
+      "target": "description",
+      "label": "Caption",
+      "editable": true,
+      "sortable": true,
+      "type": "multiline",
+      "icon": "text",
+      "visibility": [
+        "edit",
+        "import",
+        "grid",
+        "list",
+        "info"
+      ]
+    },
+    {
+      "source": "exif/focalLength",
+      "target": "focalLength",
+      "label": "Focal length",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    },
+    {
+      "source": "exif/exposureTime",
+      "target": "exposureTime",
+      "label": "Exposure time",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    },
+    {
+      "source": "exif/isoSpeed",
+      "target": "isoSpeed",
+      "label": "ISO",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    },
+    {
+      "source": "exif/make",
+      "target": "make",
+      "label": "Camera make",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    },
+    {
+      "source": "exif/model",
+      "target": "model",
+      "label": "Camera model",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    },
+    {
+      "source": "exif/orientation",
+      "target": "orientation",
+      "label": "Orientation",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    },
+    {
+      "source": "exif/software",
+      "target": "software",
+      "label": "Software",
+      "editable": false,
+      "sortable": false,
+      "type": "string",
+      "icon": "text",
+      "visibility": [
+        "info"
+      ]
+    }
+  ]
+}
+```
+
+Result in info panel:
+
+![EXIF example](../media/exif-example.png)
