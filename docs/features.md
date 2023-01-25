@@ -64,14 +64,21 @@ For accessibility, the extension can also be used using the following shortcuts,
 
 ![Context Menu](../media/context-menu.png)
 
+Item-specific actions:
 
 | key | action |
 |-----|--------|
+| `space` | select / de-select item |
 | `v` | view currently focused item |
 | `e` | edit currently focused item |
 | `r` | remove currently focused item |
 | `t` | move currently focused item to top |
 | `b` | move currently focused item to bottom |
+
+Global actions:
+
+| key | action |
+|-----|--------|
 | `i` | open the import drawer |
 | `a` | select all items |
 | `n` | deselect all items |
@@ -83,6 +90,15 @@ For accessibility, the extension can also be used using the following shortcuts,
 | `l` | switch to list view |
 | `g` | switch to grid view |
 | `m` | open context menu |
+| `right and left arrows` | move focus to next / previous item in grid and list views |
+
+Drag-and-drop actions:
+
+| key | action |
+|-----|--------|
+| `return` | start / end keyboard drag-and-drop |
+| `arrows` | move dragged item (you might need to press `space` to scroll the view) |
+| `escape` | cancel keyboard drag-and-drop |
 
 ## Manual re-ordering
 
