@@ -27,6 +27,7 @@ import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
 import { useExtension } from '../extension-context'
+import { metaToString } from '../model/metadata-map'
 
 const ItemListView = () => {
 	const app = useContext(AppContext)
@@ -132,7 +133,7 @@ const ItemListView = () => {
 										id={item.id}
 										onClick={() => app.selectItem(item.id)}
 										align='left'>
-										{item.entry[meta.target]}
+										{metaToString(meta, item.entry[meta.target])}
 									</TableCell>
 								</Tooltip>)
 							})

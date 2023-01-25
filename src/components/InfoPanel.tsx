@@ -2,6 +2,7 @@ import { Box, Table, TableBody, TableCell, TableRow, Typography } from '@mui/mat
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import { useExtension } from '../extension-context'
+import { metaToString } from '../model/metadata-map'
 
 const InfoPanel = () => {
 	const app = useContext(AppContext)
@@ -20,7 +21,7 @@ const InfoPanel = () => {
 				<Typography
 					sx={{ fontStyle: 'italic', fontSize: '1rem' }}
 					variant='caption'>
-					{app.currentMedia?.entry[meta.target]}
+					{metaToString(meta, app.currentMedia?.entry[meta.target])}
 				</Typography>
 			</TableCell>
 		</TableRow>)

@@ -19,8 +19,8 @@ import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import GenericImage from './GenericImage'
 import { useExtension } from '../extension-context'
-import { map } from 'lodash'
 import { MetadataMapEntry } from '../model/metadata-map'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 const DetailDrawer = () => {
 	const app = useContext(AppContext)
@@ -63,8 +63,8 @@ const DetailDrawer = () => {
 					key={meta.target}
 					multiline
 					rows={4}
-					id='caption'
-					label='Caption'
+					id={meta.target}
+					label={meta.label}
 					variant='standard'
 					defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
 					InputProps={{
@@ -78,6 +78,17 @@ const DetailDrawer = () => {
 					}}
 					onChange={(event) => {
 						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
+					}}
+				/>)
+			case 'date':
+				return (<DateTimePicker
+					key={meta.target}
+					label={meta.label}
+					value={app.tempMedia && app.tempMedia[meta.target]}
+					renderInput={(params) => <TextField {...params} />}
+					onChange={(event: any) => {
+						app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime())
+						app.tempMedia && app.setTempMedia && app.setTempMedia({...app.tempMedia})
 					}}
 				/>)
 			default:

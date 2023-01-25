@@ -32,6 +32,7 @@ import { useExtension } from '../extension-context'
 import { MediaItem } from '../model'
 import _ from 'lodash'
 import { EnrichedRepository, Folder } from '../ch-api/shared'
+import { metaToString } from '../model/metadata-map'
 
 const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
   if (folders) {
@@ -330,7 +331,7 @@ const ImportDrawer = () => {
 																params.metadataMap.filter(meta => meta.visibility.indexOf('import') !== -1).map(meta => {
 																	return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
 																		<Typography variant='subtitle2' noWrap>
-																			{meta.label}: {item.entry[meta.target]}
+																			{meta.label}: {metaToString(meta, item.entry[meta.target])}
 																		</Typography>
 																	</Tooltip>)
 																})

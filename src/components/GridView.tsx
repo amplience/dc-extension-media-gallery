@@ -15,6 +15,7 @@ import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
 import { useExtension } from '../extension-context'
+import { metaToString } from '../model/metadata-map'
 
 const GridView = () => {
 	const app = useContext(AppContext)
@@ -151,7 +152,7 @@ const GridView = () => {
 												params.metadataMap.filter(meta => meta.visibility.indexOf('grid') !== -1).map(meta => {
 													return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
 														<Typography variant='subtitle2' noWrap>
-															{meta.label}: {item.entry[meta.target]}
+															{meta.label}: {metaToString(meta, item.entry[meta.target])}
 														</Typography>
 													</Tooltip>)
 												})
