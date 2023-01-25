@@ -23,7 +23,7 @@ You can perform the following actions from the toolbar:
 If you have previsouly imported media from a specific folder, and potentially a query, an alert bar provides information about:
 - available items: items in the folder not in your media collection yet
 - updated items: items that have been updated in Content Hub
-- out-of-sync items: iterms that you have manullay updated locally in your collection
+- out-of-sync items: items that you have manullay updated locally in your collection
 
 ![Import alert bar](../media/import-alert-bar.png)
 
