@@ -151,7 +151,9 @@ const GridView = () => {
 											{
 												params.metadataMap.filter(meta => meta.visibility.indexOf('grid') !== -1).map(meta => {
 													return (<Tooltip title={metaToString(meta, item.entry[meta.target])} followCursor={true} key={`${meta.target}-${index}`}>
-														<Typography variant='subtitle2' noWrap>
+														<Typography style={{fontSize: "11px"}}
+															variant='subtitle2' noWrap
+														>
 															{meta.label}: {metaToString(meta, item.entry[meta.target])}
 														</Typography>
 													</Tooltip>)
