@@ -166,6 +166,7 @@ const GridView = () => {
 										mb: 1,
 										ml: 1,
 										mr: 1,
+										textAlign: 'left',
 										cursor: 'pointer',
 										bgcolor: `${item.selected ? '#444' : ''}`
 									}}
