@@ -10,7 +10,8 @@ This extension allows you to manage a collection of image items easily, with imp
 -   [Manual Installation](./docs/manual-installation.md)
 -   [Linking Content Hub to Extension](./docs/connecting-media-hub.md) (clientID and secret in install
     params)
--   [Setting EXIF fields](./docs/setting-exif-fields.md)
+-   [Configuration via Extension Params](./docs/configuration.md)
+    -   [Setting EXIF fields](./docs/setting-exif-fields.md)
 -   [Features](./docs/features.md)
     -   [Toolbar](./docs/features.md#toolbar)
     -   [Import Media](./docs//features.md#import-media)

@@ -32,4 +32,4 @@ $ dc-cli content-type-schema import ./amplience-automation/automation-files/sche
 $ dc-cli content-type import ./amplience-automation/automation-files/type/
 ```
 
-After these running commands, the media gallery content type will now be available for use. It's recommended that you change the extension parameters to point to your Content Hub client and secret, to match the information you want to extract from the metadata, and to fit the structure of the content you want to create.
+After these running commands, the media gallery content type will now be available for use. It's recommended that you change the [extension parameters](./configuration.md) to point to your Content Hub client and secret, to match the information you want to extract from the metadata, and to fit the structure of the content you want to create.
