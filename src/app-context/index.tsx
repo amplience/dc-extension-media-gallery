@@ -935,9 +935,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
 					.slice()
-					.sort((a: any, b: any) =>
-						a.entry[key] > b.entry[key] ? 1 : b.entry[key] > a.entry[key] ? -1 : 0
-					)
+					.sort((a: any, b: any) => {
+						const aValue = a.entry[key] || 0;
+						const bValue = b.entry[key] || 0;
+
+						return aValue > bValue ? 1 : bValue > aValue ? -1 : 0
+					})
 			})
 			handleSortClose()
 		}
@@ -949,9 +952,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
 					.slice()
-					.sort((a: any, b: any) =>
-						b.entry[key] > a.entry[key] ? 1 : a.entry[key] > b.entry[key] ? -1 : 0
-					)
+					.sort((a: any, b: any) => {
+						const aValue = a.entry[key] || 0;
+						const bValue = b.entry[key] || 0;
+
+						return bValue > aValue ? 1 : aValue > bValue ? -1 : 0
+					})
 			})
 			handleSortClose()
 		}
