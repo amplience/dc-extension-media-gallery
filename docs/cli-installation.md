@@ -2,7 +2,7 @@
 
 We've included several [automation files](./amplience-automation/automation-files/) to enable installing the extension and a 'starter' Content Schema and Type via the command line. An Extension Snippet is also included in the extension automation file which will enable you to easily add the extension to any existing Content Schemas.
 
-To make use of the automation files you should either clone the [dc-extension-media-gallery](https://github.com/amplience/dc-extension-media-gallery) or donwload the [ZIP file](https://github.com/amplience/dc-extension-media-gallery/archive/refs/heads/main.zip)
+To make use of the automation files you should either clone the [dc-extension-media-gallery](https://github.com/amplience/dc-extension-media-gallery) or download the repository as a [ZIP file](https://github.com/amplience/dc-extension-media-gallery/archive/refs/heads/main.zip)
 
 ```
 git clone https://github.com/amplience/dc-extension-media-gallery.git
