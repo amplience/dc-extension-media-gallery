@@ -48,7 +48,6 @@ function MediaGallery() {
 				<DetailDrawer />
 
 				{/* Import media drawer */}
-				{/* TODO: move to components */}
 				<ImportDrawer />
 			</Box>
 			<Box sx={{ width: '100%', flexGrow: 1 }} onContextMenu={app.handleContextMenu} />
