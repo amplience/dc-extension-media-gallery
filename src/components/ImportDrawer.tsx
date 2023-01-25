@@ -330,7 +330,7 @@ const ImportDrawer = () => {
 																params.metadataMap.filter(meta => meta.visibility.indexOf('import') !== -1).map(meta => {
 																	return (<Tooltip title={item.entry[meta.target]} followCursor={true} key={`${meta.target}-${index}`}>
 																		<Typography variant='subtitle2' noWrap>
-																			{item.entry[meta.target]}
+																			{meta.label}: {item.entry[meta.target]}
 																		</Typography>
 																	</Tooltip>)
 																})
