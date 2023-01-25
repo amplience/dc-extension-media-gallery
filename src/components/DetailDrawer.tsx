@@ -81,13 +81,14 @@ const DetailDrawer = () => {
 					}}
 				/>)
 			case 'date':
+				const value = app.tempMedia && app.tempMedia[meta.target];
 				return (<DateTimePicker
 					key={meta.target}
 					label={meta.label}
-					value={app.tempMedia && app.tempMedia[meta.target]}
+					value={value == null ? null : (value * 1000)}
 					renderInput={(params) => <TextField {...params} />}
 					onChange={(event: any) => {
-						app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime())
+						app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime() / 1000)
 						app.tempMedia && app.setTempMedia && app.setTempMedia({...app.tempMedia})
 					}}
 				/>)

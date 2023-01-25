@@ -14,7 +14,11 @@ export interface MetadataMapEntry {
 export const metaToString = (meta: MetadataMapEntry, value: any) => {
     switch (meta.type) {
         case 'date':
-            return new Date(value).toDateString();
+            if (value == null) {
+                return 'Unspecified';
+            }
+
+            return new Date(value * 1000).toDateString();
         default:
             return value;
     }
