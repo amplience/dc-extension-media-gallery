@@ -33,7 +33,7 @@ export const defaultMetadataMap: MetadataMap = [
 
 const defaultExifValues: any = {
   artist: 'Unknown',
-  description: 'No Description.'
+  description: 'None'
 };
 
 function first<T>(items: T[] | undefined): T | undefined {
