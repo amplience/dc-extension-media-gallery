@@ -27,7 +27,23 @@
 				"galleryConfig": {
 					"title": "Gallery Config",
 					"type": "object",
-					"properties": {},
+					"properties": {
+						"repoId": {
+							"title": "Import Repo ID",
+							"description": "Repository ID used for the last import",
+							"type": "string"
+						},
+						"folderId": {
+							"title": "Import Folder ID",
+							"description": "Folder ID used for the last import",
+							"type": "string"
+						},
+						"query": {
+							"title": "Import Query",
+							"description": "Query used for the last import",
+							"type": "string"
+						}
+					},
 					"propertyOrder": []
 				},
 				"photoGallery": {
