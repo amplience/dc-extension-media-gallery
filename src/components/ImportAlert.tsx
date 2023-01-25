@@ -45,7 +45,7 @@ const ImportAlert = () => {
     }
   }, [app.entries, app.items, params]);
 
-  const showAlert = updated + outOfSync > 0;
+  const showAlert = updated + outOfSync + available > 0;
   const alertOffset = showAlert ? 0 : -48;
 
   const messages = [];
