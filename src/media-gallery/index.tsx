@@ -20,8 +20,9 @@ function MediaGallery() {
 	return (
 		<>
 			{/* Image full screen view */}
-			{/* TODO: mode styles for all components */}
 			<ImageDialog />
+
+			{/* Main View */}
 			<Box style={{ width: '100%' }}>
 				{/* Toolbar */}
 				<AppToolbar />
