@@ -122,7 +122,7 @@ const ItemListView = () => {
 					<TableBody>
 						{app.items.map((item: any, index: number) => {
 							const metaBody = listMeta.map(meta => {
-								return (<Tooltip title={item.entry[meta.target]} followCursor={true}>
+								return (<Tooltip title={metaToString(meta, item.entry[meta.target])} followCursor={true}>
 									<TableCell
 										sx={{
 											cursor: 'pointer',
