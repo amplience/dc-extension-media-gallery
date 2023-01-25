@@ -64,18 +64,25 @@ For accessibility, the extension can also be used using the following shortcuts,
 
 ![Context Menu](../media/context-menu.png)
 
--   `v` - view currently focused item
--   `e` - edit currently focused item
--   `r` - remove currently focused item
--   `i` - open the import drawer
--   `a` - select all items
--   `n` - deselect all items
--   `R` - remove selected items
--   `s` - sort items
--   `Z` - reset collection
--   `l` - list view
--   `g` - grid view
--   `m` - open context menu
+
+| key | action |
+|-----|--------|
+| `v` | view currently focused item |
+| `e` | edit currently focused item |
+| `r` | remove currently focused item |
+| `t` | move currently focused item to top |
+| `b` | move currently focused item to bottom |
+| `i` | open the import drawer |
+| `a` | select all items |
+| `n` | deselect all items |
+| `R` | remove selected items |
+| `s` | sort items |
+| `Z` | reset collection |
+| `+` | zoom in grid view (one level only) |
+| `-` | zoom out grid view (one level only) |
+| `l` | switch to list view |
+| `g` | switch to grid view |
+| `m` | open context menu |
 
 ## Manual re-ordering
 
