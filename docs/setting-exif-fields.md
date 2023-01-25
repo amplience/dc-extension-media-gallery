@@ -2,7 +2,7 @@
 
 You can control the metadata that is saved in the content, and displayed in the different views of the extension. This can be done by editing the extension's installation parameters. 
 
-Here is a sample configuration with `photographer` and `caption` metadata, both sourced from `artist` and `description` in the exif metadata respectively:
+Here is a sample configuration with `photographer` and `caption` metadata, both sourced from `artist` and `description` in the EXIF metadata respectively:
 
 ```json
 {
@@ -44,6 +44,23 @@ Here is a sample configuration with `photographer` and `caption` metadata, both 
       ]
     }
   ]
+}
+```
+
+Here is an example of EXIF metadata coming from Content Hub, showing other properties you can use:
+
+```json
+"values": {
+    "orientation": 1.0,
+    "exposureTime": "1\/400",
+    "software": "Adobe Photoshop 24.1 (Macintosh)",
+    "taken": 1.485992461E9,
+    "description": "Breakfast",
+    "isoSpeed": 100.0,
+    "model": "Canon EOS REBEL T3i",
+    "id": "cbf76dd4-db63-4edd-8f1a-ed18a9646729",
+    "make": "Canon",
+    "focalLength": "50\/1"
 }
 ```
 
