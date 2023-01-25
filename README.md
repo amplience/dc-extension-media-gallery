@@ -8,14 +8,14 @@ This extension allows you to manage a collection of image items easily, with imp
 
 -   [Installing with `dc-cli` tool](./docs/cli-installation.md)
 -   [Manual Installation](./docs/manual-installation.md)
--   [Linking Content HUB to Extension](./docs/connecting-media-hub.md) (clientID and secret in install
+-   [Linking Content Hub to Extension](./docs/connecting-media-hub.md) (clientID and secret in install
     params)
 -   [Setting EXIF fields](./docs/setting-exif-fields.md)
 -   [Features](./docs/features.md)
     -   [Toolbar](./docs/features.md#toolbar)
     -   [Import Media](./docs//features.md#import-media)
     -   [View Media](./docs//features.md#view-media)
-    -   [EditMedia](./docs//features.md#edit-media)
+    -   [Edit Media](./docs//features.md#edit-media)
     -   [Grid View](./docs//features.md#grid-view)
     -   [List View](./docs//features.md#list-view)
     -   [Context Menu](./docs//features.md#context-menu)
