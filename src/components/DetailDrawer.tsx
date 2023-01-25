@@ -52,7 +52,8 @@ const DetailDrawer = () => {
 							<InputAdornment position='start'>
 								{getIcon(meta)}
 							</InputAdornment>
-						)
+						),
+						readOnly: !meta.editable
 					}}
 					onChange={(event) => {
 						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
@@ -74,7 +75,8 @@ const DetailDrawer = () => {
 								position='start'>
 								{getIcon(meta)}
 							</InputAdornment>
-						)
+						),
+						readOnly: !meta.editable
 					}}
 					onChange={(event) => {
 						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
@@ -86,6 +88,7 @@ const DetailDrawer = () => {
 					key={meta.target}
 					label={meta.label}
 					value={value == null ? null : (value * 1000)}
+					readOnly={meta.editable}
 					renderInput={(params) => <TextField {...params} />}
 					onChange={(event: any) => {
 						app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime() / 1000)
