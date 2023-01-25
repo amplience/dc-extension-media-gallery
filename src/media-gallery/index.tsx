@@ -26,6 +26,7 @@ function MediaGallery() {
 				{/* Toolbar */}
 				<AppToolbar />
 
+				{/* Import Alert Bar */}
 				<ImportAlert />
 
 				{/* Context Menu */}
@@ -54,6 +55,7 @@ function MediaGallery() {
 			{/* Snack Bar for alerts */}
 			<AppSnack />
 
+			{/* Error Alert Dialog */}
 			<ErrorDialog />
 		</>
 	)
