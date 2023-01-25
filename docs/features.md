@@ -6,13 +6,15 @@
 
 You can perform the following actions from the toolbar:
 
--   (TODO-icon here) import new media items
--   (TODO-icon here) select all media item
--   (TODO-icon here) de-select all media item
--   (TODO-icon here) remove selected media items
--   (TODO-icon here) sort collection (by date mofified, author, caption)
--   (TODO-icon here) reset collection
--   (TODO-icon here) switch betwen grid and list view
+| icons | actions |
+|-------|---------|
+| ![Import icon](../media/icon-import.png)  | import new media items |
+| ![Select all icon](../media/icon-select-all.png) ![De-select all icon](../media/icon-select-none.png) | select and deselect all media item |
+| ![Remove icon](../media/icon-remove.png) | remove selected media items |
+| ![Sort icon](../media/icon-sort.png) | sort collection (by date mofified, name and additional metatdata, for instance author, caption) |
+| ![Reset icon](../media/icon-reset.png) | reset collection |
+| ![Zoom in icon](../media/icon-zoom-in.png) ![Zoom out icon](../media/icon-zoom-out.png) | zoom in, zoom out in grid view |
+| ![List view icon](../media/icon-list.png) ![Grid view icon](../media/icon-grid.png) | switch betwen list and grid view |
 
 ## Import media
 
@@ -62,18 +64,41 @@ For accessibility, the extension can also be used using the following shortcuts,
 
 ![Context Menu](../media/context-menu.png)
 
--   `v` - view currently focused item
--   `e` - edit currently focused item
--   `r` - remove currently focused item
--   `i` - open the import drawer
--   `a` - select all items
--   `n` - deselect all items
--   `R` - remove selected items
--   `s` - sort items
--   `Z` - reset collection
--   `l` - list view
--   `g` - grid view
--   `m` - open context menu
+Item-specific actions:
+
+| key | action |
+|-----|--------|
+| `space` | select / de-select item |
+| `v` | view currently focused item |
+| `e` | edit currently focused item |
+| `r` | remove currently focused item |
+| `t` | move currently focused item to top |
+| `b` | move currently focused item to bottom |
+
+Global actions:
+
+| key | action |
+|-----|--------|
+| `i` | open the import drawer |
+| `a` | select all items |
+| `n` | deselect all items |
+| `R` | remove selected items |
+| `s` | sort items |
+| `Z` | reset collection |
+| `+` | zoom in grid view (one level only) |
+| `-` | zoom out grid view (one level only) |
+| `l` | switch to list view |
+| `g` | switch to grid view |
+| `m` | open context menu |
+| `right and left arrows` | move focus to next / previous item in grid and list views |
+
+Drag-and-drop actions:
+
+| key | action |
+|-----|--------|
+| `return` | start / end keyboard drag-and-drop |
+| `arrows` | move dragged item (you might need to press `space` to scroll the view) |
+| `escape` | cancel keyboard drag-and-drop |
 
 ## Manual re-ordering
 
