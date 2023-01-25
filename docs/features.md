@@ -6,13 +6,16 @@
 
 You can perform the following actions from the toolbar:
 
--   (TODO-icon here) import new media items
--   (TODO-icon here) select all media item
--   (TODO-icon here) de-select all media item
--   (TODO-icon here) remove selected media items
--   (TODO-icon here) sort collection (by date mofified, author, caption)
--   (TODO-icon here) reset collection
--   (TODO-icon here) switch betwen grid and list view
+| icons | actions |
+|-------|---------|
+| ![Import icon](../media/icon-import.png)  | import new media items |
+| ![Select all icon](../media/icon-select-all.png) | select all media item |
+| ![De-select all icon](../media/icon-select-all.png) | de-select all media item |
+| ![Remove icon](../media/icon-remove.png) | remove selected media items |
+| ![Sort icon](../media/icon-sort.png) | sort collection (by date mofified, author, caption) |
+| ![Reset icon](../media/icon-reset.png) | reset collection |
+| ![Zoom in icon](../media/icon-zoom-in.png) ![Zoom out icon](../media/icon-zoom-out.png) | zoom in, zoom out in grid view |
+| ![List view icon](../media/icon-list.png) ![Grid view icon](../media/icon-grid.png) | switch betwen grid and list view |
 
 ## Import media
 
