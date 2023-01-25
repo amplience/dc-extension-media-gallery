@@ -49,8 +49,8 @@ Extension Snippets are an easy way to add extensions to content types while allo
 
 You can find a snippet to use for this extension in: `snippet.json`. Recommended description:
 
-> Add a help block to this content item. This creates a placeholder field that simply shows helpful information of your choosing in the content item editor.
+> Add a media gallery to this content item. This allows content authors to build galleries of images in their content items, along with storing relevant metadata.
 
-You can even add your locally hosted help block extension this way for development, though note that it expects the extension url to be https. Our hosted version is a quick way to access the current version of the extension:
+You can even add your locally hosted media gallery extension this way for development, though note that it expects the extension url to be https. Our hosted version is a quick way to access the current version of the extension:
 
 -   TBD

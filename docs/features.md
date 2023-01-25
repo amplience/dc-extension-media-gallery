@@ -8,31 +8,31 @@ You can perform the following actions from the toolbar:
 
 | icons | actions |
 |-------|---------|
-| ![Import icon](../media/icon-import.png)  | import new media items |
-| ![Select all icon](../media/icon-select-all.png) ![De-select all icon](../media/icon-select-none.png) | select and deselect all media item |
-| ![Remove icon](../media/icon-remove.png) | remove selected media items |
-| ![Sort icon](../media/icon-sort.png) | sort collection (by date mofified, name and additional metatdata, for instance author, caption) |
-| ![Reset icon](../media/icon-reset.png) | reset collection |
-| ![Zoom in icon](../media/icon-zoom-in.png) ![Zoom out icon](../media/icon-zoom-out.png) | zoom in, zoom out in grid view |
-| ![List view icon](../media/icon-list.png) ![Grid view icon](../media/icon-grid.png) | switch betwen list and grid view |
+| ![Import icon](../media/icon-import.png)  | Import new media items. |
+| ![Select all icon](../media/icon-select-all.png) ![De-select all icon](../media/icon-select-none.png) | Select and deselect all media items. |
+| ![Remove icon](../media/icon-remove.png) | Remove selected media items. |
+| ![Sort icon](../media/icon-sort.png) | Sort collection (by date mofified, name and any user specified metadata eg. author/caption). |
+| ![Reset icon](../media/icon-reset.png) | Reset collection to its initial state. |
+| ![Zoom in icon](../media/icon-zoom-in.png) ![Zoom out icon](../media/icon-zoom-out.png) | Zoom in and zoom out in the grid view. |
+| ![List view icon](../media/icon-list.png) ![Grid view icon](../media/icon-grid.png) | Switch between the list and grid views. |
 
-> Note: the application logo on the left can be clicked to open the context menu
+> Note: The application logo on the left can be clicked to open the context menu.
 
 ## Import media
 
 If you have previsouly imported media from a specific folder, and potentially a query, an alert bar provides information about:
-- available items: items in the folder not in your media collection yet
-- updated items: items that have been updated in Content Hub
-- out-of-sync items: items that you have manullay updated locally in your collection
+- Available items: items in the folder not in your media collection yet.
+- Updated items: items that have been updated in Content Hub.
+- Out-of-sync items: items that you have manually updated locally in your collection.
 
 ![Import alert bar](../media/import-alert-bar.png)
 
 When opening the import drawer, you can do the following actions:
-- navigate and choose a folder in Content Hub
-- once a folder is selected, you can refine your selection using a query
-- you can see available, updated and out-of-sync items
-- you can select all, all updated, all out-of-sync items or deselect all
-- you can import your selection or cancel and close the drawer
+- Navigate and choose a folder in Content Hub.
+- Once a folder is selected, you can refine your selection using a query.
+- You can see available, updated and out-of-sync items.
+- You can select all, all updated, all out-of-sync items or deselect all.
+- You can import your selection or cancel and close the drawer.
 
 ![Import drawer selection](../media/import-drawer-selection.png)
 
@@ -50,9 +50,9 @@ You can quickly view an item full-width by clicking on its thumbnail in **grid**
 
 ![Edit item](../media/edit-item.png)
 
-You can edit an item details by clicking on the view icon in grid or list view. You can also use the `e` keyboard shortcut when focusing on an item, or use the context menu when right clicking on an item.
+You can edit an item's details by clicking on the view icon in grid or list view. You can also use the `e` keyboard shortcut when focusing on an item, or use the context menu when right clicking on an item.
 
-Date modified and name are read only and you can view or edit additional metadata if available, for instance author and caption. Once saved, a notification will appear.
+Date Modified and Name are read only. You can view or edit additional metadata if specified in the extension configuration, for instance author and caption. Once saved, a notification will appear.
 
 ## Grid View
 
@@ -74,9 +74,9 @@ Context menu with all possible action can be opened when right clicking on a spe
 
 For some actions, notifications can appear on the top left corner of the interface:
 
--   removing multiple media items
--   importing new media items
--   resetting the collection
+- Removing multiple media items.
+- Importing new media items.
+- Resetting the collection.
 
 ## Keyboard Shortcuts
 
@@ -130,11 +130,11 @@ The interface offers drag-and-drop to manually re-order media items in the colle
 
 For accessibility, the interface also offers to use the keyboard to re-order items. You can follow these steps:
 
--   focus an item using the `tab` key
--   move focus using arrow keys
--   trigger drag-and-drop using the `return` key
--   move the item using the arrow keys
--   end drag-and-drop and position the item using the `return` key again
+- Focus an item using the `tab` key.
+- Move focus using arrow keys.
+- Trigger drag-and-drop using the `return` key.
+- Move the item using the arrow keys.
+- End drag-and-drop and position the item using the `return` key again.
 
 ## Sorting by
 
@@ -142,10 +142,10 @@ For accessibility, the interface also offers to use the keyboard to re-order ite
 
 You can automatically sort the collection by:
 
--   modified date ascending
--   modified date descending
--   name ascending
--   name descending
--   additional metadata ascending and descending
+- modified date ascending
+- modified date descending
+- name ascending
+- name descending
+- additional metadata ascending and descending
 
 After a collection has been sorted, you can manually re-order using drag-and-drop.

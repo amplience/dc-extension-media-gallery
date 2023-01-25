@@ -1,8 +1,8 @@
 # Setting EXIF fields
 
-You can add additional metadata in the different views of the extension. This can be done by editing the extension's installation parameters. 
+You can control the metadata that is saved in the content, and displayed in the different views of the extension. This can be done by editing the extension's installation parameters. 
 
-Here is a sample configuration with photographer and caption metadata.
+Here is a sample configuration with `photographer` and `caption` metadata, both sourced from `artist` and `description` in the exif metadata respectively:
 
 ```json
 {
@@ -51,24 +51,24 @@ Metadata configuration properties:
 
 | property | description |
 |----------|-------------|
-| `source` | for now, the source can only be an EXIF field, prefixed with `exif/` |
-| `target` | the target field for the additional metadata, this needs to appear in your Media Gallery schema |
-| `label` | label for the different views |
-| `type` | you can choose from string or multiline |
-| `editable` | specify if the field is read-only or editable in the details drawer |
-| `sortable` | specify if the field appears in the sort menu |
-| `icon` | you can choose `author` or `text` for the field icon |
-| `visibility` | you can control the visibility of the field in the different views - `grid`, `list`, `info`, `edit`, `import` (see below) |
+| `source` | Source field in the image metadata to copy to the content item. For now, the source can only be an EXIF field, prefixed with `exif/` |
+| `target` | The target field for the additional metadata. This needs to appear in your Media Gallery schema. |
+| `label` | The label to use when displaying this metadata in the extension. |
+| `type` | The type of editor used for this metadata. Can be `string`, `number`, `multiline` or `date` (timestamp in milliseconds) |
+| `editable` | Specifies if the field is read-only or editable in the details drawer. |
+| `sortable` | Specifies if the field appears in the sort menu. |
+| `icon` | An icon to display alongside the content editor. Options are `author` or `text`. |
+| `visibility` | Controls the visibility of the field in the different views - `grid`, `list`, `info`, `edit`, `import` (see below) |
 
 Field visibility:
 
 | keyword | View |
 |---------|------|
-| `grid` | grid view as additional lines |
-| `list` | list view as additional columns |
-| `info` | info panel in fullscreen view as additional rows |
-| `edit` | edit drawer as additional read-only or editable fields |
-| `import` | import grid view as additional lines |
+| `grid` | The field will appear in the grid view as additional lines |
+| `list` | The field will appear in the list view as additional columns |
+| `info` | The field will appear in the info panel in fullscreen view as additional rows |
+| `edit` | The field will appear in the edit drawer as additional read-only or editable fields |
+| `import` | The field will appear in the import grid view as additional lines |
 
 Additional metadata in `grid` view:
 
