@@ -89,17 +89,42 @@ const DetailDrawer = () => {
 				/>)
 			case 'date':
 				const value = app.tempMedia && app.tempMedia[meta.target];
-				return (<DateTimePicker
-					key={meta.target}
-					label={meta.label}
-					value={value == null ? null : (value * 1000)}
-					readOnly={meta.editable}
-					renderInput={(params) => <TextField {...params} />}
-					onChange={(event: any) => {
-						app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime() / 1000)
-						app.tempMedia && app.setTempMedia && app.setTempMedia({...app.tempMedia})
-					}}
-				/>)
+				if (meta.editable) {
+					return (<DateTimePicker
+						key={meta.target}
+						label={meta.label}
+						value={value == null ? null : (value * 1000)}
+						renderInput={(params) => <TextField {...params} />}
+						onChange={(event: any) => {
+							app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime() / 1000)
+							app.tempMedia && app.setTempMedia && app.setTempMedia({...app.tempMedia})
+						}}
+					/>)
+				} else {
+					return(<TextField
+							key={meta.target}
+							label={meta.label}
+							variant='standard'
+							InputProps={{
+								readOnly: true,
+								startAdornment: (
+									<InputAdornment position='start'>
+										<CalendarMonthOutlined />
+									</InputAdornment>
+								),
+								endAdornment: (
+									<InputAdornment position='start'>
+										<LockOutlined />
+									</InputAdornment>
+								)
+							}}
+							defaultValue={
+								value &&
+								new Date(value * 1000).toLocaleString()
+							}
+						/>	
+					)
+				}
 			default:
 				return <></>
 		}
