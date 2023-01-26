@@ -18,7 +18,7 @@ import { RestChApi } from '../ch-api/rest-ch-api'
 import { AssetWithExif, EnrichedRepository, sortRepos } from '../ch-api/shared'
 
 /**
- * TODO: javadoc
+ * Context for application state used across multiple components.
  */
 type AppContextData = {
 	zoom: number
@@ -158,7 +158,7 @@ const defaultAppState = {
 }
 
 /**
- * TODO: javadoc
+ * Interface for DAM Asset Folder
  */
 interface DefaultFolder {
 	folderId: string
@@ -203,9 +203,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [pendingDefaultFolder, setPendingDefaultFolder] = useState<DefaultFolder>()
 
 	/**
-	 * TODO: javadoc
-	 * @param active 
-	 * @param over 
+	 * Used with DnD Gallery Items. When using a context, Grid and List components must set
+	 * item order 'locally' first, and THEN call this function, otherwise item tiles flip back
+	 * to original position before moving to the new position. FIX for NOVADEV-1017
+	 * @param active
+	 * @param over
 	 */
 	const dragOrder = (active: any, over: any) => {
 		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
@@ -502,7 +504,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}
 
 	/**
-	 * TODO: javadoc
+	 * This useEffect sets the items in the extension UI to the items stored in the DC field
 	 */
 	useEffect(() => {
 		if (field) {
@@ -515,7 +517,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}, [field, galleryPath, params])
 
 	/**
-	 * TODO: javadoc
+	 * This useEffect sets the DC field when items in the extension UI have changed
 	 */
 	useEffect(() => {
 		if (field) {
@@ -527,7 +529,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}, [field, galleryPath, setField, items])
 
 	/**
-	 * TODO: javadoc
+	 * This useEffect gets asset data from Dynamic Media
 	 */
 	useEffect(() => {
 		if (chApi) {
@@ -539,7 +541,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}, [chApi])
 
 	/**
-	 * TODO: javadoc
+	 * This useEffect initializes the keyDownHandler along with many of the application's
+	 * handlers, functions, and state
+	 *
 	 */
 	useEffect(() => {
 		const keyDownHandler = (event: KeyboardEvent) => {
@@ -645,10 +649,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		document.addEventListener('keydown', keyDownHandler)
 
 		/**
-		 * TODO: javadoc
-		 * @param repoId 
-		 * @param folderId 
-		 * @param query 
+		 * Sets the default Dynamic Media Folder
+		 * @param repoId
+		 * @param folderId
+		 * @param query
 		 */
 		const setDefaultFolder = (repoId: string, folderId: string, query?: string) => {
 			// Should also clear the last used query here if it's being replaced with a folder.
@@ -746,15 +750,15 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
-		 * TODO: javadoc
+		 * Resets the Grdi View Zoom level to 1
 		 */
 		const handleResetZoom = () => {
 			setZoom(1)
 		}
 
 		/**
-		 * TODO: javadoc
-		 * @param media 
+		 * Handles moving a Gallery tile to the top of the list (Grid and List Components)
+		 * @param media
 		 */
 		const handleMoveToTop = (media: MediaItem) => {
 			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
@@ -762,8 +766,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
-		 * TODO: javadoc
-		 * @param media 
+		 * Handles moving a Gallery tile to the bottom of the list (Grid and List Components)
+		 * @param media
 		 */
 		const handleMoveToBottom = (media: MediaItem) => {
 			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
@@ -802,8 +806,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
-		 * TODO: javadoc
-		 * @param event 
+		 * Handles setting the MediaItem for the Context Menu
+		 * @param event
 		 */
 		const handleContextMenu = (event: React.MouseEvent) => {
 			setContextMedia(null)
@@ -949,7 +953,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
-		 * TODO: javadoc
+		 * Sorts by Author Name descending
 		 */
 		const handleSortByNameDesc = () => {
 			setItems((prevState: MediaItem[]) => {
