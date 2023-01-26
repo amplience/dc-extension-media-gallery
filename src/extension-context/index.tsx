@@ -5,7 +5,7 @@ import Params from "./params";
 import { defaultMetadataMap } from "../model/conversion";
 
 /**
- * TODO: javadoc
+ * Extension state.
  */
 interface ExtensionContextData {
   params: Params,
@@ -15,6 +15,9 @@ interface ExtensionContextData {
   setField?: () => void
 }
 
+/**
+ * Default extension parameters. Overwritten by user instance/installation parameters.
+ */
 const defaultParams = {
   clientId: '',
   clientSecret: '',
@@ -23,19 +26,30 @@ const defaultParams = {
   metadataMap: defaultMetadataMap,
 };
 
+/**
+ * Initial extension state.
+ */
 const defaultExtensionState = {
   params: {
     ...defaultParams,
   }
 };
 
+/**
+ * Context for extension state.
+ */
 const ExtensionContext = React.createContext<ExtensionContextData>(defaultExtensionState);
 
+/**
+ * Provide a context for extensions state, allowing access to the field, params and extension SDK.
+ * @param props React props
+ * @returns React context
+ */
 export function ExtensionContextProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ExtensionContextData>(defaultExtensionState);
 
   /**
-   * 
+   * UseEffect for managing extension state.
    */
   useEffect(() => {
     getSdk().then(async (sdk) => {
