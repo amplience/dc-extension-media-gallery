@@ -95,9 +95,9 @@ type AppContextData = {
 	selectImportItem: (id: string) => void
 	selectItem: (id: string) => void
 	saveItem?: () => void
-	dragOrder: (active: any, over: any) => void,
+	dragOrder: (active: any, over: any) => void
 	error?: string
-	setError: (error: string | undefined) => void,
+	setError: (error: string | undefined) => void
 	entries: Entry[]
 }
 
@@ -142,7 +142,7 @@ const defaultAppState = {
 	handleSortClose: () => {},
 	handleZoomIn: () => {},
 	handleZoomOut: () => {},
-	handleResetZoom:() => {},
+	handleResetZoom: () => {},
 	handleSortByMetaAsc: (key: string) => {},
 	handleSortByMetaDesc: (key: string) => {},
 	handleMoveToTop: () => {},
@@ -155,8 +155,8 @@ const defaultAppState = {
 }
 
 interface DefaultFolder {
-	folderId: string,
-	repoId: string,
+	folderId: string
+	repoId: string
 	query?: string
 }
 
@@ -194,7 +194,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	} | null>(null)
 
 	const [entries, setEntries] = useState<Entry[]>([])
-	const [pendingDefaultFolder, setPendingDefaultFolder] = useState<DefaultFolder>();
+	const [pendingDefaultFolder, setPendingDefaultFolder] = useState<DefaultFolder>()
 
 	const dragOrder = (active: any, over: any) => {
 		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
@@ -225,7 +225,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	/**
 	 * Opening alert
-	 * TODO: move to components
 	 */
 	const handleSnackOpen = () => {
 		setSnackOpen(true)
@@ -233,7 +232,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	/**
 	 * Closing alert
-	 * TODO: move to components
 	 * @param event
 	 * @param reason
 	 * @returns
@@ -247,7 +245,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	/**
 	 * Opening sort menu
-	 * TODO: move to components
 	 * @param event
 	 */
 	const handleSortClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -256,7 +253,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	/**
 	 * Opening fullscreen view
-	 * TODO: move to components
 	 * @param media
 	 */
 	const handleFullScreenView = (media: MediaItem) => {
@@ -266,7 +262,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	/**
 	 * Opening media details view
-	 * TODO: move to components
 	 * @param media
 	 */
 	const handleDetailView = (media: MediaItem) => {
@@ -279,7 +274,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	/**
 	 * Closing sort menu
-	 * TODO: move to components
 	 */
 	const handleSortClose = () => {
 		setSortAnchorEl(null)
@@ -358,7 +352,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					await api.auth(params.clientId, params.clientSecret)
 				} catch (e: any) {
 					setError(e.message)
-					return;
+					return
 				}
 
 				setEndpoint(await api.getEndpoint())
@@ -517,9 +511,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 	useEffect(() => {
 		if (chApi) {
-			const config = field[params.configPath];
+			const config = field[params.configPath]
 			if (config && config.repoId && config.folderId && state.getEntries) {
-				state.getEntries(config.repoId, config.folderId, config.query);
+				state.getEntries(config.repoId, config.folderId, config.query)
 			}
 		}
 	}, [chApi])
@@ -651,10 +645,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 
 				// reset does nothing
 				await sdk.field.reset()
-				setItems(initialItems.map((item) => { 
-					item.selected = false 
-					return item
-				}))
+				setItems(
+					initialItems.map((item) => {
+						item.selected = false
+						return item
+					})
+				)
 				setField()
 			}
 			//setItems([])
@@ -673,7 +669,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const getEntries = async (repoId: string, id: string, query?: string): Promise<Entry[]> => {
 			if (chApi && repoId && endpoint) {
-				setPendingDefaultFolder({repoId, folderId: id, query})
+				setPendingDefaultFolder({ repoId, folderId: id, query })
 				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
 
@@ -694,7 +690,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					})
 				)
 
-				setEntries(entries);
+				setEntries(entries)
 
 				return entries
 			}
@@ -797,7 +793,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const importMedia = () => {
 			if (pendingDefaultFolder) {
-				setDefaultFolder(pendingDefaultFolder.repoId, pendingDefaultFolder.folderId, pendingDefaultFolder.query);
+				setDefaultFolder(
+					pendingDefaultFolder.repoId,
+					pendingDefaultFolder.folderId,
+					pendingDefaultFolder.query
+				)
 			}
 
 			setImportDrawerOpen(false)
@@ -824,17 +824,24 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					newItems
 						// Update items in place
 						.map((item: MediaItem) => {
-							const match = newSelectedItems.find((item2: MediaItem) => item.id === item2.id)
+							const match = newSelectedItems.find(
+								(item2: MediaItem) => item.id === item2.id
+							)
 							if (match) {
 								item = match
 							}
 							return item
 						})
 						// Add new items
-						.concat(structuredClone(newSelectedItems.filter(
-							(item: MediaItem) =>
-								newItems.filter((item2: MediaItem) => item.id === item2.id).length === 0
-						)))
+						.concat(
+							structuredClone(
+								newSelectedItems.filter(
+									(item: MediaItem) =>
+										newItems.filter((item2: MediaItem) => item.id === item2.id)
+											.length === 0
+								)
+							)
+						)
 				)
 				if (newSelectedItems.length > 0) {
 					setCurrentAlert({
@@ -859,7 +866,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * Save item
 		 */
 		const saveItem = () => {
-			// TODO: move to function
 			setDetailDrawerOpen(false)
 			tempMedia &&
 				setItems((prevState: MediaItem[]) => {
@@ -887,9 +893,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
 					.slice()
-					.sort(
-						(a: MediaItem, b: MediaItem) =>
-							a.entry.photo.name > b.entry.photo.name ? 1 : b.entry.photo.name > a.entry.photo.name ? -1 : 0
+					.sort((a: MediaItem, b: MediaItem) =>
+						a.entry.photo.name > b.entry.photo.name
+							? 1
+							: b.entry.photo.name > a.entry.photo.name
+							? -1
+							: 0
 					)
 			})
 			handleSortClose()
@@ -899,9 +908,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
 					.slice()
-					.sort(
-						(a: MediaItem, b: MediaItem) =>
-							b.entry.photo.name > a.entry.photo.name ? 1 : a.entry.photo.name > b.entry.photo.name ? -1 : 0
+					.sort((a: MediaItem, b: MediaItem) =>
+						b.entry.photo.name > a.entry.photo.name
+							? 1
+							: a.entry.photo.name > b.entry.photo.name
+							? -1
+							: 0
 					)
 			})
 			handleSortClose()
@@ -942,14 +954,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const handleSortByMetaAsc = (key: string) => {
 			setItems((prevState: MediaItem[]) => {
-				return prevState
-					.slice()
-					.sort((a: any, b: any) => {
-						const aValue = a.entry[key] || 0;
-						const bValue = b.entry[key] || 0;
+				return prevState.slice().sort((a: any, b: any) => {
+					const aValue = a.entry[key] || 0
+					const bValue = b.entry[key] || 0
 
-						return aValue > bValue ? 1 : bValue > aValue ? -1 : 0
-					})
+					return aValue > bValue ? 1 : bValue > aValue ? -1 : 0
+				})
 			})
 			handleSortClose()
 		}
@@ -959,14 +969,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const handleSortByMetaDesc = (key: string) => {
 			setItems((prevState: MediaItem[]) => {
-				return prevState
-					.slice()
-					.sort((a: any, b: any) => {
-						const aValue = a.entry[key] || 0;
-						const bValue = b.entry[key] || 0;
+				return prevState.slice().sort((a: any, b: any) => {
+					const aValue = a.entry[key] || 0
+					const bValue = b.entry[key] || 0
 
-						return bValue > aValue ? 1 : aValue > bValue ? -1 : 0
-					})
+					return bValue > aValue ? 1 : aValue > bValue ? -1 : 0
+				})
 			})
 			handleSortClose()
 		}

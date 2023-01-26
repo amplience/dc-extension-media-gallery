@@ -36,24 +36,32 @@ const AppToolbar = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension()
 
-	const metaSort = params.metadataMap.filter(meta => meta.sortable).map(meta => {
-		return (
-			<>
-				<MenuItem dense onClick={() => app.handleSortByMetaAsc(meta.target)} key={`${meta.target}-asc`}>
-					<ListItemIcon>
-						<ArrowUpwardOutlined fontSize='small' />
-					</ListItemIcon>
-					<ListItemText>{meta.label} Asc</ListItemText>
-				</MenuItem>
-				<MenuItem dense onClick={() => app.handleSortByMetaDesc(meta.target)} key={`${meta.target}-desc`}>
-					<ListItemIcon>
-						<ArrowDownwardOutlined fontSize='small' />
-					</ListItemIcon>
-					<ListItemText>{meta.label} Desc</ListItemText>
-				</MenuItem>
-			</>
-		)
-	})
+	const metaSort = params.metadataMap
+		.filter((meta) => meta.sortable)
+		.map((meta) => {
+			return (
+				<>
+					<MenuItem
+						dense
+						onClick={() => app.handleSortByMetaAsc(meta.target)}
+						key={`${meta.target}-asc`}>
+						<ListItemIcon>
+							<ArrowUpwardOutlined fontSize='small' />
+						</ListItemIcon>
+						<ListItemText>{meta.label} Asc</ListItemText>
+					</MenuItem>
+					<MenuItem
+						dense
+						onClick={() => app.handleSortByMetaDesc(meta.target)}
+						key={`${meta.target}-desc`}>
+						<ListItemIcon>
+							<ArrowDownwardOutlined fontSize='small' />
+						</ListItemIcon>
+						<ListItemText>{meta.label} Desc</ListItemText>
+					</MenuItem>
+				</>
+			)
+		})
 
 	return (
 		<AppBar position='sticky'>
@@ -128,7 +136,6 @@ const AppToolbar = () => {
 				</IconButton>
 
 				{/* Sort menu */}
-				{/* TODO: move to components */}
 				<Menu
 					id='basic-menu'
 					anchorEl={app.sortAnchorEl}
@@ -192,9 +199,9 @@ const AppToolbar = () => {
 						aria-label={`list mode`}
 						title='List view'
 						onClick={() => {
-							if (app.setGridMode){
+							if (app.setGridMode) {
 								app.setGridMode(false)
-							} 
+							}
 						}}>
 						<ViewHeadlineOutlined />
 					</IconButton>

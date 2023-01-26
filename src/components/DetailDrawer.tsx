@@ -20,17 +20,17 @@ import { useContext } from 'react'
 import GenericImage from './GenericImage'
 import { useExtension } from '../extension-context'
 import { MetadataMapEntry } from '../model/metadata-map'
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 
 const DetailDrawer = () => {
 	const app = useContext(AppContext)
 
-	const { params } = useExtension();
+	const { params } = useExtension()
 
 	/**
-	 * TODO: javadoc
-	 * @param meta 
-	 * @returns 
+	 * Returns a MUI Icon based on meta.icon value. 'author' returns <PhotoCameraFrontOutlined /> all else returns <NotesOutlined />
+	 * @param meta
+	 * @returns
 	 */
 	const getIcon = (meta: MetadataMapEntry) => {
 		switch (meta.icon) {
@@ -39,96 +39,105 @@ const DetailDrawer = () => {
 			case 'text':
 				return <NotesOutlined />
 			default:
-				return <NotesOutlined />;
+				return <NotesOutlined />
 		}
 	}
 
-	const metaEdit = params.metadataMap.filter(meta => meta.visibility.indexOf('edit') !== -1).map(meta => {
-		switch (meta.type) {
-			case 'string':
-				return (<TextField
-					key={meta.target}
-					id={meta.target}
-					label={meta.label}
-					variant='standard'
-					defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
-					InputProps={{
-						startAdornment: (
-							<InputAdornment position='start'>
-								{getIcon(meta)}
-							</InputAdornment>
-						),
-						readOnly: !meta.editable
-					}}
-					onChange={(event) => {
-						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
-					}}
-				/>)
-			case 'multiline':
-				return (<TextField
-					key={meta.target}
-					multiline
-					rows={4}
-					id={meta.target}
-					label={meta.label}
-					variant='standard'
-					defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
-					InputProps={{
-						startAdornment: (
-							<InputAdornment
-								style={{ display: 'flex', flexDirection: 'column-reverse' }}
-								position='start'>
-								{getIcon(meta)}
-							</InputAdornment>
-						),
-						readOnly: !meta.editable
-					}}
-					onChange={(event) => {
-						app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
-					}}
-				/>)
-			case 'date':
-				const value = app.tempMedia && app.tempMedia[meta.target];
-				if (meta.editable) {
-					return (<DateTimePicker
-						key={meta.target}
-						label={meta.label}
-						value={value == null ? null : (value * 1000)}
-						renderInput={(params) => <TextField {...params} />}
-						onChange={(event: any) => {
-							app.tempMedia && (app.tempMedia[meta.target] = event.$d.getTime() / 1000)
-							app.tempMedia && app.setTempMedia && app.setTempMedia({...app.tempMedia})
-						}}
-					/>)
-				} else {
-					return(<TextField
+	const metaEdit = params.metadataMap
+		.filter((meta) => meta.visibility.indexOf('edit') !== -1)
+		.map((meta) => {
+			switch (meta.type) {
+				case 'string':
+					return (
+						<TextField
 							key={meta.target}
+							id={meta.target}
 							label={meta.label}
 							variant='standard'
+							defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
 							InputProps={{
-								readOnly: true,
 								startAdornment: (
 									<InputAdornment position='start'>
-										<CalendarMonthOutlined />
+										{getIcon(meta)}
 									</InputAdornment>
 								),
-								endAdornment: (
-									<InputAdornment position='start'>
-										<LockOutlined />
-									</InputAdornment>
-								)
+								readOnly: !meta.editable
 							}}
-							defaultValue={
-								value &&
-								new Date(value * 1000).toLocaleString()
-							}
-						/>	
+							onChange={(event) => {
+								app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
+							}}
+						/>
 					)
-				}
-			default:
-				return <></>
-		}
-	});
+				case 'multiline':
+					return (
+						<TextField
+							key={meta.target}
+							multiline
+							rows={4}
+							id={meta.target}
+							label={meta.label}
+							variant='standard'
+							defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
+							InputProps={{
+								startAdornment: (
+									<InputAdornment
+										style={{ display: 'flex', flexDirection: 'column-reverse' }}
+										position='start'>
+										{getIcon(meta)}
+									</InputAdornment>
+								),
+								readOnly: !meta.editable
+							}}
+							onChange={(event) => {
+								app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
+							}}
+						/>
+					)
+				case 'date':
+					const value = app.tempMedia && app.tempMedia[meta.target]
+					if (meta.editable) {
+						return (
+							<DateTimePicker
+								key={meta.target}
+								label={meta.label}
+								value={value == null ? null : value * 1000}
+								renderInput={(params) => <TextField {...params} />}
+								onChange={(event: any) => {
+									app.tempMedia &&
+										(app.tempMedia[meta.target] = event.$d.getTime() / 1000)
+									app.tempMedia &&
+										app.setTempMedia &&
+										app.setTempMedia({ ...app.tempMedia })
+								}}
+							/>
+						)
+					} else {
+						return (
+							<TextField
+								key={meta.target}
+								label={meta.label}
+								variant='standard'
+								InputProps={{
+									readOnly: true,
+									startAdornment: (
+										<InputAdornment position='start'>
+											<CalendarMonthOutlined />
+										</InputAdornment>
+									),
+									endAdornment: (
+										<InputAdornment position='start'>
+											<LockOutlined />
+										</InputAdornment>
+									)
+								}}
+								defaultValue={value && new Date(value * 1000).toLocaleString()}
+							/>
+						)
+					}
+				default:
+					return <></>
+			}
+		})
 
 	return (
 		<SwipeableDrawer
@@ -148,7 +157,15 @@ const DetailDrawer = () => {
 				keepMounted: false
 			}}>
 			<Stack spacing={2} sx={{ h: '100%' }}>
-				<Stack direction={'row'} sx={{position:'sticky', top:'-16px', backgroundColor:'white', zIndex:100, p:2}}>
+				<Stack
+					direction={'row'}
+					sx={{
+						position: 'sticky',
+						top: '-16px',
+						backgroundColor: 'white',
+						zIndex: 100,
+						p: 2
+					}}>
 					<Typography sx={{ pb: 0 }} variant='h5' component='h5'>
 						Media Details
 					</Typography>
@@ -164,7 +181,13 @@ const DetailDrawer = () => {
 						</IconButton>
 					</Box>
 				</Stack>
-				<GenericImage item={app.currentMedia} w={1024} zoomable={true} aspect={{w:3,h:2}} lazy={false} fillWidth={true}></GenericImage>
+				<GenericImage
+					item={app.currentMedia}
+					w={1024}
+					zoomable={true}
+					aspect={{ w: 3, h: 2 }}
+					lazy={false}
+					fillWidth={true}></GenericImage>
 				<TextField
 					id='name'
 					label='Name'
@@ -182,9 +205,7 @@ const DetailDrawer = () => {
 							</InputAdornment>
 						)
 					}}
-					defaultValue={
-						app.currentMedia?.entry?.photo?.name
-					}
+					defaultValue={app.currentMedia?.entry?.photo?.name}
 				/>
 				<TextField
 					id='dateModified'
@@ -209,30 +230,29 @@ const DetailDrawer = () => {
 					}
 				/>
 				{metaEdit}
-				</Stack>
-				<Stack 
-					sx={{
-						pb: 4,
-						pt: 2,
-						p: 2,
-						position: 'sticky',
-						backgroundColor: 'white',
-						bottom: 0
-					}} 
-					direction={'row'}
-				>
-					<Box sx={{ flexGrow: 1 }} />
-					<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
-						Save
-					</Button>
-					<Button
-						variant='outlined'
-						onClick={() => {
-							if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
-						}}>
-						Cancel
-					</Button>
-				</Stack>
+			</Stack>
+			<Stack
+				sx={{
+					pb: 4,
+					pt: 2,
+					p: 2,
+					position: 'sticky',
+					backgroundColor: 'white',
+					bottom: 0
+				}}
+				direction={'row'}>
+				<Box sx={{ flexGrow: 1 }} />
+				<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
+					Save
+				</Button>
+				<Button
+					variant='outlined'
+					onClick={() => {
+						if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+					}}>
+					Cancel
+				</Button>
+			</Stack>
 		</SwipeableDrawer>
 	)
 }
