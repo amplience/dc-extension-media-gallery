@@ -56,7 +56,7 @@ const GenericImage: FC<Props> = ({
     <>
 
       <div style={{ overflow: 'hidden', color: textCol, position: 'relative' }}>
-        <div style={{ width: '100%', height: 'auto', display: `${imageLoading && loadingIcon ? 'block' : 'none'}`, aspectRatio: '3/2', marginTop: '50px' }}>
+        <div style={{ width: '100%', height: 'auto', display: `${imageLoading && loadingIcon ? 'block' : 'none'}`, aspectRatio: '3/2', marginTop: '320px' }}>
           <CircularProgress style={{ margin: 'auto', display: 'flex' }} />
           <Typography variant='subtitle1' align="center" style={{ margin: 'auto', display: "block" }}>Loading image...</Typography>
         </div>
