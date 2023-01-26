@@ -6,7 +6,7 @@ import { Folder } from '../ch-api/shared'
 import { FormControl, InputLabel, MenuItem, Popover, Select } from '@mui/material'
 
 /**
- * TODO: javadoc
+ * Builds out the tree view for folders in a Media Repo for selecting in the Import Drawer
  * @param node
  * @param id
  * @param list
