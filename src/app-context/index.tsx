@@ -154,6 +154,12 @@ const defaultAppState = {
 	entries: []
 }
 
+interface DefaultFolder {
+	folderId: string,
+	repoId: string,
+	query?: string
+}
+
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
@@ -188,6 +194,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	} | null>(null)
 
 	const [entries, setEntries] = useState<Entry[]>([])
+	const [pendingDefaultFolder, setPendingDefaultFolder] = useState<DefaultFolder>();
 
 	const dragOrder = (active: any, over: any) => {
 		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
@@ -666,7 +673,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const getEntries = async (repoId: string, id: string, query?: string): Promise<Entry[]> => {
 			if (chApi && repoId && endpoint) {
-				setDefaultFolder(repoId, id, query)
+				setPendingDefaultFolder({repoId, folderId: id, query})
 				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
 
@@ -789,6 +796,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * Import new media in collection
 		 */
 		const importMedia = () => {
+			if (pendingDefaultFolder) {
+				setDefaultFolder(pendingDefaultFolder.repoId, pendingDefaultFolder.folderId, pendingDefaultFolder.query);
+			}
+
 			setImportDrawerOpen(false)
 			if (importItems.filter((item: MediaItem) => item.selected).length === 0) {
 				setCurrentAlert({
@@ -1074,7 +1085,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		galleryPath,
 		params,
 		error,
-		entries
+		entries,
+		pendingDefaultFolder,
+		setPendingDefaultFolder
 	])
 
 	return <AppContext.Provider value={state}>{children}</AppContext.Provider>
