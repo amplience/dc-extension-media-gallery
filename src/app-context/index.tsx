@@ -809,24 +809,22 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 						item.outOfSync = false
 						return item
 					})
-				setTimeout(() => {
-					setItems(
-						newItems
-							// Update items in place
-							.map((item: MediaItem) => {
-								const match = newSelectedItems.find((item2: MediaItem) => item.id === item2.id)
-								if (match) {
-									item = match
-								}
-								return item
-							})
-							// Add new items
-							.concat(structuredClone(newSelectedItems.filter(
-								(item: MediaItem) =>
-									newItems.filter((item2: MediaItem) => item.id === item2.id).length === 0
-							)))
-					)
-				}, 500)
+				setItems(
+					newItems
+						// Update items in place
+						.map((item: MediaItem) => {
+							const match = newSelectedItems.find((item2: MediaItem) => item.id === item2.id)
+							if (match) {
+								item = match
+							}
+							return item
+						})
+						// Add new items
+						.concat(structuredClone(newSelectedItems.filter(
+							(item: MediaItem) =>
+								newItems.filter((item2: MediaItem) => item.id === item2.id).length === 0
+						)))
+				)
 				if (newSelectedItems.length > 0) {
 					setCurrentAlert({
 						severity: 'success',
