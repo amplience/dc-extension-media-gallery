@@ -1,7 +1,7 @@
 const expiryOffset = 10; // 10 seconds
 
 /**
- * TODO: javadoc
+ * An HTTP client supporting OAuth authentication.
  */
 export class AuthClient {
   private token?: string;
@@ -10,16 +10,16 @@ export class AuthClient {
   private secret!: string;
 
   /**
-   * 
-   * @param authUrl 
-   * @param url 
+   * Create an instance of an OAuth client.
+   * @param authUrl URL of the auth token provider
+   * @param url Base URL for fetch
    */
   constructor(private authUrl: string, private url: string) {}
 
   /**
-   * 
-   * @param id 
-   * @param secret 
+   * Authenticate the OAuth client using an ID and secret.
+   * @param id Client ID
+   * @param secret Client Secret
    */
   async auth(id: string, secret: string) {
     const authQuery: { [key: string]: string } = {
@@ -54,9 +54,9 @@ export class AuthClient {
   }
 
   /**
-   * 
-   * @param params 
-   * @returns 
+   * Encode parameters for URI in a manner friendly to the Content Hub REST API.
+   * @param params An object of parameters
+   * @returns A string URI component with the given parameters.
    */
   encodeParams = (params: any) => {
     let result: string[] = [];
@@ -72,7 +72,7 @@ export class AuthClient {
   }
 
   /**
-   * 
+   * Checks the authentication token expiry time, and reauthenticates if it is about to elapse.
    */
   async checkToken() {
     const currentTime = (Date.now() / 1000) + expiryOffset;
@@ -83,12 +83,12 @@ export class AuthClient {
   }
 
   /**
-   * 
-   * @param url 
-   * @param method 
-   * @param body 
-   * @param params 
-   * @returns 
+   * Fetch the given URL with authentication headers. Assumes a JSON response.
+   * @param url The URL to fetch
+   * @param method The HTTP method for the request
+   * @param body The body to send with the request
+   * @param params The query parameters to use
+   * @returns The response JSON body
    */
   async fetchUrl(url: string, method: 'GET' | 'POST', body: any, params?: any) {
     if (this.token == null) {
