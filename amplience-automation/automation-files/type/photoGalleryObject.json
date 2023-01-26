@@ -2,7 +2,7 @@
   "contentTypeUri": "https://blackmould.com/photoGalleryObject",
   "status": "ACTIVE",
   "settings": {
-    "label": "Media Gallery Object",
+    "label": "Media Gallery",
     "icons": [{
       "size" : 256,
       "url" : "https://ampproduct.a.bigcontent.io/v1/static/icons-dc-extension-media-gallery"
