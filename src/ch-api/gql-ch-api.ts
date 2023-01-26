@@ -21,7 +21,7 @@ import {
 } from "./shared";
 
 /**
- * TODO: javadoc
+ * GraphQL list edge
  */
 interface Edge<T> {
   node: T;
@@ -29,7 +29,7 @@ interface Edge<T> {
 }
 
 /**
- * 
+ * GraphQL pagination info
  */
 interface PageInfo {
   hasNextPage: boolean;
@@ -37,14 +37,14 @@ interface PageInfo {
 }
 
 /**
- * 
+ * GraphQL list container
  */
 interface List<T> {
   edges: Edge<T>[];
 }
 
 /**
- * 
+ * GraphQL paginated container
  */
 interface Paginated<T> extends List<T> {
   total: number;
@@ -52,14 +52,14 @@ interface Paginated<T> extends List<T> {
 }
 
 /**
- * 
+ * GraphQL Asset Search response
  */
 interface FetchAssetSearch {
   assetSearch: Paginated<AssetSearchItem>;
 }
 
 /**
- * 
+ * GraphQL Exif Metadata response contents
  */
 interface FetchExifMetadataAsset {
   id: string;
@@ -67,14 +67,14 @@ interface FetchExifMetadataAsset {
 }
 
 /**
- * 
+ * GraphQL Exif Metadata response
  */
 interface FetchExifMetadata {
   node: FetchExifMetadataAsset;
 }
 
 /**
- * 
+ * GraphQL Repositories response
  */
 interface FetchRepositories {
   viewer: {
@@ -85,7 +85,7 @@ interface FetchRepositories {
 }
 
 /**
- * 
+ * GraphQL Folder by Repo response
  */
 interface FetchFoldersByRepo {
   node: {
@@ -95,21 +95,21 @@ interface FetchFoldersByRepo {
 }
 
 /**
- * 
+ * GraphQL Folders by Parent response
  */
 interface FetchFoldersByParent {
   node: Folder;
 }
 
 /**
- * 
+ * GraphQL Asset with Exif response
  */
 interface AssetWithExifGql extends AssetSearchItem {
   exifMetadata?: List<MetadataResult<ExifMetadataProperties>>;
 }
 
 /**
- * 
+ * GraphQL Exif by Repo response
  */
 interface FetchExifByRepo {
   node: {
@@ -119,7 +119,7 @@ interface FetchExifByRepo {
 }
 
 /**
- * 
+ * GraphQL Exif by Folder response
  */
 interface FetchExifByFolder {
   node: {
@@ -129,24 +129,17 @@ interface FetchExifByFolder {
 }
 
 /**
- * 
- * @param list 
- * @returns 
- */
-export function getFirstListItem<T>(list: List<T> | undefined): T | undefined {
-  const edges = list?.edges;
-
-  if (edges) {
-    return edges[0]?.node;
-  }
-
-  return undefined;
-}
-
-/**
- * 
+ * A Content Hub API Client that uses the GraphQL API.
  */
 export class GqlChApi extends GraphQLClient implements IChApi {
+  /**
+   * Fetch Assets from with given repo, folder and query.
+   * @param repoId Repository containing the assets
+   * @param folderId Folder containing the assets
+   * @param query Query filtering the assets
+   * @param after Start cursor for pagination
+   * @returns Exif Metadata correlating to the asset
+   */
   async fetchAssetsByFolder(
     repoId: string,
     folderId: string,
@@ -162,18 +155,18 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param uuid 
-   * @returns 
+   * Fetch Asset Exif metadata for a singular asset by ID.
+   * @param uuid Asset ID to fetch metadata for
+   * @returns Exif Metadata correlating to the asset
    */
   async fetchAssetEXIF(uuid: string): Promise<FetchExifMetadata> {
     return await this.fetch(assetEXIF, { uuid });
   }
 
   /**
-   * 
-   * @param uuids 
-   * @returns 
+   * Fetch Asset Exif metadata in batch given a list of asset IDs.
+   * @param uuids List of Asset IDs to fetch metadata for
+   * @returns A list of Exif Metadata correlating to each asset
    */
   async fetchAssetsEXIF(uuids: string[]): Promise<FetchExifMetadataAsset[]> {
     let request = `query assetEXIF${uuids.length}(`;
@@ -210,19 +203,19 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param after 
-   * @returns 
+   * Fetch Repositories.
+   * @param after Start cursor for pagination
+   * @returns Response containing repositories
    */
   async fetchRepositories(after?: string): Promise<FetchRepositories> {
     return await this.fetch(repositories, { after });
   }
 
   /**
-   * 
-   * @param repoId 
-   * @param after 
-   * @returns 
+   * Fetch a repository and its child folders.
+   * @param repoId Repo ID to request
+   * @param after Start cursor for pagination
+   * @returns Response containing the requested repository and its folder children
    */
   async fetchFoldersByRepo(
     repoId: string,
@@ -232,9 +225,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param folderId 
-   * @returns 
+   * Fetch a folder and its children.
+   * @param folderId Folder ID to request
+   * @returns Response containing the requested folder and its children
    */
   async fetchFoldersByParent(folderId: string): Promise<FetchFoldersByParent> {
     return await this.fetch(foldersByParent, { folderId });
@@ -243,8 +236,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   /**
    * 
    * @param repoId 
-   * @param after 
-   * @returns 
+   * @param after Start cursor for pagination
+   * @returns Response containing assets with exif from the given repo
    */
   async fetchExifByRepo(
     repoId: string,
@@ -256,8 +249,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   /**
    * 
    * @param folderId 
-   * @param after 
-   * @returns 
+   * @param after Start cursor for pagination
+   * @returns Response containing assets with exif from the given folder
    */
   async fetchExifByFolder(
     folderId: string,
@@ -269,9 +262,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   // ---
 
   /**
-   * 
-   * @param getItems 
-   * @returns 
+   * Helper method to get all resources from a paginated request.
+   * @param getItems Method to fetch more items, passed the cursor for the page to request
+   * @returns A flat list of the requested resource
    */
   async paginate<T>(
     getItems: (after?: string) => Promise<Paginated<T>>
@@ -298,9 +291,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param repoId 
-   * @returns 
+   * Get the folders for a repo from the GraphQL API
+   * @param repoId Repository ID
+   * @returns A list of folders for the repository
    */
   async allFoldersByRepo(repoId: string): Promise<Folder[]> {
     return await this.paginate(async (after?: string) => {
@@ -309,9 +302,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param uuid 
-   * @returns 
+   * Get Exif Metadata for a specific asset from the GraphQL API.
+   * @param uuid The Asset ID
+   * @returns The Exif Metadata for the asset
    */
   async assetEXIF(
     uuid: string
@@ -322,8 +315,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param folder 
+   * Recursively fetches child folders if they aren't present.
+   * @param folder Folder to enrich with child folders.
    */
   async recursiveFolderEnrich(folder: Folder) {
     if (!folder.children) {
@@ -337,8 +330,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @returns 
+   * Get all repositories from the GraphQL API.
+   * @returns A list of repositories
    */
   async allRepositories(): Promise<Repository[]> {
     // TODO: handle more than 50 repos (???)
@@ -350,8 +343,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @returns 
+   * Gets all repositories and their child folders from the REST API.
+   * @returns Enriched repositories
    */
   async allReposWithFolders(): Promise<EnrichedRepository[]> {
     const repos = (await this.allRepositories()) as EnrichedRepository[];
@@ -368,9 +361,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param value 
-   * @returns 
+   * Converts a GraphQL edge list into a regular list.
+   * @param value A GraphQL edge list containing the resources
+   * @returns A list containing the resources
    */
   listToArray<T>(value?: List<T>): T[] {
     if (value == null) {
@@ -381,9 +374,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param assets 
-   * @returns 
+   * Converts GraphQL Assets with exif data into the interface friendly version.
+   * @param assets The Assets from the GraphQL API
+   * @returns A list of AssetsWithExif
    */
   toAssetWithExif(assets: AssetWithExifGql[]): AssetWithExif[] {
     return assets.map((gql) => ({
@@ -393,10 +386,10 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param repoId 
-   * @param folderId 
-   * @returns 
+   * Gets Assets with Exif data from a given repo/folder.
+   * @param repoId Repo to get assets from
+   * @param folderId Folder to get assets from
+   * @returns List of Assets with Exif data included
    */
   async getExifByFolder(
     repoId: string,
@@ -422,9 +415,9 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param encoded 
-   * @returns 
+   * Extracts a Content Hub resource ID from a GraphQL global ID. Ignores the resource type.
+   * @param encoded The encoded global ID
+   * @returns The Content Hub ID
    */
   extractId(encoded: string): string {
     const decoded = atob(encoded);
@@ -437,10 +430,12 @@ export class GqlChApi extends GraphQLClient implements IChApi {
     return decoded;
   }
 
-  /**
-   * 
-   * @param param0 
-   * @returns 
+   /**
+   * Gets Assets with Exif data from a given repo/folder, and a search query.
+   * @param repoId Repo to get assets from
+   * @param folderId Folder to get assets from
+   * @param query Query to filter assets with
+   * @returns List of Assets with Exif data included
    */
   async queryAssetsExif({
     repoId,
@@ -478,8 +473,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @returns 
+   * Gets the endpoint to use for accessing media.
+   * @returns An endpoint name
    */
   async getEndpoint(): Promise<string> {
     // TODO

@@ -1,5 +1,5 @@
 /**
- * TODO: javadoc
+ * Query assets by folder and query string. Does not contain exif data.
  */
 export const queryAssetByFolder = `
 query queryAssetByFolder($folderId: String!, $query: String, $after: String) {
@@ -27,7 +27,7 @@ query queryAssetByFolder($folderId: String!, $query: String, $after: String) {
 }`;
 
 /**
- * 
+ * Query assets by repository. Does not contain exif data.
  */
 export const queryAssetByRepo = `
 query queryAssetByFolder($repoId: String!, $after: String) {
@@ -55,7 +55,7 @@ query queryAssetByFolder($repoId: String!, $after: String) {
 }`;
 
 /**
- * 
+ * Get Exif Metadata for a single asset.
  */
 export const assetEXIF = `
 query assetEXIF($uuid: ID!) {
@@ -76,7 +76,7 @@ query assetEXIF($uuid: ID!) {
 }`;
 
 /**
- * 
+ * Repeating portion of a request for multiple assets with exif metadata.
  */
 export const assetEXIFBuilder = `node(id: $uuid) {
     id
@@ -93,6 +93,9 @@ export const assetEXIFBuilder = `node(id: $uuid) {
     }
 	}`;
 
+/**
+ * Get repositories for the active client. Assumes less than 50 repositories.
+ */
 export const repositories = `
 query repositories($after: String) {
   viewer {
@@ -118,7 +121,7 @@ query repositories($after: String) {
 }`;
 
 /**
- * 
+ * Gets folders for a given repo, up to four levels deep.
  */
 export const foldersByRepo = `
 query foldersByRepo($repoId: ID!, $after: String) {
@@ -155,7 +158,7 @@ query foldersByRepo($repoId: ID!, $after: String) {
 `
 
 /**
- * 
+ * Gets a folder and its child folders, up to three levels deep from the given folder.
  */
 export const foldersByParent = `
 query foldersByFolder($folderId: ID!) {
@@ -181,7 +184,7 @@ query foldersByFolder($folderId: ID!) {
 }`
 
 /**
- * 
+ * Gets assets by folder, with their exif metadata.
  */
 export const exifByFolder = `
 query exifByFolder($folderId: ID!, $after: String) {
@@ -216,7 +219,7 @@ query exifByFolder($folderId: ID!, $after: String) {
 }`
 
 /**
- * 
+ * Gets assets by repo, with their exif metadata.
  */
 export const exifByRepo = `
 query exifByRepo($repoId: ID!, $after: String) {

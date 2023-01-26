@@ -3,7 +3,7 @@ import { AuthClient } from "../auth-client";
 import IChApi from "./i-ch-api";
 
 /**
- * TODO: javadoc
+ * Content Hub REST list container
  */
 interface List<T> {
   data: T[];
@@ -11,7 +11,7 @@ interface List<T> {
 }
 
 /**
- * 
+ * Content Hub REST pagination container
  */
 interface Paginated<T> extends List<T> {
   numFound: number;
@@ -20,7 +20,7 @@ interface Paginated<T> extends List<T> {
 }
 
 /**
- * 
+ * Content Hub REST response container
  */
 interface Result<T> {
   status: string;
@@ -28,7 +28,7 @@ interface Result<T> {
 }
 
 /**
- * 
+ * Content Hub shared properties between Folders and Repositories
  */
 interface FolderBase {
   children: RestFolder[];
@@ -40,7 +40,7 @@ interface FolderBase {
 }
 
 /**
- * 
+ * Content Hub REST Folder
  */
 interface RestFolder extends FolderBase {
   bucketId: string;
@@ -49,7 +49,7 @@ interface RestFolder extends FolderBase {
 }
 
 /**
- * 
+ * Content Hub REST Repository
  */
 interface Repository extends FolderBase {
   imageClassificationEnabled: boolean;
@@ -59,12 +59,12 @@ interface Repository extends FolderBase {
 }
 
 /**
- * 
+ * Content Hub REST folders/ response.
  */
 type GetFoldersResult = Result<List<Repository>>;
 
 /**
- * 
+ * Content Hub REST Exif Relationship.
  */
 type ExifRelationship = {
   schema: 'exif',
@@ -76,7 +76,7 @@ type ExifRelationship = {
 }[];
 
 /**
- * 
+ * Content Hub REST Asset.
  */
 interface Asset {
   id: string,
@@ -89,7 +89,7 @@ interface Asset {
 }
 
 /**
- * 
+ * Content Hub REST Settings.
  */
 interface Settings {
   di: {
@@ -101,18 +101,18 @@ interface Settings {
 }
 
 /**
- * 
+ * A Content Hub API Client that uses the REST API.
  */
 export class RestChApi extends AuthClient implements IChApi {
   apiUrl = "http://dam-api-internal.amplience.net/v1.5.0/";
 
   /**
-   * 
-   * @param url 
-   * @param method 
-   * @param body 
-   * @param query 
-   * @returns 
+   * Requests all content from paginated endpoint.
+   * @param url The base URL to request
+   * @param method The HTTP method for the requests
+   * @param body The body to send with the requests
+   * @param query The query parameters to use
+   * @returns A list of the requested asset type
    */
   async paginate<T>(
     url: string,
@@ -144,9 +144,9 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @param folders 
-   * @returns 
+   * Converts folders from the REST API to EnrichedFolders.
+   * @param folders Folders from the REST API
+   * @returns Converted EnrichedFolder list
    */
   toEnrichedFolder(folders: RestFolder[]): Folder[] {
     return folders.map((rest) => ({
@@ -157,9 +157,9 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @param repos 
-   * @returns 
+   * Converts repositories from the REST API to EnrichedRepository.
+   * @param repos Repositories from the REST API
+   * @returns Converted EnrichedRepository list
    */
   toEnrichedRepository(repos: Repository[]): EnrichedRepository[] {
     return repos.map((rest) => ({
@@ -170,9 +170,9 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @param relationships 
-   * @returns 
+   * Converts relationships from the REST API to a MetadataResult.
+   * @param relationships Relationships from the REST API
+   * @returns Converted metadata
    */
   toMetadata(relationships: ExifRelationship | undefined): MetadataResult<ExifMetadataProperties>[] {
     if (!relationships || relationships.length === 0) {
@@ -194,9 +194,9 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @param assets 
-   * @returns 
+   * Converts Assets from the REST API to AssetWithExif
+   * @param assets Assets from the REST API
+   * @returns Converted AssetWithExif list
    */
   toAssetWithExif(assets: Asset[]): AssetWithExif[] {
     return assets.map((rest) => (
@@ -211,8 +211,8 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @returns 
+   * Gets all repositories and their child folders from the REST API.
+   * @returns Enriched repositories
    */
   async allReposWithFolders(): Promise<EnrichedRepository[]> {
     const result = (await this.fetchUrl(
@@ -226,10 +226,10 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @param repoId 
-   * @param folderId 
-   * @returns 
+   * Gets Assets with Exif data from a given repo/folder.
+   * @param repoId Repo to get assets from
+   * @param folderId Folder to get assets from
+   * @returns List of Assets with Exif data included
    */
   async getExifByFolder(
     repoId: string,
@@ -253,10 +253,12 @@ export class RestChApi extends AuthClient implements IChApi {
     );
   }
 
-  /**
-   * 
-   * @param param0 
-   * @returns 
+   /**
+   * Gets Assets with Exif data from a given repo/folder, and a search query.
+   * @param repoId Repo to get assets from
+   * @param folderId Folder to get assets from
+   * @param query Query to filter assets with
+   * @returns List of Assets with Exif data included
    */
   async queryAssetsExif({
     repoId,
@@ -286,8 +288,8 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * 
-   * @returns 
+   * Gets the endpoint to use for accessing media.
+   * @returns An endpoint name
    */
   async getEndpoint(): Promise<string> {
     const response = (await this.fetchUrl('settings', 'GET', undefined)) as Result<Settings>;
