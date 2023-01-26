@@ -157,6 +157,9 @@ const defaultAppState = {
 	entries: []
 }
 
+/**
+ * TODO: javadoc
+ */
 interface DefaultFolder {
 	folderId: string
 	repoId: string
@@ -199,6 +202,11 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [entries, setEntries] = useState<Entry[]>([])
 	const [pendingDefaultFolder, setPendingDefaultFolder] = useState<DefaultFolder>()
 
+	/**
+	 * TODO: javadoc
+	 * @param active 
+	 * @param over 
+	 */
 	const dragOrder = (active: any, over: any) => {
 		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
 		const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
@@ -493,6 +501,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		})
 	}
 
+	/**
+	 * TODO: javadoc
+	 */
 	useEffect(() => {
 		if (field) {
 			const data = assetsToItems(field[galleryPath], params)
@@ -503,6 +514,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 	}, [field, galleryPath, params])
 
+	/**
+	 * TODO: javadoc
+	 */
 	useEffect(() => {
 		if (field) {
 			field[galleryPath] = itemsToAssets(items)
@@ -512,6 +526,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 	}, [field, galleryPath, setField, items])
 
+	/**
+	 * TODO: javadoc
+	 */
 	useEffect(() => {
 		if (chApi) {
 			const config = field[params.configPath]
@@ -521,6 +538,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 	}, [chApi])
 
+	/**
+	 * TODO: javadoc
+	 */
 	useEffect(() => {
 		const keyDownHandler = (event: KeyboardEvent) => {
 			const nonModalMode =
@@ -624,6 +644,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 		document.addEventListener('keydown', keyDownHandler)
 
+		/**
+		 * TODO: javadoc
+		 * @param repoId 
+		 * @param folderId 
+		 * @param query 
+		 */
 		const setDefaultFolder = (repoId: string, folderId: string, query?: string) => {
 			// Should also clear the last used query here if it's being replaced with a folder.
 
@@ -719,15 +745,26 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}
 		}
 
+		/**
+		 * TODO: javadoc
+		 */
 		const handleResetZoom = () => {
 			setZoom(1)
 		}
 
+		/**
+		 * TODO: javadoc
+		 * @param media 
+		 */
 		const handleMoveToTop = (media: MediaItem) => {
 			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
 			setItems(arrayMove(items, oldIndex, 0))
 		}
 
+		/**
+		 * TODO: javadoc
+		 * @param media 
+		 */
 		const handleMoveToBottom = (media: MediaItem) => {
 			const oldIndex = items.findIndex((item: MediaItem) => item.id === media.id)
 			setItems(arrayMove(items, oldIndex, items.length - 1))
@@ -764,6 +801,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			}, 500)
 		}
 
+		/**
+		 * TODO: javadoc
+		 * @param event 
+		 */
 		const handleContextMenu = (event: React.MouseEvent) => {
 			setContextMedia(null)
 			event.preventDefault()
@@ -907,6 +948,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleSortClose()
 		}
 
+		/**
+		 * TODO: javadoc
+		 */
 		const handleSortByNameDesc = () => {
 			setItems((prevState: MediaItem[]) => {
 				return prevState
