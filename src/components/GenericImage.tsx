@@ -4,6 +4,9 @@ import React, { FC, useContext, useState } from "react";
 import { AppContext } from "../app-context";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 
+/**
+ * 
+ */
 type Props = {
   item: any,
   zoomable?: Boolean,
@@ -42,6 +45,9 @@ const GenericImage: FC<Props> = ({
   const realWidth: number = zoomable ? w * (forceNoZoom ? 1 : app.zoom) : w;
   const realHeight: number = zoomable ? ((w / aspect.w) * aspect.h) * (forceNoZoom ? 1 : app.zoom) : ((w / aspect.w) * aspect.h);
 
+  /**
+   * TODO: javadoc
+   */
   const handleImageLoaded = () => {
     setImageLoading(false)
   }

@@ -36,6 +36,11 @@ const defaultExifValues: any = {
   description: 'None'
 };
 
+/**
+ * TODO: javadoc
+ * @param items 
+ * @returns 
+ */
 function first<T>(items: T[] | undefined): T | undefined {
   if (items) {
     return items[0];
@@ -44,6 +49,13 @@ function first<T>(items: T[] | undefined): T | undefined {
   return undefined;
 }
 
+/**
+ * 
+ * @param asset 
+ * @param metadataMap 
+ * @param chConfiguration 
+ * @returns 
+ */
 export function convertToEntry(
   asset: AssetWithExif,
   metadataMap: MetadataMap,
@@ -84,16 +96,33 @@ export function convertToEntry(
   return result;
 }
 
+/**
+ * 
+ * @param asset 
+ * @param vse 
+ * @returns 
+ */
 export function assetToImg(asset: Entry, vse?: string): string {
   return `https://${vse ?? asset.photo.defaultHost}/i/${asset.photo.endpoint}/${
     asset.photo.name
   }`;
 }
 
+/**
+ * 
+ * @param items 
+ * @returns 
+ */
 export function itemsToAssets(items: MediaItem[]): Entry[] {
   return items.map((item) => item.entry as Entry);
 }
 
+/**
+ * 
+ * @param assets 
+ * @param params 
+ * @returns 
+ */
 export function assetsToItems(assets: Entry[], params: Params): MediaItem[] {
   return assets.map((asset, index) => ({
     id: asset.photo.id,

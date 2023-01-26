@@ -27,6 +27,11 @@ const DetailDrawer = () => {
 
 	const { params } = useExtension();
 
+	/**
+	 * TODO: javadoc
+	 * @param meta 
+	 * @returns 
+	 */
 	const getIcon = (meta: MetadataMapEntry) => {
 		switch (meta.icon) {
 			case 'author':

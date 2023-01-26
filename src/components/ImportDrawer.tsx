@@ -12,8 +12,6 @@ import {
 	Typography,
 	Box,
 	IconButton,
-	Divider,
-	ImageList,
 	ImageListItem,
 	ImageListItemBar,
 	Button,
@@ -34,6 +32,12 @@ import _ from 'lodash'
 import { EnrichedRepository, Folder } from '../ch-api/shared'
 import { metaToString } from '../model/metadata-map'
 
+/**
+ * TODO: javadoc
+ * @param folders 
+ * @param id 
+ * @returns 
+ */
 const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
   if (folders) {
     for (let folder of folders) {
@@ -46,6 +50,12 @@ const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
   return false;
 }
 
+/**
+ * 
+ * @param repos 
+ * @param id 
+ * @returns 
+ */
 const getRepoId = (repos: EnrichedRepository[], id: string): string | undefined => {
   for (let repo of repos) {
     if (repo.id === id || containsFolder(repo.folders, id)) {
@@ -77,12 +87,18 @@ const ImportDrawer = () => {
 		query = oldConfig.query
 	}
 
+	/**
+	 * 
+	 */
 	useEffect(() => {
-    setRepoId(repo)
+    	setRepoId(repo)
 		setFolderId(folder)
 		setQueryValue(query)
 	}, [repo, folder, query])
 
+	/**
+	 * 
+	 */
 	useEffect(() => {
 		if (app.importDrawerOpen) {
 			let cancelled = false

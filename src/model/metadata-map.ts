@@ -1,5 +1,11 @@
+/**
+ * TODO: javadoc
+ */
 export type VisibilityFlags = 'edit' | 'import' | 'grid' | 'list' | 'info';
 
+/**
+ * 
+ */
 export interface MetadataMapEntry {
     source: string,
     target: string,
@@ -11,6 +17,12 @@ export interface MetadataMapEntry {
     visibility: VisibilityFlags[]
 }
 
+/**
+ * 
+ * @param meta 
+ * @param value 
+ * @returns 
+ */
 export const metaToString = (meta: MetadataMapEntry, value: any) => {
     switch (meta.type) {
         case 'date':
@@ -24,4 +36,7 @@ export const metaToString = (meta: MetadataMapEntry, value: any) => {
     }
 }
 
+/**
+ * 
+ */
 export type MetadataMap = MetadataMapEntry[];

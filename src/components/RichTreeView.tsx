@@ -5,6 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { Folder } from "../ch-api/shared";
 import { FormControl, InputLabel, MenuItem, Popover, Select } from "@mui/material";
 
+/**
+ * TODO: javadoc
+ * @param node 
+ * @param id 
+ * @param list 
+ * @returns 
+ */
 const buildExpanded = (node: any, id: string, list: string[]): boolean => {
   if (node.id === id) {
     list.splice(1, 0, node.id);
@@ -23,6 +30,12 @@ const buildExpanded = (node: any, id: string, list: string[]): boolean => {
   return false;
 };
 
+/**
+ * 
+ * @param nodes 
+ * @param id 
+ * @returns 
+ */
 const findItem = (nodes: any, id: string): any => {
   if (Array.isArray(nodes)) {
     for (let node of nodes) {
@@ -41,6 +54,11 @@ const findItem = (nodes: any, id: string): any => {
   return undefined;
 }
 
+/**
+ * 
+ * @param collection 
+ * @returns 
+ */
 const children = (collection: any) => {
   return collection.children ?? collection.folders;
 }
@@ -52,6 +70,9 @@ const RichObjectTreeView = (props: any) => {
 
   const popoverAnchor = useRef();
 
+  /**
+   * 
+   */
   useEffect(() => {
     if (props.selectedId) {
       const newExpanded = ["root"];
@@ -66,14 +87,25 @@ const RichObjectTreeView = (props: any) => {
     }
   }, [props.selectedId, children(props), sequenceNumber, expanded]);
 
+  /**
+   * 
+   */
   const openPopover = () => {
     setOpen(true);
   };
 
+  /**
+   * 
+   */
   const closePopover = () => {
     setOpen(false);
   };
 
+  /**
+   * 
+   * @param node 
+   * @returns 
+   */
   const renderTree = (node: any) => (
     <TreeItem key={node.id} nodeId={node.id} label={node.label}>
       {Array.isArray(children(node))

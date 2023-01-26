@@ -14,6 +14,9 @@ const ImportAlert = () => {
   const [outOfSync, setOutOfSync] = useState(0);
   const [available, setAvailable] = useState(0);
 
+  /**
+   * TODO: javadoc
+   */
   useEffect(() => {
     if (app.entries && app.items) {
       let updatedCount = 0;

@@ -18,6 +18,9 @@ const errorCodeToMessage = (code: string | undefined): string => {
 const ErrorDialog = () => {
   const app = useContext(AppContext)
 
+  /**
+   * TDOO: javadoc
+   */
 	const handleClose = () => {
 		app.setError(undefined);
 	}

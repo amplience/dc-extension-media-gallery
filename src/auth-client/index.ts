@@ -1,13 +1,26 @@
 const expiryOffset = 10; // 10 seconds
 
+/**
+ * TODO: javadoc
+ */
 export class AuthClient {
   private token?: string;
   private expiryTime!: number;
   private id!: string;
   private secret!: string;
 
+  /**
+   * 
+   * @param authUrl 
+   * @param url 
+   */
   constructor(private authUrl: string, private url: string) {}
 
+  /**
+   * 
+   * @param id 
+   * @param secret 
+   */
   async auth(id: string, secret: string) {
     const authQuery: { [key: string]: string } = {
       grant_type: "client_credentials",
@@ -40,6 +53,11 @@ export class AuthClient {
     this.secret = secret;
   }
 
+  /**
+   * 
+   * @param params 
+   * @returns 
+   */
   encodeParams = (params: any) => {
     let result: string[] = [];
 
@@ -53,6 +71,9 @@ export class AuthClient {
     return result.length > 0 ? '?' + result.join('&') : '';
   }
 
+  /**
+   * 
+   */
   async checkToken() {
     const currentTime = (Date.now() / 1000) + expiryOffset;
 
@@ -61,6 +82,14 @@ export class AuthClient {
     }
   }
 
+  /**
+   * 
+   * @param url 
+   * @param method 
+   * @param body 
+   * @param params 
+   * @returns 
+   */
   async fetchUrl(url: string, method: 'GET' | 'POST', body: any, params?: any) {
     if (this.token == null) {
       throw new Error("Not authenticated.");

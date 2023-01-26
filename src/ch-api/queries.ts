@@ -1,3 +1,6 @@
+/**
+ * TODO: javadoc
+ */
 export const queryAssetByFolder = `
 query queryAssetByFolder($folderId: String!, $query: String, $after: String) {
   assetSearch(
@@ -23,6 +26,9 @@ query queryAssetByFolder($folderId: String!, $query: String, $after: String) {
   }
 }`;
 
+/**
+ * 
+ */
 export const queryAssetByRepo = `
 query queryAssetByFolder($repoId: String!, $after: String) {
   assetSearch(
@@ -48,6 +54,9 @@ query queryAssetByFolder($repoId: String!, $after: String) {
   }
 }`;
 
+/**
+ * 
+ */
 export const assetEXIF = `
 query assetEXIF($uuid: ID!) {
   node(id: $uuid) {
@@ -66,6 +75,9 @@ query assetEXIF($uuid: ID!) {
 	}
 }`;
 
+/**
+ * 
+ */
 export const assetEXIFBuilder = `node(id: $uuid) {
     id
     ... on Asset {
@@ -105,6 +117,9 @@ query repositories($after: String) {
   }
 }`;
 
+/**
+ * 
+ */
 export const foldersByRepo = `
 query foldersByRepo($repoId: ID!, $after: String) {
   node(id: $repoId) {
@@ -139,6 +154,9 @@ query foldersByRepo($repoId: ID!, $after: String) {
 }
 `
 
+/**
+ * 
+ */
 export const foldersByParent = `
 query foldersByFolder($folderId: ID!) {
   node(id: $folderId) {
@@ -162,6 +180,9 @@ query foldersByFolder($folderId: ID!) {
 	}
 }`
 
+/**
+ * 
+ */
 export const exifByFolder = `
 query exifByFolder($folderId: ID!, $after: String) {
   node(id: $folderId) {
@@ -194,6 +215,9 @@ query exifByFolder($folderId: ID!, $after: String) {
 	}
 }`
 
+/**
+ * 
+ */
 export const exifByRepo = `
 query exifByRepo($repoId: ID!, $after: String) {
   node(id: $repoId) {

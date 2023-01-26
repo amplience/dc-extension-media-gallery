@@ -1,3 +1,6 @@
+/**
+ * TODO: javadoc
+ */
 export interface AssetSearchItem {
   id: string,
   name: string;
@@ -5,44 +8,71 @@ export interface AssetSearchItem {
   updatedDate: string;
 }
 
+/**
+ * 
+ */
 export interface Repository {
   id: string;
   label: string;
 }
 
+/**
+ * 
+ */
 export interface MetadataProperties {
   id: string;
 }
 
+/**
+ * 
+ */
 export interface ExifMetadataProperties extends MetadataProperties {
   software: string;
   artist: string;
   description: string;
 }
 
+/**
+ * 
+ */
 export interface MetadataResult<T extends MetadataProperties> {
   schemaName: string;
   properties: T;
 }
 
+/**
+ * 
+ */
 export interface Folder {
   id: string;
   label: string;
   children?: Folder[];
 }
 
+/**
+ * 
+ */
 export interface EnrichedRepository extends Repository {
   folders: Folder[];
 }
 
+/**
+ * 
+ */
 export interface AssetWithExif extends AssetSearchItem {
   exifMetadata?: MetadataResult<ExifMetadataProperties>[];
 }
 
+/**
+ * 
+ */
 const idIsNone = (id: string) => {
   return id === '00000000-0000-0000-0000-000000000000' || id === 'QXNzZXRGb2xkZXI6MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAw';
 }
 
+/**
+ * 
+ */
 const sortFolders = (folders: Folder[]) => {
   for (let folder of folders) {
     if (folder.children) {
@@ -59,6 +89,9 @@ const sortFolders = (folders: Folder[]) => {
   })
 }
 
+/**
+ * 
+ */
 export const sortRepos = (repos: EnrichedRepository[]) => {
   for (let repo of repos) {
     if (repo.folders) {

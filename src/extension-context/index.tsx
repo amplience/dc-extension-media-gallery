@@ -4,6 +4,9 @@ import { ContentFieldExtension } from 'dc-extensions-sdk';
 import Params from "./params";
 import { defaultMetadataMap } from "../model/conversion";
 
+/**
+ * TODO: javadoc
+ */
 interface ExtensionContextData {
   params: Params,
   field?: any,
@@ -31,6 +34,9 @@ const ExtensionContext = React.createContext<ExtensionContextData>(defaultExtens
 export function ExtensionContextProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ExtensionContextData>(defaultExtensionState);
 
+  /**
+   * 
+   */
   useEffect(() => {
     getSdk().then(async (sdk) => {
       sdk.frame.startAutoResizer();

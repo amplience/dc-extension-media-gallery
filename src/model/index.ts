@@ -1,6 +1,9 @@
 import { AlertColor } from '@mui/material'
 import Entry from './entry'
 
+/**
+ * TODO: javadoc
+ */
 export interface MediaItem {
 	id: string
 	selected: boolean
@@ -12,6 +15,9 @@ export interface MediaItem {
 	entry: Entry
 }
 
+/**
+ * 
+ */
 export interface AlertMessage {
 	severity: AlertColor
 	message: string

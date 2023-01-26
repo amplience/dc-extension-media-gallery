@@ -2,22 +2,34 @@ import { EnrichedRepository, AssetWithExif, ExifMetadataProperties, MetadataResu
 import { AuthClient } from "../auth-client";
 import IChApi from "./i-ch-api";
 
+/**
+ * TODO: javadoc
+ */
 interface List<T> {
   data: T[];
   count: number;
 }
 
+/**
+ * 
+ */
 interface Paginated<T> extends List<T> {
   numFound: number;
   start: number;
   pageSize: number;
 }
 
+/**
+ * 
+ */
 interface Result<T> {
   status: string;
   content: T;
 }
 
+/**
+ * 
+ */
 interface FolderBase {
   children: RestFolder[];
   numFound: number;
@@ -27,12 +39,18 @@ interface FolderBase {
   numItems: string;
 }
 
+/**
+ * 
+ */
 interface RestFolder extends FolderBase {
   bucketId: string;
   status: string;
   type: "folder";
 }
 
+/**
+ * 
+ */
 interface Repository extends FolderBase {
   imageClassificationEnabled: boolean;
   shared: boolean;
@@ -40,8 +58,14 @@ interface Repository extends FolderBase {
   type: "bucket";
 }
 
+/**
+ * 
+ */
 type GetFoldersResult = Result<List<Repository>>;
 
+/**
+ * 
+ */
 type ExifRelationship = {
   schema: 'exif',
   variants: [
@@ -51,6 +75,9 @@ type ExifRelationship = {
   ]
 }[];
 
+/**
+ * 
+ */
 interface Asset {
   id: string,
   name: string;
@@ -61,6 +88,9 @@ interface Asset {
   }
 }
 
+/**
+ * 
+ */
 interface Settings {
   di: {
     endpoints: {
@@ -70,9 +100,20 @@ interface Settings {
   }
 }
 
+/**
+ * 
+ */
 export class RestChApi extends AuthClient implements IChApi {
   apiUrl = "http://dam-api-internal.amplience.net/v1.5.0/";
 
+  /**
+   * 
+   * @param url 
+   * @param method 
+   * @param body 
+   * @param query 
+   * @returns 
+   */
   async paginate<T>(
     url: string,
     method: "GET" | "POST",
@@ -102,6 +143,11 @@ export class RestChApi extends AuthClient implements IChApi {
     return results;
   }
 
+  /**
+   * 
+   * @param folders 
+   * @returns 
+   */
   toEnrichedFolder(folders: RestFolder[]): Folder[] {
     return folders.map((rest) => ({
       id: rest.id,
@@ -110,6 +156,11 @@ export class RestChApi extends AuthClient implements IChApi {
     }));
   }
 
+  /**
+   * 
+   * @param repos 
+   * @returns 
+   */
   toEnrichedRepository(repos: Repository[]): EnrichedRepository[] {
     return repos.map((rest) => ({
       id: rest.id,
@@ -118,6 +169,11 @@ export class RestChApi extends AuthClient implements IChApi {
     }));
   }
 
+  /**
+   * 
+   * @param relationships 
+   * @returns 
+   */
   toMetadata(relationships: ExifRelationship | undefined): MetadataResult<ExifMetadataProperties>[] {
     if (!relationships || relationships.length === 0) {
       return [];
@@ -137,6 +193,11 @@ export class RestChApi extends AuthClient implements IChApi {
     return data;
   }
 
+  /**
+   * 
+   * @param assets 
+   * @returns 
+   */
   toAssetWithExif(assets: Asset[]): AssetWithExif[] {
     return assets.map((rest) => (
       {
@@ -149,6 +210,10 @@ export class RestChApi extends AuthClient implements IChApi {
     ))
   }
 
+  /**
+   * 
+   * @returns 
+   */
   async allReposWithFolders(): Promise<EnrichedRepository[]> {
     const result = (await this.fetchUrl(
       "folders",
@@ -160,6 +225,12 @@ export class RestChApi extends AuthClient implements IChApi {
     return this.toEnrichedRepository(result.content.data);
   }
 
+  /**
+   * 
+   * @param repoId 
+   * @param folderId 
+   * @returns 
+   */
   async getExifByFolder(
     repoId: string,
     folderId: string
@@ -182,6 +253,11 @@ export class RestChApi extends AuthClient implements IChApi {
     );
   }
 
+  /**
+   * 
+   * @param param0 
+   * @returns 
+   */
   async queryAssetsExif({
     repoId,
     folderId,
@@ -209,6 +285,10 @@ export class RestChApi extends AuthClient implements IChApi {
     );
   }
 
+  /**
+   * 
+   * @returns 
+   */
   async getEndpoint(): Promise<string> {
     const response = (await this.fetchUrl('settings', 'GET', undefined)) as Result<Settings>;
 

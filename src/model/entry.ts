@@ -1,3 +1,6 @@
+/**
+ * TODO: javadoc
+ */
 export default interface Entry {
   photo: {
     _meta: {
