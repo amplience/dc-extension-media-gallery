@@ -6,6 +6,7 @@
 
 This extension allows you to manage a collection of image items easily, with import froma specified Content Hub, drag-and-drop, sorting, grid and list view.
 
+-   [Prerequisites](./docs/prerequisites.md)
 -   Extension installation
     -   [Installing with `dc-cli` tool](./docs/cli-installation.md)
     -   [Manual Installation](./docs/manual-installation.md)
