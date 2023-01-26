@@ -10,10 +10,6 @@ git clone https://github.com/amplience/dc-extension-media-gallery.git
 
 To get started, navigate to the root directory of the project.
 
-<!-- An Extension Snippet is also included in the extension automation file which will enable you to easily add the extension to any existing Content Schemas.
-
-![Add Extension via Snippet in DC](./media/addExtensionUI.png) -->
-
 ## Setup & Use `dc-cli`
 
 You'll need to install and configure `dc-cli`. Here are [detailed instructions](https://github.com/amplience/dc-cli#installation). NOTE that you will need your DC Hub ID, `clientId` and `clientSecret`.

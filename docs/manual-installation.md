@@ -23,31 +23,71 @@ This extension requires no additional permissions.
 
 # Example extension snippet
 
+Here is a minimal example snippet with no metadata fields:
+
 ```json
 {
 	"type": "object",
 	"ui:extension": {
-		"name": "media-gallery"
+		"name": "media-gallery",
+	},
+	"properties": {
+		"galleryConfig": {
+			"title": "Gallery Config",
+			"type": "object",
+			"properties": {
+				"repoId": {
+					"title": "Import Repo ID",
+					"description": "Repository ID used for the last import",
+					"type": "string"
+				},
+				"folderId": {
+					"title": "Import Folder ID",
+					"description": "Folder ID used for the last import",
+					"type": "string"
+				},
+				"query": {
+					"title": "Import Query",
+					"description": "Query used for the last import",
+					"type": "string"
+				}
+			},
+			"propertyOrder": []
+		},
+		"photoGallery": {
+			"title": "Photos",
+			"type": "array",
+			"minItems": 0,
+			"maxItems": 100,
+			"items": {
+				"type": "object",
+				"title": "Photo",
+				"properties": {
+					"photo": {
+						"title": "Photo",
+						"allOf": [
+							{
+								"$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+							}
+						]
+					},
+					"date": {
+						"title": "Date",
+						"type": "string"
+					}
+				},
+				"propertyOrder": []
+			}
+		}
 	}
 }
-```
-
-# Use
-
-Example:
-
-```json
-"collection": {
-    ...
-}
-
 ```
 
 ## Setting up the Snippet in DC
 
 Extension Snippets are an easy way to add extensions to content types while allowing you to easily change the extension url and base extension properties from one spot.
 
-You can find a snippet to use for this extension in: `snippet.json`. Recommended description:
+You can find a snippet to use for this extension above. Recommended description:
 
 > Add a media gallery to this content item. This allows content authors to build galleries of images in their content items, along with storing relevant metadata.
 

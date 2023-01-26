@@ -6,7 +6,7 @@
 
 You can perform the following actions from the toolbar:
 
-| icons | actions |
+| Icons | Actions |
 |-------|---------|
 | ![Import icon](../media/icon-import.png)  | Import new media items. |
 | ![Select all icon](../media/icon-select-all.png) ![De-select all icon](../media/icon-select-none.png) | Select and deselect all media items. |
@@ -44,13 +44,13 @@ After import, a notification will display the number of items imported, and the 
 
 ![View item](../media/view-item.png)
 
-You can quickly view an item full-width by clicking on its thumbnail in **grid**, **list**, **edit** or **import** view. You can also use the `v` keyboard shortcut when focusing on an item, or use the context menu when right clicking on an item. You can see all details using the information icon `i`.
+You can quickly view an item full-width by clicking on its thumbnail in **grid**, **list**, **edit** or **import** view. You can also use the `v` keyboard shortcut when focusing on an item, or use the context menu when right clicking it. You can see all details using the information icon `i`.
 
 ## Edit media
 
 ![Edit item](../media/edit-item.png)
 
-You can edit an item's details by clicking on the view icon in grid or list view. You can also use the `e` keyboard shortcut when focusing on an item, or use the context menu when right clicking on an item.
+You can edit an item's details by clicking on the view icon in grid or list view. You can also use the `e` keyboard shortcut when focusing on an item, or use the context menu when right clicking on it.
 
 Date Modified and Name are read only. You can view or edit additional metadata if specified in the extension configuration, for instance author and caption. Once saved, a notification will appear.
 
@@ -66,7 +66,7 @@ Date Modified and Name are read only. You can view or edit additional metadata i
 
 ![Context Menu](../media/context-menu.png)
 
-Context menu with all possible action can be opened when right clicking on a specific media item, on the top left icon, or anywhere else on the interface, as well as using the `m` keyboard shortcut.
+A context menu with all possible actions can be opened when right clicking on a specific media item, on the top left icon, or anywhere else on the interface, as well as using the `m` keyboard shortcut.
 
 ## Notifications
 
@@ -86,7 +86,7 @@ For accessibility, the extension can also be used using the following shortcuts,
 
 Item-specific actions:
 
-| key | action |
+| Key | Action |
 |-----|--------|
 | `space` | select / de-select item |
 | `v` | view currently focused item |
@@ -97,7 +97,7 @@ Item-specific actions:
 
 Global actions:
 
-| key | action |
+| Key | Action |
 |-----|--------|
 | `i` | open the import drawer |
 | `a` | select all items |
@@ -114,7 +114,7 @@ Global actions:
 
 Drag-and-drop actions:
 
-| key | action |
+| Key | Action |
 |-----|--------|
 | `return` | start / end keyboard drag-and-drop |
 | `arrows` | move dragged item (you might need to press `space` to scroll the view) |
@@ -148,4 +148,4 @@ You can automatically sort the collection by:
 - name descending
 - additional metadata ascending and descending
 
-After a collection has been sorted, you can manually re-order using drag-and-drop.
+After a collection has been sorted, you can manually re-order using drag-and-drop. The order is saved to the content item. Any newly imported items will always appear at the end, so remember to re-sort the collection when importing, or manually position the new items.
