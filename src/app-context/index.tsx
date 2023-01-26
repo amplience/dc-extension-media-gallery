@@ -17,6 +17,9 @@ import IChApi from '../ch-api/i-ch-api'
 import { RestChApi } from '../ch-api/rest-ch-api'
 import { AssetWithExif, EnrichedRepository, sortRepos } from '../ch-api/shared'
 
+/**
+ * TODO: javadoc
+ */
 type AppContextData = {
 	zoom: number
 	setZoom?: Dispatch<SetStateAction<number>>
