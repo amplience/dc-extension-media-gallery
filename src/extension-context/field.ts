@@ -1,6 +1,6 @@
 /**
- * TODO: javadoc
+ * Field for the Extension SDK to fetch.
  */
 export default interface Field {
-    // Nothing right now.
+    // Field properties are defined by user configuration.
 }

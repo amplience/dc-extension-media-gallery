@@ -1,7 +1,7 @@
 import { MetadataMap } from "../model/metadata-map"
 
 /**
- * TODO: javadoc
+ * Extension parameters
  */
 export default interface Params {
     clientId: string,
