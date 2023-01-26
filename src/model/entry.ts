@@ -1,5 +1,6 @@
 /**
- * TODO: javadoc
+ * Media entry, as found in the content item.
+ * Any number of metadata properties can appear in the base object.
  */
 export default interface Entry {
   photo: {
