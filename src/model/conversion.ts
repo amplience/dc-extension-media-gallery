@@ -60,7 +60,7 @@ function first<T>(items: T[] | undefined): T | undefined {
  * @param asset Asset from the API
  * @param metadataMap Mapping for copying metadata
  * @param chConfiguration Content Hub configuration, specifically defaultHost and endpoint
- * @returns 
+ * @returns Return a media entry
  */
 export function convertToEntry(
   asset: AssetWithExif,

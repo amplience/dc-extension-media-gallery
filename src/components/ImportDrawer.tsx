@@ -37,7 +37,7 @@ import { metaToString } from '../model/metadata-map'
  * folder structure.
  * @param folders
  * @param id
- * @returns
+ * @returns Boolean
  */
 const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
 	if (folders) {
@@ -55,7 +55,7 @@ const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
  *
  * @param repos
  * @param id
- * @returns
+ * @returns Repository ID | undefined
  */
 const getRepoId = (repos: EnrichedRepository[], id: string): string | undefined => {
 	for (let repo of repos) {

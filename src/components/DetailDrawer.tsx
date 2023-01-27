@@ -30,7 +30,7 @@ const DetailDrawer = () => {
 	/**
 	 * Returns a MUI Icon based on meta.icon value. 'author' returns <PhotoCameraFrontOutlined /> all else returns <NotesOutlined />
 	 * @param meta
-	 * @returns
+	 * @returns MUI Icon
 	 */
 	const getIcon = (meta: MetadataMapEntry) => {
 		switch (meta.icon) {

@@ -247,7 +247,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Closing alert
 	 * @param event
 	 * @param reason
-	 * @returns
 	 */
 	const handleSnackClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {

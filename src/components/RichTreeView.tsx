@@ -10,7 +10,7 @@ import { FormControl, InputLabel, MenuItem, Popover, Select } from '@mui/materia
  * @param node
  * @param id
  * @param list
- * @returns
+ * @returns Boolean
  */
 const buildExpanded = (node: any, id: string, list: string[]): boolean => {
 	if (node.id === id) {
@@ -34,7 +34,7 @@ const buildExpanded = (node: any, id: string, list: string[]): boolean => {
  *
  * @param nodes
  * @param id
- * @returns
+ * @returns Child node | undefined
  */
 const findItem = (nodes: any, id: string): any => {
 	if (Array.isArray(nodes)) {
@@ -57,7 +57,7 @@ const findItem = (nodes: any, id: string): any => {
 /**
  *
  * @param collection
- * @returns
+ * @returns Children | Folders from collection
  */
 const children = (collection: any) => {
 	return collection.children ?? collection.folders
@@ -104,7 +104,7 @@ const RichObjectTreeView = (props: any) => {
 	/**
 	 *
 	 * @param node
-	 * @returns
+	 * @returns Tree item
 	 */
 	const renderTree = (node: any) => (
 		<TreeItem key={node.id} nodeId={node.id} label={node.label}>
