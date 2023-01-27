@@ -1,5 +1,5 @@
 {
   "body": "./schemas/photoGalleryObject-schema.json",
-  "schemaId": "https://blackmould.com/photoGalleryObject",
+  "schemaId": "https://amplience.com/photoGalleryObject",
   "validationLevel": "CONTENT_TYPE"
 }

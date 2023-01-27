@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://blackmould.com/photoGalleryObject",
+	"$id": "https://amplience.com/photoGalleryObject",
 	"title": "Photo Gallery Object",
 	"description": "Description",
 	"allOf": [
