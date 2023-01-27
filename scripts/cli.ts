@@ -1,7 +1,6 @@
 import Yargs from 'yargs/yargs'
 import {Arguments, Argv} from 'yargs'
 import {importArgs, importHandler} from './import'
-import {cleanArgs, cleanHandler} from './clean'
 
 export type Context = {
     automationDir: string,
@@ -42,7 +41,6 @@ const configureYargs = (yargInstance: Argv): Promise<Arguments> => {
 
             const argv = yargInstance
                 .command('import', 'Import Content', importArgs, importHandler)
-                .command('clean', 'Clean Hub', cleanArgs, cleanHandler)
                 .strict()
                 .demandCommand(1, 'Please specify at least one command')
                 .exitProcess(false)

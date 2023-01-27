@@ -124,14 +124,6 @@ export const importHandler = async (context: Arguments<Context>): Promise<any> =
             {stdio: 'inherit'}
         )
 
-        console.log(`Importing settings...`)
-        execSync(
-            `npx dc-cli settings import ${context.tempDir}/settings/hub-settings.json \
-                --allowDelete true \
-                --mapFile ${mappingFile}`, 
-            {stdio: 'inherit'}
-        )
-
         console.log(`Importing extensions...`)
         execSync(
             `npx dc-cli extension import ${context.tempDir}/extensions`, 
@@ -148,17 +140,6 @@ export const importHandler = async (context: Arguments<Context>): Promise<any> =
         execSync(
             `npx dc-cli content-type import ${context.tempDir}/type \
                 --sync`,
-            {stdio: 'inherit'}
-        )
-
-        console.log(`Importing content...`)
-        execSync(
-            `npx dc-cli content-item import ${context.tempDir}/content/content \
-                --baseRepo ${context.contentRepoId} \
-                --media true \
-                --publish \
-                --batchPublish \
-                --mapFile ${mappingFile}`,
             {stdio: 'inherit'}
         )
 
