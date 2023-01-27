@@ -48,7 +48,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "import": "ts-node scripts/index.ts import",
-    "clean": "ts-node scripts/index.ts clean",
     "version:patch": "standard-version --release-as patch",
     "version:minor": "standard-version --release-as minor",
     "version:major": "standard-version --release-as major",
