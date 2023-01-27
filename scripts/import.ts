@@ -6,7 +6,6 @@ import {tmpdir} from 'os'
 import {join} from 'path'
 import { nanoid } from 'nanoid'
 import { Context } from './cli'
-const amplience: any = require('../config/default')
 
 const recursiveTemplateSearch = async (baseDir: string, targetDir: string, dir: string, fileFunc: (path: string) => Promise<void>) => {
     const files = await promises.readdir(join(baseDir, dir))
@@ -100,9 +99,6 @@ export const importArgs = (yargs: Argv) => {
 
 export const importHandler = async (context: Arguments<Context>): Promise<any> => {
     createTempDir(context)
-
-    // Getting visualisation name and url from Amplience default config
-    context.visualisations = amplience.visualisations
 
     console.log(`Compiling templates and copying files...`)
     await compileTemplates(context.automationDir, context.tempDir, context)
