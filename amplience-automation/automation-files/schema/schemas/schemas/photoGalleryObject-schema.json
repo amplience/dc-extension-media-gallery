@@ -50,7 +50,6 @@
 					"title": "title",
 					"type": "array",
 					"minItems": 0,
-					"maxItems": 100,
 					"items": {
 						"type": "object",
 						"title": "Photo",
