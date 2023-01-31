@@ -217,19 +217,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	}
 
 	/**
-	 * re-calculate cols
-	 */
-	// useEffect(() => {
-	//   function handleResize() {
-	//     if (isXLarge) setCols(Math.floor(6*zoom))
-	//     if (isLarge) setCols(Math.floor(4*zoom))
-	//     if (isTablet) setCols(Math.floor(3*zoom))
-	//     if (isMobile) setCols(Math.floor(2*zoom))
-	//   }
-	//   window.addEventListener('resize', handleResize)
-	// })
-
-	/**
 	 * Close context menu
 	 */
 	const handleContextClose = () => {
@@ -1069,8 +1056,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setCurrentAlert,
 			contextMenu,
 			setContextMenu,
-			//dragStart,
-			//dragEnd,
 			handleContextClose,
 			handleContextMenu,
 			handleDetailView,
