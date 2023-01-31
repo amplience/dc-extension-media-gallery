@@ -1,0 +1,90 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://amplience.com/mediaGalleryObject",
+	"title": "Media Gallery Object",
+	"description": "Description",
+	"allOf": [
+		{
+			"$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+		}
+	],
+	"type": "object",
+	"properties": {
+		"title": {
+			"title": "Title",
+			"description": "Title for the Gallery",
+			"type": "string",
+			"minLength": 0
+		},
+		"gallery": {
+			"title": "Gallery",
+			"type": "object",
+			"ui:extension": {
+				"name": "media-gallery",
+				"params": {}
+			},
+			"properties": {
+				"galleryConfig": {
+					"title": "Gallery Config",
+					"type": "object",
+					"properties": {
+						"repoId": {
+							"title": "Import Repo ID",
+							"description": "Repository ID used for the last import",
+							"type": "string"
+						},
+						"folderId": {
+							"title": "Import Folder ID",
+							"description": "Folder ID used for the last import",
+							"type": "string"
+						},
+						"query": {
+							"title": "Import Query",
+							"description": "Query used for the last import",
+							"type": "string"
+						}
+					},
+					"propertyOrder": []
+				},
+				"photoGallery": {
+					"title": "title",
+					"type": "array",
+					"minItems": 0,
+					"items": {
+						"type": "object",
+						"title": "Photo",
+						"properties": {
+							"photo": {
+								"title": "Photo",
+								"allOf": [
+									{
+										"$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+									}
+								]
+							},
+							"photographer": {
+								"title": "Photographer",
+								"type": "string",
+								"minLength": 0,
+								"maxLength": 200
+							},
+							"caption": {
+								"title": "Caption",
+								"type": "string",
+								"minLength": 0,
+								"maxLength": 500
+							},
+							"date": {
+								"title": "Date",
+								"type": "string"
+							}
+						},
+						"propertyOrder": []
+					}
+				}
+			},
+			"propertyOrder": []
+		}
+	},
+	"propertyOrder": []
+}

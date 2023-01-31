@@ -1,0 +1,23 @@
+{
+	"hubId": "621647a8c9e77c00012af6e0",
+	"name": "media-gallery",
+	"label": "Media Gallery",
+	"description": "Media Gallery Extension",
+	"url": "https://dc-extension-media-gallery.dc-demostore.com/",
+	"height": 200,
+	"enabledForAllContentTypes": false,
+	"category": "CONTENT_FIELD",
+	"parameters": "{\n  {{#if extensionVse}}\"vse\": \"{{extensionVse}}\",\n{{/if}}  \"clientId\": \"{{extensionClientId}}\",\n  \"clientSecret\": \"{{extensionClientSecret}}\",\n  \"configPath\": \"galleryConfig\",\n  \"galleryPath\": \"photoGallery\",\n  \"metadataMap\": [\n    {\n      \"source\": \"exif/artist\",\n      \"target\": \"photographer\",\n      \"label\": \"Artist\",\n      \"editable\": true,\n      \"sortable\": true,\n      \"type\": \"string\",\n      \"icon\": \"author\",\n      \"visibility\": [\n        \"edit\",\n        \"import\",\n        \"grid\",\n        \"list\",\n        \"info\"\n      ]\n    },\n    {\n      \"source\": \"exif/description\",\n      \"target\": \"description\",\n      \"label\": \"Description\",\n      \"editable\": true,\n      \"sortable\": true,\n      \"type\": \"multiline\",\n      \"icon\": \"text\",\n      \"visibility\": [\n        \"edit\",\n        \"import\",\n        \"grid\",\n        \"list\",\n        \"info\"\n      ]\n    }\n  ]\n}",
+	"snippets": [
+		{
+			"label": "Add Media Gallery",
+			"body": "{\n  \"title\": \"Gallery\",\n  \"type\": \"object\",\n  \"ui:extension\": {\n    \"name\": \"media-gallery\",\n    \"params\": {}\n  },\n  \"properties\": {\n    \"galleryConfig\": {\n      \"title\": \"Gallery Config\",\n      \"type\": \"object\",\n      \"properties\": {},\n      \"propertyOrder\": []\n    },\n    \"photoGallery\": {\n      \"title\": \"title\",\n      \"type\": \"array\",\n      \"minItems\": 0,\n      \"maxItems\": 100,\n      \"items\": {\n        \"type\": \"object\",\n        \"title\": \"Photo\",\n        \"properties\": {\n          \"photo\": {\n            \"title\": \"Photo\",\n            \"allOf\": [\n              {\n                \"$ref\": \"http://bigcontent.io/cms/schema/v1/core#/definitions/image-link\"\n              }\n            ]\n          },\n          \"photographer\": {\n            \"title\": \"Photographer\",\n            \"type\": \"string\",\n            \"minLength\": 0,\n            \"maxLength\": 200\n          },\n          \"caption\": {\n            \"title\": \"Caption\",\n            \"type\": \"string\",\n            \"minLength\": 0,\n            \"maxLength\": 500\n          },\n          \"date\": {\n            \"title\": \"Date\",\n            \"type\": \"string\"\n          }\n        },\n        \"propertyOrder\": []\n      }\n    }\n  },\n  \"propertyOrder\": []\n}"
+		}
+	],
+	"settings": "{\"API\":{\"READ\":true,\"EDIT\":true},\"SANDBOX\":{\"SAME_ORIGIN\":false,\"MODALS\":false,\"NAVIGATION\":false,\"POPUPS\":false,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":false,\"FORMS\":false}}",
+	"status": "ACTIVE",
+	"createdBy": "df984790-5cf9-4b6e-96a0-3a0ea9475b64",
+	"createdDate": "2023-01-03T09:30:50.989Z",
+	"lastModifiedBy": "df984790-5cf9-4b6e-96a0-3a0ea9475b64",
+	"lastModifiedDate": "2023-01-19T15:56:23.319Z"
+}

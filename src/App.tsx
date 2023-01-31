@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { ExtensionContextProvider } from './extension-context'
+import { AppContextProvider } from './app-context'
+import MediaGallery from './media-gallery'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<LocalizationProvider dateAdapter={AdapterDayjs}>
+			<ExtensionContextProvider>
+				<AppContextProvider>
+					<div className='App'>
+						<header className='App-header'>
+							<MediaGallery />
+						</header>
+					</div>
+				</AppContextProvider>
+			</ExtensionContextProvider>
+		</LocalizationProvider>
+	)
 }
 
-export default App;
+export default App

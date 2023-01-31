@@ -1,0 +1,5 @@
+{
+	"body": "./schemas/mediaGalleryObject-schema.json",
+	"schemaId": "https://amplience.com/mediaGalleryObject",
+	"validationLevel": "CONTENT_TYPE"
+}
