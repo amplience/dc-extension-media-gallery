@@ -168,6 +168,11 @@ interface DefaultFolder {
 
 export const AppContext = React.createContext<AppContextData>(defaultAppState)
 
+/**
+ * Application Context provider
+ * @param param0 
+ * @returns 
+ */
 export function AppContextProvider({ children }: { children: ReactNode }) {
 	const { field, setField, params, sdk } = useExtension()
 	const { galleryPath, configPath } = params
