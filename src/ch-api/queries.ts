@@ -30,7 +30,7 @@ query queryAssetByFolder($folderId: String!, $query: String, $after: String) {
  * Query assets by repository. Does not contain exif data.
  */
 export const queryAssetByRepo = `
-query queryAssetByFolder($repoId: String!, $after: String) {
+query queryAssetByRepo($repoId: String!, $after: String) {
   assetSearch(
     keyword: "*"
     first: 100
@@ -72,7 +72,7 @@ query assetEXIF($uuid: ID!) {
         }		
       }
     }
-	}
+  }
 }`;
 
 /**
@@ -91,7 +91,7 @@ export const assetEXIFBuilder = `node(id: $uuid) {
         }		
       }
     }
-	}`;
+  }`;
 
 /**
  * Get repositories for the active client. Assumes less than 50 repositories.
@@ -153,7 +153,7 @@ query foldersByRepo($repoId: ID!, $after: String) {
         }
       }
     }
-	}
+  }
 }
 `
 
@@ -180,7 +180,7 @@ query foldersByFolder($folderId: ID!) {
         }
       }
     }
-	}
+  }
 }`
 
 /**
@@ -215,7 +215,7 @@ query exifByFolder($folderId: ID!, $after: String) {
         }
       }
     }
-	}
+  }
 }`
 
 /**
@@ -250,5 +250,5 @@ query exifByRepo($repoId: ID!, $after: String) {
         }
       }
     }
-	}
+  }
 }`

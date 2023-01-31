@@ -211,7 +211,7 @@ export class RestChApi extends AuthClient implements IChApi {
   }
 
   /**
-   * Gets all repositories and their child folders from the REST API.
+   * Gets all repositories and their child folders.
    * @returns Enriched repositories
    */
   async allReposWithFolders(): Promise<EnrichedRepository[]> {
@@ -255,9 +255,10 @@ export class RestChApi extends AuthClient implements IChApi {
 
    /**
    * Gets Assets with Exif data from a given repo/folder, and a search query.
-   * @param repoId Repo to get assets from
-   * @param folderId Folder to get assets from
-   * @param query Query to filter assets with
+   * @param {Object} params Parameters to select assets with
+   * @param params.repoId Repo to get assets from
+   * @param params.folderId Folder to get assets from
+   * @param params.query Query to filter assets with
    * @returns List of Assets with Exif data included
    */
   async queryAssetsExif({

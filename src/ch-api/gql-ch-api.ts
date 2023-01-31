@@ -213,7 +213,7 @@ export class GqlChApi extends GraphQLClient implements IChApi {
 
   /**
    * Fetch a repository and its child folders.
-   * @param repoId Repo ID to request
+   * @param repoId Repository ID to request
    * @param after Start cursor for pagination
    * @returns Response containing the requested repository and its folder children
    */
@@ -234,8 +234,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param repoId 
+   * Fetch assets with exif from a given folder.
+   * @param repoId ID for repository to get assets from
    * @param after Start cursor for pagination
    * @returns Response containing assets with exif from the given repo
    */
@@ -247,8 +247,8 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * 
-   * @param folderId 
+   * Fetch assets with exif from a given repo.
+   * @param folderId ID for folder to get assets from
    * @param after Start cursor for pagination
    * @returns Response containing assets with exif from the given folder
    */
@@ -343,7 +343,7 @@ export class GqlChApi extends GraphQLClient implements IChApi {
   }
 
   /**
-   * Gets all repositories and their child folders from the REST API.
+   * Gets all repositories and their child folders.
    * @returns Enriched repositories
    */
   async allReposWithFolders(): Promise<EnrichedRepository[]> {
@@ -432,9 +432,10 @@ export class GqlChApi extends GraphQLClient implements IChApi {
 
    /**
    * Gets Assets with Exif data from a given repo/folder, and a search query.
-   * @param repoId Repo to get assets from
-   * @param folderId Folder to get assets from
-   * @param query Query to filter assets with
+   * @param {Object} params Parameters to select assets with
+   * @param params.repoId Repo to get assets from
+   * @param params.folderId Folder to get assets from
+   * @param params.query Query to filter assets with
    * @returns List of Assets with Exif data included
    */
   async queryAssetsExif({

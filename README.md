@@ -4,7 +4,7 @@
 
 # Dynamic Content Media Gallery Extension
 
-This extension allows you to manage a collection of image items easily, with import froma specified Content Hub, drag-and-drop, sorting, grid and list view.
+This extension allows you to manage a collection of image items easily, with import from a specified Content Hub, drag-and-drop, sorting, grid and list view.
 
 -   [Prerequisites](./docs/prerequisites.md)
 

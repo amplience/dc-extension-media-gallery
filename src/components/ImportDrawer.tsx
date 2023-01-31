@@ -52,9 +52,9 @@ const containsFolder = (folders: Folder[] | undefined, id: string): boolean => {
 }
 
 /**
- *
- * @param repos
- * @param id
+ * Gets a repository ID from a contained folder ID.
+ * @param repos List of top level repositories
+ * @param id Folder ID to search for
  * @returns Repository ID | undefined
  */
 const getRepoId = (repos: EnrichedRepository[], id: string): string | undefined => {
@@ -67,9 +67,13 @@ const getRepoId = (repos: EnrichedRepository[], id: string): string | undefined 
 	return undefined
 }
 
+/**
+ * Drawer for querying, selecting and importing media into the set.
+ * @returns ImportDrawer component
+ */
 const ImportDrawer = () => {
 	const app = useContext(AppContext)
-	const { params, field, oldConfig } = useExtension()
+	const { params, oldConfig } = useExtension()
 
 	const [queryValue, setQueryValue] = useState<string | undefined>(undefined)
 	const [repoId, setRepoId] = useState<string | undefined>(undefined)
@@ -88,7 +92,7 @@ const ImportDrawer = () => {
 	}
 
 	/**
-	 *
+	 * Update the query parameters based on the config saved in the content item.
 	 */
 	useEffect(() => {
 		setRepoId(repo)
@@ -97,7 +101,7 @@ const ImportDrawer = () => {
 	}, [repo, folder, query])
 
 	/**
-	 *
+	 * Reload entries from content hub when the query parameters change.
 	 */
 	useEffect(() => {
 		if (app.importDrawerOpen) {
@@ -199,7 +203,6 @@ const ImportDrawer = () => {
 							p: 1
 						}}>
 						{/* Tree View */}
-						{/* TODO: replace with a dropdown tree select */}
 						{app.repos && (
 							<Box style={{ width: '40%' }}>
 								<RichObjectTreeView

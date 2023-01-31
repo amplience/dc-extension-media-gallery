@@ -11,24 +11,25 @@ import {
 import { Stack, Box, IconButton, ImageListItemBar, Typography, Tooltip } from '@mui/material'
 import SortableListItem from '../sortable-list-item'
 import { AppContext } from '../app-context'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
 import { useExtension } from '../extension-context'
 import { metaToString } from '../model/metadata-map'
 
+/**
+ * Displays items in the media gallery in a reorderable grid view.
+ * @returns GridView component
+ */
 const GridView = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension();
-
-	const [dragging, setDragging] = useState(false)
 
 	/**
 	 * Drag-end-Drop action start
 	 * @param event
 	 */
 	const dragStart = (event: any) => {
-		setDragging(true)
 		if (app.setDragging) app.setDragging(true)
 	}
 
@@ -37,7 +38,6 @@ const GridView = () => {
 	 * @param event
 	 */
 	const dragEnd = (event: any) => {
-		setDragging(false)
 		if (app.setDragging) app.setDragging(false)
 		const { active, over } = event
 		if (active.id !== over.id) {
@@ -50,7 +50,6 @@ const GridView = () => {
 
 	return (
 		<Stack direction={'row'}>
-			{/* <ImageList cols={Math.floor(cols / zoom)} gap={8} sx={{ p: '2px' }}> */}
 			<Box
 				sx={{
 					width: '100%',

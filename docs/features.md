@@ -128,7 +128,7 @@ The interface offers drag-and-drop to manually re-order media items in the colle
 
 ![Keyboard Drag-and-drop](../media/keyboard-drag-and-drop.png)
 
-For accessibility, the interface also offers to use the keyboard to re-order items. You can follow these steps:
+For accessibility, the interface also allows using the keyboard to re-order items. You can follow these steps:
 
 - Focus an item using the `tab` key.
 - Move focus using arrow keys.
