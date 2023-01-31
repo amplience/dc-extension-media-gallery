@@ -7,6 +7,18 @@
 This extension allows you to manage a collection of image items easily, with import froma specified Content Hub, drag-and-drop, sorting, grid and list view.
 
 -   [Prerequisites](./docs/prerequisites.md)
+
+## Quick Install
+
+If you have your Media Hub Client Id and Secret the extension will link out to, there is an `npm` script that will install the extension to your DC Hub:
+
+```
+$ npm i
+$ npm run import --extensionClientId [your_client_id] --extensionClientSecret [your_client_secret] --extensionVSE [optional_vse_url]
+```
+
+## Table of Contents
+
 -   Extension installation
     -   [Installing with `dc-cli` tool](./docs/cli-installation.md)
     -   [Manual Installation](./docs/manual-installation.md)
