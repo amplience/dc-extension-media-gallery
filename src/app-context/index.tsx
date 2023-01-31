@@ -689,7 +689,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		const getEntries = async (repoId: string, id: string, query?: string): Promise<Entry[]> => {
 			if (chApi && repoId && endpoint) {
 				setPendingDefaultFolder({ repoId, folderId: id, query })
-				//const assets = await chApi.getExifByFolder(repo.id, id)
 				let assets: AssetWithExif[]
 
 				if (query && query !== '') {
