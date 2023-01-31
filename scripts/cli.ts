@@ -11,12 +11,6 @@ export type Context = {
     clientSecret: string,
     contentRepoId: string,
     slotsRepoId: string,
-
-    sfccUrl: string | null,
-    sfccVersion: string | null,
-    authSecret: string | null,
-    authClientId: string | null,
-    siteId: string | null
 }
 
 const configureYargs = (yargInstance: Argv): Promise<Arguments> => {
