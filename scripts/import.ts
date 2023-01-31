@@ -85,11 +85,6 @@ export const importArgs = (yargs: Argv) => {
             required: true,
             type: 'string'
         })
-        .option('contentRepoId', {
-            describe: 'content repository id',
-            required: true,
-            type: 'string'
-        })
         .option('mapFile', {
             describe: 'mapFile',
             default: null,
