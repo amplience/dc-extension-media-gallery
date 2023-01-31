@@ -14,7 +14,7 @@ If you have your Media Hub Client Id and Secret the extension will link out to, 
 
 ```
 $ npm i
-$ npm run import --extensionClientId [your_client_id] --extensionClientSecret [your_client_secret] --extensionVSE [optional_vse_url]
+$ npm run import -- --extensionClientId [your_client_id] --extensionClientSecret [your_client_secret] --extensionVSE [optional_vse_url]
 ```
 
 ## Table of Contents
