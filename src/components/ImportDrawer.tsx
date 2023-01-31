@@ -345,7 +345,7 @@ const ImportDrawer = () => {
 													<Tooltip
 														title={item.entry.photo.name}
 														followCursor={true}>
-														<Typography variant='subtitle1' noWrap>
+														<Typography variant='subtitle1' noWrap sx={{marginBottom: '6px'}}>
 															{item.entry.photo.name}
 														</Typography>
 													</Tooltip>
