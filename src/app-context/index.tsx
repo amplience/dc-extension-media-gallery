@@ -749,7 +749,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
-		 * Resets the Grdi View Zoom level to 1
+		 * Resets the Grid View Zoom level to 1
 		 */
 		const handleResetZoom = () => {
 			setZoom(1)
