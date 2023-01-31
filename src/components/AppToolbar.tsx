@@ -10,7 +10,7 @@ import {
 	ArrowDownwardOutlined,
 	ZoomInOutlined,
 	ZoomOutOutlined,
-	ViewHeadlineOutlined,
+	ListOutlined,
 	AppsOutlined
 } from '@mui/icons-material'
 import {
@@ -207,7 +207,7 @@ const AppToolbar = () => {
 								app.setGridMode(false)
 							}
 						}}>
-						<ViewHeadlineOutlined />
+						<ListOutlined />
 					</IconButton>
 				)}
 				{!app.gridMode && (

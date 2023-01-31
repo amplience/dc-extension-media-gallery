@@ -11,7 +11,7 @@ import {
 	CachedOutlined,
 	ZoomInOutlined,
 	ZoomOutOutlined,
-	ViewHeadlineOutlined,
+	ListOutlined,
 	AppsOutlined,
 	VerticalAlignTop,
 	VerticalAlignBottom
@@ -318,7 +318,7 @@ const ContextMenu = () => {
 						}
 					}}>
 					<ListItemIcon>
-						<ViewHeadlineOutlined fontSize='small' />
+						<ListOutlined fontSize='small' />
 					</ListItemIcon>
 					<ListItemText>List view</ListItemText>
 					<Typography variant='body2' color='text.secondary'>
