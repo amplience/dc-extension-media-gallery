@@ -30,6 +30,10 @@ import {
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 
+/**
+ * Context menu for media items, providing access to actions relating to them.
+ * @returns ContextMenu Component
+ */
 const ContextMenu = () => {
 	const app = useContext(AppContext)
 	return (

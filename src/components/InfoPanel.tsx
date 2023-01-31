@@ -4,6 +4,10 @@ import { useContext } from 'react'
 import { useExtension } from '../extension-context'
 import { metaToString } from '../model/metadata-map'
 
+/**
+ * Panel that displays read-only information for a media item.
+ * @returns InfoPanel Component
+ */
 const InfoPanel = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension();

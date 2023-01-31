@@ -5,6 +5,10 @@ import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import GenericImage from './GenericImage'
 
+/**
+ * Fullscreen image display with information popover.
+ * @returns ImageDialog Component
+ */
 const ImageDialog = () => {
 	const app = useContext(AppContext)
 	return (
@@ -31,7 +35,7 @@ const ImageDialog = () => {
 						loadingIcon={true}
 						textCol={'white'}></GenericImage>
 					<IconButton
-						aria-label={`close import drawer`}
+						aria-label={`toggle image information display`}
 						size='small'
 						sx={{ color: 'white', position: 'absolute', top: 8, left: 8 }}
 						onClick={() => {

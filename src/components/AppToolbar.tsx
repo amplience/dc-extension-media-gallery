@@ -32,6 +32,10 @@ import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import { useExtension } from '../extension-context'
 
+/**
+ * Toolbar component that provides access to global actions.
+ * @returns AppToolbar Component
+ */
 const AppToolbar = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension()

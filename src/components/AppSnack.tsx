@@ -3,6 +3,10 @@ import SlideTransition from './SlideTransition'
 import { useContext } from 'react'
 import { AppContext } from '../app-context'
 
+/**
+ * Snack component to display alerts from the AppContext.
+ * @returns AppSnack component
+ */
 const AppSnack = () => {
 	const app = useContext(AppContext)
 	return (

@@ -6,10 +6,10 @@ import { Folder } from '../ch-api/shared'
 import { FormControl, InputLabel, MenuItem, Popover, Select } from '@mui/material'
 
 /**
- * Builds out the tree view for folders in a Media Repo for selecting in the Import Drawer
- * @param node
- * @param id
- * @param list
+ * Builds out the list of expanded nodes in the tree view, given a selected ID.
+ * @param node Current node
+ * @param id ID to expand to
+ * @param list List of expanded nodes
  * @returns Boolean
  */
 const buildExpanded = (node: any, id: string, list: string[]): boolean => {
@@ -31,9 +31,9 @@ const buildExpanded = (node: any, id: string, list: string[]): boolean => {
 }
 
 /**
- *
- * @param nodes
- * @param id
+ * Find an item with a given ID either in the given items or their children.
+ * @param nodes List of nodes to search
+ * @param id ID to search for
  * @returns Child node | undefined
  */
 const findItem = (nodes: any, id: string): any => {
@@ -55,14 +55,19 @@ const findItem = (nodes: any, id: string): any => {
 }
 
 /**
- *
- * @param collection
+ * Get the children of a given node (repo/folder)
+ * @param collection List of child nodes
  * @returns Children | Folders from collection
  */
 const children = (collection: any) => {
 	return collection.children ?? collection.folders
 }
 
+/**
+ * Select component where the options are displayed on a tree.
+ * @param props Comonent props, including selected id and the tree containing the nodes.
+ * @returns RichObjectTreeView Component
+ */
 const RichObjectTreeView = (props: any) => {
 	const [expanded, setExpanded] = useState(['root'])
 	const [sequenceNumber, setSequenceNumber] = useState(0)
@@ -71,7 +76,7 @@ const RichObjectTreeView = (props: any) => {
 	const popoverAnchor = useRef()
 
 	/**
-	 *
+	 * Recalculate the expanded folders when the selectedId prop or tree changes.
 	 */
 	useEffect(() => {
 		if (props.selectedId) {
@@ -88,22 +93,22 @@ const RichObjectTreeView = (props: any) => {
 	}, [props.selectedId, children(props), sequenceNumber, expanded])
 
 	/**
-	 *
+	 * Opens the popover containing the tree.
 	 */
 	const openPopover = () => {
 		setOpen(true)
 	}
 
 	/**
-	 *
+	 * Closes the popover containing the tree.
 	 */
 	const closePopover = () => {
 		setOpen(false)
 	}
 
 	/**
-	 *
-	 * @param node
+	 * Renders the tree of nodes recursively.
+	 * @param node The current node
 	 * @returns Tree item
 	 */
 	const renderTree = (node: any) => (
