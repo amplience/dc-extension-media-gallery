@@ -22,6 +22,10 @@ import { useExtension } from '../extension-context'
 import { MetadataMapEntry } from '../model/metadata-map'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 
+/**
+ * A drawer that shows details for a media item, and allows fields to be edited.
+ * @returns DetailDrawer Component
+ */
 const DetailDrawer = () => {
 	const app = useContext(AppContext)
 

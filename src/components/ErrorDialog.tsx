@@ -23,6 +23,10 @@ const errorCodeToMessage = (code: string | undefined): string => {
 	}
 }
 
+/**
+ * Modal dialog that displays global errors reported through the context.
+ * @returns ErrorDialog Component
+ */
 const ErrorDialog = () => {
 	const app = useContext(AppContext)
 

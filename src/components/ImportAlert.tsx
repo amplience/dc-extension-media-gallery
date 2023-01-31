@@ -6,6 +6,10 @@ import { MediaItem } from '../model'
 import { assetsToItems } from '../model/conversion'
 import _ from 'lodash'
 
+/**
+ * Alert that shows the user how many new, updated or out-of-sync images can be imported.
+ * @returns ImportAlert component
+ */
 const ImportAlert = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension()
