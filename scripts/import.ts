@@ -73,7 +73,7 @@ export const importArgs = (yargs: Argv) => {
 		.option('tempDir', {
 			alias: 't',
 			describe: 'temporary directory for all run files',
-			default: join(tmpdir(), `amplience-sfcc/amplience-sfcc-${nanoid()}`)
+			default: join(tmpdir(), `amplience-${nanoid()}`)
 		})
 		.option('hubId', {
 			describe: 'amplience hub id',
@@ -123,7 +123,7 @@ export const importHandler = async (context: Arguments<Context>): Promise<any> =
 			process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME'] || __dirname,
 			'.amplience',
 			'imports',
-			`sfcc-${context.hubId}.json`
+			`${context.hubId}.json`
 		)
 
 	try {

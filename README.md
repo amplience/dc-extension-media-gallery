@@ -10,17 +10,29 @@ This extension allows you to manage a collection of image items easily, with imp
 
 ## Quick Install
 
-If you have your Media Hub Client Id and Secret the extension will link out to, there is an `npm` script that will install the extension to your DC Hub:
+To run the `npm` install scripts, you'll need to install some dependencies:
 
 ```
 $ npm i
-$ npm run import -- --extensionClientId [your_client_id] --extensionClientSecret [your_client_secret] --extensionVSE [optional_vse_url]
+```
+
+Then, if you have your DC Hub Client Id and Secret, run the following `npm` script to install the extension to your DC Hub:
+
+```
+$ npm run import -- --clientId [your_client_id] --clientSecret [your_client_secret] --hubId [your_hub_id]
+```
+
+> NOTE: the above flags are required
+
+If you also have the Media Hub Client Id and Secret the extension will link out to, include the `--extensionClientId` and `--extensionClientSecret` flags, with an OPTIONAL `--extensionVSE` flag
+
+```
+$ npm run import -- --clientId [your_client_id] --clientSecret [your_client_secret] --hubId [your_hub_id] --extensionClientId [your_mediahub_client_id] --extensionClientSecret [your_mediahub_client_secret] --extensionVSE [optional_vse_url]
 ```
 
 ## Table of Contents
 
--   Extension installation
-    -   [Manual Installation](./docs/manual-installation.md)
+-   [Manual Installation](./docs/manual-installation.md)
 -   [Configuration via Extension Params](./docs/configuration.md)
     -   [Setting EXIF fields](./docs/setting-exif-fields.md)
 -   [Features](./docs/features.md)
