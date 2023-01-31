@@ -11,7 +11,7 @@ import {
 import { Stack, Box, IconButton, ImageListItemBar, Typography, Tooltip } from '@mui/material'
 import SortableListItem from '../sortable-list-item'
 import { AppContext } from '../app-context'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
 import { useExtension } from '../extension-context'
@@ -25,11 +25,15 @@ const GridView = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension();
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [dragging, setDragging] = useState(false)
+
 	/**
 	 * Drag-end-Drop action start
 	 * @param event
 	 */
 	const dragStart = (event: any) => {
+		setDragging(true)
 		if (app.setDragging) app.setDragging(true)
 	}
 
@@ -38,6 +42,7 @@ const GridView = () => {
 	 * @param event
 	 */
 	const dragEnd = (event: any) => {
+		setDragging(false)
 		if (app.setDragging) app.setDragging(false)
 		const { active, over } = event
 		if (active.id !== over.id) {

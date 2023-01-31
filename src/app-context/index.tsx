@@ -1099,6 +1099,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		sortAnchorEl,
 		sortOpen,
 		dragging,
+		setDragging,
 		fullscreenView,
 		contextMedia,
 		currentMedia,
