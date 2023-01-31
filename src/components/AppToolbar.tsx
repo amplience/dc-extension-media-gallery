@@ -4,7 +4,7 @@ import {
 	GridViewSharp,
 	GridViewOutlined,
 	DeleteOutline,
-	SortOutlined,
+	SortByAlphaOutlined,
 	CachedOutlined,
 	ArrowUpwardOutlined,
 	ArrowDownwardOutlined,
@@ -128,7 +128,7 @@ const AppToolbar = () => {
 					onClick={app.handleSortClick}
 					size='small'
 					id='toolbar-icon-sort'>
-					<SortOutlined />
+					<SortByAlphaOutlined />
 				</IconButton>
 				<IconButton
 					sx={{ color: 'white' }}

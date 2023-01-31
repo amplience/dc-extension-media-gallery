@@ -7,7 +7,7 @@ import {
 	AddPhotoAlternateOutlined,
 	GridViewSharp,
 	GridViewOutlined,
-	SortOutlined,
+	SortByAlphaOutlined,
 	CachedOutlined,
 	ZoomInOutlined,
 	ZoomOutOutlined,
@@ -256,7 +256,7 @@ const ContextMenu = () => {
 					app.handleContextClose()
 				}}>
 				<ListItemIcon>
-					<SortOutlined fontSize='small' />
+					<SortByAlphaOutlined fontSize='small' />
 				</ListItemIcon>
 				<ListItemText>Sort by</ListItemText>
 				<Typography variant='body2' color='text.secondary'>
