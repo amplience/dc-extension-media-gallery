@@ -20,7 +20,6 @@ $ npm run import -- --extensionClientId [your_client_id] --extensionClientSecret
 ## Table of Contents
 
 -   Extension installation
-    -   [Installing with `dc-cli` tool](./docs/cli-installation.md)
     -   [Manual Installation](./docs/manual-installation.md)
 -   [Configuration via Extension Params](./docs/configuration.md)
     -   [Setting EXIF fields](./docs/setting-exif-fields.md)
