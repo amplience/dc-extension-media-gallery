@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://amplience.com/photoGalleryObject",
-	"title": "Photo Gallery Object",
+	"$id": "https://amplience.com/mediaGalleryObject",
+	"title": "Media Gallery Object",
 	"description": "Description",
 	"allOf": [
 		{
