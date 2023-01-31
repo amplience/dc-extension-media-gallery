@@ -13,7 +13,7 @@ This extension needs to be registered against a Hub with in the Dynamic Content 
 -   Description: Media Gallery _(can be left blank, if you wish)_
 
 > Note:
-> You can use our deployed version of this extension (builds from the "production" branch) - TBD
+> You can use our deployed version of this extension (builds from the "production" branch) at [https://dc-extension-media-gallery.dc-demostore.com/](https://dc-extension-media-gallery.dc-demostore.com/).
 
 _As this is an open source project you're welcome to host your own "fork" of this project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish._
 
@@ -93,4 +93,4 @@ You can find a snippet to use for this extension above. Recommended description:
 
 You can even add your locally hosted media gallery extension this way for development, though note that it expects the extension url to be https. Our hosted version is a quick way to access the current version of the extension:
 
--   TBD
+[https://dc-extension-media-gallery.dc-demostore.com/](https://dc-extension-media-gallery.dc-demostore.com/)
