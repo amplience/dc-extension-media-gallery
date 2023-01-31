@@ -1,4 +1,4 @@
-If you feel that any customisations are useful to the Amplience ecosystem, we welcome contribution. These can range from your own integrations, new capabilities or just typos and bug fixes.
+If you feel that any customisations are useful to the Amplience ecosystem, we welcome contributions. These can range from your own integrations, new capabilities or just typos and bug fixes.
 
 ## Instructions
 
@@ -14,7 +14,7 @@ Make and commit your changes. Make sure the commands npm run build and npm run t
 When committing changes, it is useful to follow a standard practice for readability. We would reccomend following [Conventional Commits](https://www.conventionalcommits.org/) 
 
 ### Documentation
-Please do not forget to add documentation for other users in markdown format as part of your pull request
+Please do not forget to add documentation for other users in markdown format as part of your pull request.
 
 ### Pull Requests
 Finally send a [GitHub Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) with a clear list of what you've done.

@@ -23,24 +23,25 @@ import {
 } from '@mui/material'
 import SortableTableRow from '../sortable-table-row'
 import { AppContext } from '../app-context'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import GenericImage from './GenericImage'
 import { MediaItem } from '../model'
 import { useExtension } from '../extension-context'
 import { metaToString } from '../model/metadata-map'
 
+/**
+ * Displays items in the media gallery in a reorderable list view.
+ * @returns ItemListView component
+ */
 const ItemListView = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension()
-
-	const [dragging, setDragging] = useState(false)
 
 	/**
 	 * Drag-end-Drop action start
 	 * @param event
 	 */
 	const dragStart = (event: any) => {
-		setDragging(true)
 		if (app.setDragging) app.setDragging(true)
 	}
 
@@ -49,7 +50,6 @@ const ItemListView = () => {
 	 * @param event
 	 */
 	const dragEnd = (event: any) => {
-		setDragging(false)
 		if (app.setDragging) app.setDragging(false)
 		const { active, over } = event
 		if (active.id !== over.id) {

@@ -1,11 +1,10 @@
 import { Chip, CircularProgress, Skeleton, Typography } from '@mui/material'
-import { style } from '@mui/system'
-import React, { FC, useContext, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import { AppContext } from '../app-context'
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined'
 
 /**
- *
+ * Props the control how an image is displayed.
  */
 type Props = {
 	item: any
@@ -25,6 +24,11 @@ type Props = {
 	textCol?: string
 }
 
+/**
+ * Generic image component with a loading skeleton and some useful display props.
+ * @param props Image Props
+ * @returns GenericImage component
+ */
 const GenericImage: FC<Props> = ({
 	item,
 	zoomable = false,
@@ -48,7 +52,7 @@ const GenericImage: FC<Props> = ({
 		: (w / aspect.w) * aspect.h
 
 	/**
-	 * WHen img tag is loaded, setImageLoading to false
+	 * When img tag is loaded, setImageLoading to false
 	 */
 	const handleImageLoaded = () => {
 		setImageLoading(false)
@@ -117,7 +121,6 @@ const GenericImage: FC<Props> = ({
 							style={{ position: 'absolute', top: 8, right: 5 }}
 						/>
 					)
-					//  <AutorenewOutlinedIcon color='warning' />
 				}
 				{
 					outOfSync && (
@@ -129,7 +132,6 @@ const GenericImage: FC<Props> = ({
 							style={{ position: 'absolute', top: 8, right: 5 }}
 						/>
 					)
-					//  <AutorenewOutlinedIcon color='warning' />
 				}
 			</div>
 		</>

@@ -212,7 +212,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const dragOrder = (active: any, over: any) => {
 		const oldIndex = items.findIndex((item: MediaItem) => item.id === active.id)
 		const newIndex = items.findIndex((item: MediaItem) => item.id === over.id)
-		//setItems(arrayMove(items, oldIndex, newIndex))
+
 		setItems((prev: MediaItem[]) => (prev = arrayMove(items, oldIndex, newIndex)))
 	}
 
@@ -595,18 +595,10 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					offsetActiveElementIndex(1)
 				} else if (event.key === 'ArrowLeft') {
 					offsetActiveElementIndex(-1)
-					// } else if (event.key === 'ArrowDown' && gridMode) {
-					//   offsetActiveElementIndex(Math.floor(cols / zoom))
-					// } else if (event.key === 'ArrowUp' && gridMode) {
-					//   offsetActiveElementIndex(Math.floor(-cols / zoom))
 				} else if (event.key === '-' && gridMode) {
 					handleZoomOut()
 				} else if (event.key === '+' && gridMode) {
 					handleZoomIn()
-					// } else if (event.key === 'ArrowDown' && !gridMode) {
-					//   offsetActiveElementIndex(1)
-					// } else if (event.key === 'ArrowUp' && !gridMode) {
-					//   offsetActiveElementIndex(-1)
 				} else if (event.key === 't') {
 					const element = document.activeElement as HTMLElement
 					const item: MediaItem | undefined = getItem(element.id)

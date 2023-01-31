@@ -179,7 +179,7 @@ const AppToolbar = () => {
 				<Divider orientation='vertical' variant='middle' sx={{ ml: 1, mr: 1 }} flexItem />
 				<IconButton
 					sx={{ color: 'white' }}
-					aria-label={`zoonm in`}
+					aria-label={`zoom in`}
 					title='Zoom In'
 					disabled={app.zoom === 2 || !app.gridMode}
 					onClick={app.handleZoomIn}>
@@ -187,7 +187,7 @@ const AppToolbar = () => {
 				</IconButton>
 				<IconButton
 					sx={{ color: 'white' }}
-					aria-label={`zoonm out`}
+					aria-label={`zoom out`}
 					title='Zoom Out'
 					disabled={app.zoom === 1 / 2 || !app.gridMode}
 					onClick={app.handleZoomOut}>
