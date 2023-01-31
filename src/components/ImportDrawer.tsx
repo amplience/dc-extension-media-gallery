@@ -19,7 +19,8 @@ import {
 	CircularProgress,
 	Badge,
 	Tooltip,
-	Alert
+	Alert,
+	Chip
 } from '@mui/material'
 import RichObjectTreeView from './RichTreeView'
 import { AppContext } from '../app-context'
@@ -31,6 +32,7 @@ import { MediaItem } from '../model'
 import _ from 'lodash'
 import { EnrichedRepository, Folder } from '../ch-api/shared'
 import { metaToString } from '../model/metadata-map'
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined'
 
 /**
  * Recursive function that checks to see if a repo's folder(s) contains another folder. It's ultimately used to reflect a repo's
@@ -107,43 +109,43 @@ const ImportDrawer = () => {
 		if (app.importDrawerOpen) {
 			let cancelled = false
 
-			;(async () => {
-				if (app.getEntries && app.setImportItems && repoId && folderId) {
-					setLoading(true)
-					setIsEmpty(false)
-					const entries = await app.getEntries(
-						repoId,
-						folderId === repoId ? 'root' : folderId,
-						queryValue
-					)
-					if (!cancelled) {
-						setIsEmpty(entries.length === 0)
-						app.setImportItems(
-							assetsToItems(entries, params).map((item: MediaItem) => {
-								const filtered = app.items.filter(
-									(item2: MediaItem) => item2.id === item.id
-								)
-								if (filtered.length > 0) {
-									filtered.forEach((fItem: MediaItem) => {
-										if (fItem.id === item.id) {
-											if (fItem.dateModified < item.dateModified) {
-												item.updated = true
-											} else if (!_.isEqual(fItem.entry, item.entry)) {
-												item.outOfSync = true
-											} else {
-												item.disabled = true
-											}
-										}
-									})
-								}
-								return item
-							})
+				; (async () => {
+					if (app.getEntries && app.setImportItems && repoId && folderId) {
+						setLoading(true)
+						setIsEmpty(false)
+						const entries = await app.getEntries(
+							repoId,
+							folderId === repoId ? 'root' : folderId,
+							queryValue
 						)
+						if (!cancelled) {
+							setIsEmpty(entries.length === 0)
+							app.setImportItems(
+								assetsToItems(entries, params).map((item: MediaItem) => {
+									const filtered = app.items.filter(
+										(item2: MediaItem) => item2.id === item.id
+									)
+									if (filtered.length > 0) {
+										filtered.forEach((fItem: MediaItem) => {
+											if (fItem.id === item.id) {
+												if (fItem.dateModified < item.dateModified) {
+													item.updated = true
+												} else if (!_.isEqual(fItem.entry, item.entry)) {
+													item.outOfSync = true
+												} else {
+													item.disabled = true
+												}
+											}
+										})
+									}
+									return item
+								})
+							)
 
-						setLoading(false)
+							setLoading(false)
+						}
 					}
-				}
-			})()
+				})()
 
 			return () => {
 				cancelled = true
@@ -345,7 +347,7 @@ const ImportDrawer = () => {
 													<Tooltip
 														title={item.entry.photo.name}
 														followCursor={true}>
-														<Typography variant='subtitle1' noWrap sx={{marginBottom: '6px'}}>
+														<Typography variant='subtitle1' noWrap sx={{ marginBottom: '6px' }}>
 															{item.entry.photo.name}
 														</Typography>
 													</Tooltip>
@@ -378,7 +380,7 @@ const ImportDrawer = () => {
 																			{metaToString(
 																				meta,
 																				item.entry[
-																					meta.target
+																				meta.target
 																				]
 																			)}
 																		</Typography>
@@ -388,15 +390,14 @@ const ImportDrawer = () => {
 													</>
 												}
 												style={{
-													color: `${
-														item.disabled
-															? '#bbb'
-															: item.updated
+													color: `${item.disabled
+														? '#bbb'
+														: item.updated
 															? 'orange'
 															: item.outOfSync
-															? 'green'
-															: '#000'
-													}`,
+																? 'green'
+																: '#000'
+														}`,
 													padding: '3px'
 												}}
 												sx={{
@@ -435,17 +436,45 @@ const ImportDrawer = () => {
 						bottom: 0
 					}}
 					direction={'row'}>
+					<Stack direction={'column'}>
+						<Stack direction={'row'}>
+							<Chip
+								size='small'
+								icon={<AutorenewOutlinedIcon />}
+								label='updated'
+								color='warning'
+								style={{ width: '100px' }}
+								sx={{ mb: '5px' }}
+							/>
+							<Typography variant='caption' sx={{ mt: '2px', pr: 3, pl: 1 }}>asset has changed</Typography>
+						</Stack>
+						<Stack direction={'row'}>
+							<Chip
+								size='small'
+								icon={<AutorenewOutlinedIcon />}
+								label='out-of-sync'
+								color='success'
+								style={{ width: '100px' }}
+							/>
+							<Typography variant='caption' sx={{ mt: '2px', pr: 1, pl: 1 }}>data has changed</Typography>
+						</Stack>
+					</Stack>
 					<Box sx={{ flexGrow: 1 }} />
-					<Button sx={{ mr: 2 }} variant='contained' onClick={app.importMedia}>
-						Import
-					</Button>
-					<Button
-						variant='outlined'
-						onClick={() => {
-							if (app.setImportDrawerOpen) app.setImportDrawerOpen(false)
-						}}>
-						Cancel
-					</Button>
+					<Stack direction={'column'}>
+						<Stack direction={'row'}>
+							<Button sx={{ mr: 2 }} variant='contained' onClick={app.importMedia}>
+								Import
+							</Button>
+							<Button
+								variant='outlined'
+								onClick={() => {
+									if (app.setImportDrawerOpen) app.setImportDrawerOpen(false)
+								}}>
+								Cancel
+							</Button>
+						</Stack>
+						<Box sx={{ flexGrow: 1 }} />
+					</Stack>
 				</Stack>
 			</Stack>
 		</SwipeableDrawer>
