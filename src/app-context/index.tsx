@@ -608,10 +608,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					// } else if (event.key === 'ArrowUp' && !gridMode) {
 					//   offsetActiveElementIndex(-1)
 				} else if (event.key === 't') {
-					console.log(event.key)
 					const element = document.activeElement as HTMLElement
 					const item: MediaItem | undefined = getItem(element.id)
-					console.log(item)
 					if (item) handleMoveToTop(item)
 				} else if (event.key === 'b') {
 					const element = document.activeElement as HTMLElement
@@ -657,13 +655,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const handleResetItems = async () => {
 			if (field && sdk && setField) {
-				//console.log('field: ', field)
-
-				// resetValue does not exist. docs incorrect
-				//await sdk.field.resetValue()
-
-				// reset does nothing
-				await sdk.field.reset()
 				setItems(
 					initialItems.map((item) => {
 						item.selected = false
@@ -672,7 +663,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				)
 				setField()
 			}
-			//setItems([])
 			setCurrentAlert({
 				severity: 'success',
 				message: 'Collection reset successfully!'
@@ -802,7 +792,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					const filteredItems = items.filter(
 						(element: MediaItem) => (event.target as HTMLElement).id === element.id
 					)
-					console.log(filteredItems)
 					if (filteredItems.length > 0) {
 						setContextMedia(filteredItems[0])
 					}
