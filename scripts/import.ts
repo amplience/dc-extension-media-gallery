@@ -6,6 +6,7 @@ import { tmpdir } from 'os'
 import { join } from 'path'
 import { nanoid } from 'nanoid'
 import { Context } from './cli'
+import { isCallExpression } from '@babel/types'
 
 const recursiveTemplateSearch = async (
 	baseDir: string,
@@ -37,6 +38,7 @@ const compileTemplates = async (dir: string, targetDir: string, params: any) => 
 			const template = await promises.readFile(join(dir, filePath), { encoding: 'utf8' })
 
 			const hbs = compile(template)
+
 			const result = hbs(params)
 
 			// The path is confirmed to end with .hbs.
@@ -114,6 +116,13 @@ export const importArgs = (yargs: Argv) => {
 
 export const importHandler = async (context: Arguments<Context>): Promise<any> => {
 	createTempDir(context)
+
+	context.extensionClientId = context.extensionClientId
+		? context.extensionClientId
+		: context.clientId
+	context.extensionClientSecret = context.extensionClientSecret
+		? context.extensionClientSecret
+		: context.clientSecret
 
 	console.log(`Compiling templates and copying files...`)
 	await compileTemplates(context.automationDir, context.tempDir, context)

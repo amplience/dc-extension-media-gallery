@@ -6,11 +6,13 @@ This extension needs to be registered against a Hub with in the Dynamic Content 
 
 ### Setup
 
--   Category: Content Field
--   Label: Media Gallery
--   Name: media-gallery _(needs to be unique with the Hub)_
--   URL: your hosted HTTPS location for the extension
--   Description: Media Gallery _(can be left blank, if you wish)_
+| Property | Value |
+|----------|-------|
+| `Category` | Content Field |
+| `Label` | Media Gallery |
+| `Name` | media-gallery _(needs to be unique with the Hub)_ |
+| `URL` | Your hosted HTTPS location for the extension |
+| `Description` | Media Gallery _(can be left blank, if you wish)_ |
 
 > Note:
 > You can use our deployed version of this extension (builds from the "production" branch) at [https://dc-extension-media-gallery.dc-demostore.com/](https://dc-extension-media-gallery.dc-demostore.com/).

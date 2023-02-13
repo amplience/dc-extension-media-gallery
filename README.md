@@ -19,7 +19,10 @@ $ npm i
 Then, if you have your DC Hub Client Id and Secret, run the following `npm` script to install the extension to your DC Hub:
 
 ```
-$ npm run import -- --clientId [your_client_id] --clientSecret [your_client_secret] --hubId [your_hub_id]
+$ npm run import -- \
+    --clientId [your_client_id] \
+    --clientSecret [your_client_secret] \
+    --hubId [your_hub_id]
 ```
 
 > NOTE: the above flags are required
@@ -27,7 +30,13 @@ $ npm run import -- --clientId [your_client_id] --clientSecret [your_client_secr
 If you also have the Media Hub Client Id and Secret the extension will link out to, include the `--extensionClientId` and `--extensionClientSecret` flags, with an OPTIONAL `--extensionVSE` flag
 
 ```
-$ npm run import -- --clientId [your_client_id] --clientSecret [your_client_secret] --hubId [your_hub_id] --extensionClientId [your_mediahub_client_id] --extensionClientSecret [your_mediahub_client_secret] --extensionVSE [optional_vse_url]
+$ npm run import -- \
+    --clientId [your_client_id] \
+    --clientSecret [your_client_secret] \
+    --hubId [your_hub_id] \
+    --extensionClientId [your_mediahub_client_id] \
+    --extensionClientSecret [your_mediahub_client_secret] \
+    --extensionVSE [optional_vse_url]
 ```
 
 ## Table of Contents
