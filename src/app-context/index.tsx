@@ -926,7 +926,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 * Save item
 		 */
 		const saveItems = () => {
-			setDetailDrawerOpen(false)
+			setMultiDetailDrawerOpen(false)
 			
 			// TODO
 			// save to multiple items
