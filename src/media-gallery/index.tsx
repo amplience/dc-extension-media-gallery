@@ -6,6 +6,7 @@ import AppToolbar from '../components/AppToolbar'
 import GridView from '../components/GridView'
 import ItemListView from '../components/ItemListView'
 import DetailDrawer from '../components/DetailDrawer'
+import MultiDetailDrawer from '../components/MultiDetailDrawer'
 import ImportDrawer from '../components/ImportDrawer'
 import AppSnack from '../components/AppSnack'
 import ContextMenu from '../components/ContextMenu'
@@ -46,6 +47,9 @@ function MediaGallery() {
 
 				{/* Image detail drawer */}
 				<DetailDrawer />
+
+				{/* Multi Image detail drawer */}
+				<MultiDetailDrawer />
 
 				{/* Import media drawer */}
 				<ImportDrawer />

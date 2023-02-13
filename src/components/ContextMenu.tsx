@@ -29,6 +29,7 @@ import {
 } from '@mui/material'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
+import { MediaItem } from '../model'
 
 /**
  * Context menu for media items, providing access to actions relating to them.
@@ -230,6 +231,29 @@ const ContextMenu = () => {
 			<Divider />
 			<MenuItem
 				dense
+				disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}
+				onClick={() => {
+					app.handleContextClose()
+					app.handleMultiDetailView()
+				}}>
+				<ListItemIcon>
+					<EditOutlined fontSize='small' />
+				</ListItemIcon>
+				<ListItemText>
+					<Badge
+						badgeContent={app.items?.filter((item: any) => item.selected).length}
+						color='secondary'>
+						Edit selected
+						<Box style={{ width: '10px' }} />
+					</Badge>
+				</ListItemText>
+				<Typography variant='body2' color='text.secondary'>
+					E
+				</Typography>
+			</MenuItem>
+			<MenuItem
+				dense
+				disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}
 				onClick={() => {
 					app.handleContextClose()
 					app.handleRemoveSelected()
@@ -239,7 +263,7 @@ const ContextMenu = () => {
 				</ListItemIcon>
 				<ListItemText>
 					<Badge
-						badgeContent={app.items.filter((item: any) => item.selected).length}
+						badgeContent={app.items?.filter((item: any) => item.selected).length}
 						color='secondary'>
 						Remove selected
 						<Box style={{ width: '10px' }} />

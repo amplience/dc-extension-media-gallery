@@ -13,23 +13,29 @@ import {
 	IconButton,
 	TextField,
 	InputAdornment,
-	Button
+	Button,
+	List,
+	ListItem,
+	ListItemText,
+	ListItemIcon,
+	Paper
 } from '@mui/material'
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
-import GenericImage from './GenericImage'
 import { useExtension } from '../extension-context'
 import { MetadataMapEntry } from '../model/metadata-map'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { MediaItem } from '../model'
+import GenericImage from './GenericImage'
 
 /**
  * A drawer that shows details for a media item, and allows fields to be edited.
  * @returns DetailDrawer Component
  */
-const DetailDrawer = () => {
+const MultiDetailDrawer = () => {
 	const app = useContext(AppContext)
-
 	const { params } = useExtension()
+	const selectedItems = app.items?.filter((item: MediaItem) => item.selected)
 
 	/**
 	 * Returns a MUI Icon based on meta.icon value. 'author' returns <PhotoCameraFrontOutlined /> all else returns <NotesOutlined />
@@ -47,9 +53,23 @@ const DetailDrawer = () => {
 		}
 	}
 
-	const metaEdit = params.metadataMap
-		.filter((meta) => meta.visibility.indexOf('edit') !== -1)
-		.map((meta) => {
+	/**
+	 * Checks if all the elements in a string array are identical
+	 * @param arr 
+	 * @returns Boolean
+	 */
+	function allIdentical(arr: string[]) {
+		for (var i = 1; i < arr.length; i++) {
+			if (arr[i] !== arr[0]) {
+			return false;
+			}
+		}
+		return true;
+	}
+
+	const metaEdit: any = params.metadataMap
+		.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
+		.map((meta: any) => {
 			switch (meta.type) {
 				case 'string':
 					return (
@@ -58,7 +78,9 @@ const DetailDrawer = () => {
 							id={meta.target}
 							label={meta.label}
 							variant='standard'
-							defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
+							defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
+								return item.entry[meta.target]
+							})) ? selectedItems[0]?.entry[meta.target] : ''}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -81,7 +103,9 @@ const DetailDrawer = () => {
 							id={meta.target}
 							label={meta.label}
 							variant='standard'
-							defaultValue={app.currentMedia && app.currentMedia.entry[meta.target]}
+							defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
+								return item.entry[meta.target]
+							})) ? selectedItems[0]?.entry[meta.target] : ''}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment
@@ -149,12 +173,12 @@ const DetailDrawer = () => {
 				sx: { width: '50%', p: 2 }
 			}}
 			anchor={'left'}
-			open={app.detailDrawerOpen}
+			open={app.multiDetailDrawerOpen}
 			onClose={() => {
-				if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+				if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(false)
 			}}
 			onOpen={() => {
-				if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(true)
+				if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(true)
 			}}
 			variant='temporary'
 			ModalProps={{
@@ -168,11 +192,10 @@ const DetailDrawer = () => {
 						top: '-16px',
 						backgroundColor: 'white',
 						zIndex: 100,
-						pt: 2,
-						pb: 2
+						p: 0
 					}}>
 					<Typography sx={{ pb: 0 }} variant='h5' component='h5'>
-						Media Details
+						Multiple Media Details
 					</Typography>
 					<Box sx={{ flexGrow: 1 }} />
 					<Box>
@@ -180,19 +203,39 @@ const DetailDrawer = () => {
 							aria-label={`close detail drawer`}
 							size='small'
 							onClick={() => {
-								if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+								if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(false)
 							}}>
 							<CloseOutlined />
 						</IconButton>
 					</Box>
 				</Stack>
-				<GenericImage
-					item={app.currentMedia}
-					w={1024}
-					zoomable={true}
-					aspect={{ w: 3, h: 2 }}
-					lazy={false}
-					fillWidth={true}></GenericImage>
+				{
+					selectedItems &&
+					<>
+						<Typography variant='subtitle1'>{selectedItems.length} selected item{selectedItems.length > 0 && 's'}</Typography>
+						<Paper style={{maxHeight: 250, overflow: 'auto'}}>
+						<List>
+						{
+							selectedItems.map((item: MediaItem) => {
+								return (
+									<ListItem>
+										<ListItemIcon>
+										<GenericImage
+											item={item}
+											w={32}
+											zoomable={true}
+											aspect={{ w: 3, h: 2 }}
+											lazy={false}
+											fillWidth={true}></GenericImage>
+										</ListItemIcon>
+										<ListItemText primary={item?.entry?.photo?.name} />
+									</ListItem>
+							)})
+						}
+						</List>
+						</Paper>
+					</>
+				}
 				<TextField
 					id='name'
 					label='Name'
@@ -210,7 +253,7 @@ const DetailDrawer = () => {
 							</InputAdornment>
 						)
 					}}
-					defaultValue={app.currentMedia?.entry?.photo?.name}
+					defaultValue={selectedItems.length > 1 ? 'Multiple values' : selectedItems[0]?.entry?.photo?.name}
 				/>
 				<TextField
 					id='dateModified'
@@ -229,10 +272,7 @@ const DetailDrawer = () => {
 							</InputAdornment>
 						)
 					}}
-					defaultValue={
-						app.currentMedia?.dateModified &&
-						new Date(app.currentMedia.dateModified).toLocaleString()
-					}
+					defaultValue={selectedItems.length > 1 ? 'Multiple values' : new Date(selectedItems[0]?.dateModified).toLocaleString()}
 				/>
 				{metaEdit}
 			</Stack>
@@ -253,7 +293,7 @@ const DetailDrawer = () => {
 				<Button
 					variant='outlined'
 					onClick={() => {
-						if (app.setDetailDrawerOpen) app.setDetailDrawerOpen(false)
+						if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(false)
 					}}>
 					Cancel
 				</Button>
@@ -262,4 +302,4 @@ const DetailDrawer = () => {
 	)
 }
 
-export default DetailDrawer
+export default MultiDetailDrawer

@@ -37,6 +37,8 @@ type AppContextData = {
 	setChApi?: Dispatch<SetStateAction<IChApi | undefined>>
 	detailDrawerOpen?: boolean
 	setDetailDrawerOpen?: Dispatch<SetStateAction<boolean>>
+	multiDetailDrawerOpen?: boolean
+	setMultiDetailDrawerOpen?: Dispatch<SetStateAction<boolean>>
 	importDrawerOpen?: boolean
 	setImportDrawerOpen?: Dispatch<SetStateAction<boolean>>
 	sortAnchorEl?: HTMLElement | null
@@ -65,6 +67,7 @@ type AppContextData = {
 	handleContextClose: () => void
 	handleContextMenu: (event: React.MouseEvent) => void
 	handleDetailView: (media: MediaItem) => void
+	handleMultiDetailView: () => void
 	handleFullScreenView: (media: MediaItem) => void
 	handleImport: () => void
 	handleRemoveSelected: () => void
@@ -115,12 +118,14 @@ const defaultAppState = {
 	repo: null,
 	chApi: null,
 	detailDrawerOpen: false,
+	multiDetailDrawerOpen: false,
 	importDrawerOpen: false,
 	sortAnchorEl: null,
 	sortOpen: false,
 	currentMedia: null,
 	contextMenu: null,
 	handleDetailView: (media: MediaItem) => {},
+	handleMultiDetailView: () => {},
 	handleFullScreenView: (media: MediaItem) => {},
 	selectItem: (id: string) => {},
 	removeItem: (id: string) => {},
@@ -189,6 +194,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [endpoint, setEndpoint] = useState<string>()
 	const [error, setError] = useState<string>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
+	const [multiDetailDrawerOpen, setMultiDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
 	const sortOpen = Boolean(sortAnchorEl)
@@ -275,6 +281,13 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		setTempMedia(temp)
 		setDetailDrawerOpen(true)
 	}
+
+	/**
+	 * Opening multiple media details view
+	 */
+		const handleMultiDetailView = () => {
+			setMultiDetailDrawerOpen(true)
+		}
 
 	/**
 	 * Closing sort menu
@@ -542,6 +555,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				!fullscreenView &&
 				!importDrawerOpen &&
 				!detailDrawerOpen &&
+				!multiDetailDrawerOpen &&
 				!sortOpen &&
 				!dragging &&
 				!contextMenu
@@ -556,6 +570,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					handleResetItems()
 				} else if (event.key === 'R') {
 					handleRemoveSelected()
+				} else if (event.key === 'E') {
+					handleMultiDetailView()
 				} else if (event.key.toLowerCase() === 'g') {
 					setGridMode(true)
 				} else if (event.key.toLowerCase() === 'l') {
@@ -1018,6 +1034,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setChApi,
 			detailDrawerOpen,
 			setDetailDrawerOpen,
+			multiDetailDrawerOpen,
+			setMultiDetailDrawerOpen,
 			importDrawerOpen,
 			setImportDrawerOpen,
 			sortAnchorEl,
@@ -1044,6 +1062,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleContextClose,
 			handleContextMenu,
 			handleDetailView,
+			handleMultiDetailView,
 			handleFullScreenView,
 			handleImport,
 			handleRemoveSelected,
@@ -1095,6 +1114,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		repos,
 		chApi,
 		detailDrawerOpen,
+		multiDetailDrawerOpen,
 		importDrawerOpen,
 		sortAnchorEl,
 		sortOpen,
