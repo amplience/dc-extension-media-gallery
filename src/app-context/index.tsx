@@ -922,6 +922,24 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
+		 * Save item
+		 */
+		const saveItems = () => {
+			setDetailDrawerOpen(false)
+			
+			// TODO
+			// save to multiple items
+			
+			setCurrentAlert({
+				severity: 'success',
+				message: 'Media details successfully saved!'
+			})
+			setTimeout(() => {
+				handleSnackOpen()
+			}, 500)
+		}
+
+		/**
 		 * Sort by Name asc
 		 */
 		const handleSortByNameAsc = () => {
