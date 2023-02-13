@@ -101,6 +101,7 @@ type AppContextData = {
 	selectImportItem: (id: string) => void
 	selectItem: (id: string) => void
 	saveItem?: () => void
+	saveItems?: () => void
 	dragOrder: (active: any, over: any) => void
 	error?: string
 	setError: (error: string | undefined) => void
@@ -929,7 +930,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			
 			// TODO
 			// save to multiple items
-			
+
 			setCurrentAlert({
 				severity: 'success',
 				message: 'Media details successfully saved!'
@@ -1113,6 +1114,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			selectImportItem,
 			selectItem,
 			saveItem,
+			saveItems,
 			sensors,
 			dragOrder,
 			error,

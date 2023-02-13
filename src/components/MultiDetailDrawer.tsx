@@ -287,7 +287,7 @@ const MultiDetailDrawer = () => {
 				}}
 				direction={'row'}>
 				<Box sx={{ flexGrow: 1 }} />
-				<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
+				<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItems}>
 					Save
 				</Button>
 				<Button
