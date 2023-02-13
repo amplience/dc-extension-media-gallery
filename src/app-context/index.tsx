@@ -287,6 +287,19 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Opening multiple media details view
 	 */
 		const handleMultiDetailView = () => {
+			const item: Entry = {
+				photo: {
+					_meta: {
+						schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+					},
+					id: '',
+					name: '',
+					endpoint: '',
+					defaultHost: ''
+				},
+				date: ''
+			}
+			setTempMedia(item)
 			setMultiDetailDrawerOpen(true)
 		}
 
@@ -928,9 +941,28 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		const saveItems = () => {
 			setMultiDetailDrawerOpen(false)
 			
-			// TODO
 			// save to multiple items
-
+			const updates: any[] = []
+			params.metadataMap
+				.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
+				.forEach((meta: any) => {
+					if (tempMedia && tempMedia[meta.target] && tempMedia[meta.target] !== '') {
+						updates.push({
+							property: meta.target,
+							value: tempMedia[meta.target]
+						})
+					}
+				})
+			setItems((prevState: MediaItem[]) => {
+				return prevState.map((item: MediaItem) => {
+					if (item.selected) {
+						updates.forEach((update: any) => {
+							item.entry[update.property] = update.value
+						})
+					}
+					return item
+				})
+			})
 			setCurrentAlert({
 				severity: 'success',
 				message: 'Media details successfully saved!'
