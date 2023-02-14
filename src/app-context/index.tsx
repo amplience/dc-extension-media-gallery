@@ -943,16 +943,20 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			
 			// save to multiple items
 			const updates: any[] = []
+
+			// listing updates
 			params.metadataMap
 				.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
 				.forEach((meta: any) => {
-					if (tempMedia && tempMedia[meta.target] && tempMedia[meta.target] !== '') {
+					if (tempMedia && tempMedia[meta.target]) {
 						updates.push({
 							property: meta.target,
 							value: tempMedia[meta.target]
 						})
 					}
 				})
+
+			// applying updates to each selected items
 			setItems((prevState: MediaItem[]) => {
 				return prevState.map((item: MediaItem) => {
 					if (item.selected) {
@@ -965,7 +969,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			})
 			setCurrentAlert({
 				severity: 'success',
-				message: 'Media details successfully saved!'
+				message: `${items.filter((item: any) => item.selected).length} media details successfully saved!`
 			})
 			setTimeout(() => {
 				handleSnackOpen()

@@ -30,6 +30,7 @@ import {
 import { AppContext } from '../app-context'
 import { useContext } from 'react'
 import { MediaItem } from '../model'
+import { useExtension } from '../extension-context'
 
 /**
  * Context menu for media items, providing access to actions relating to them.
@@ -37,6 +38,7 @@ import { MediaItem } from '../model'
  */
 const ContextMenu = () => {
 	const app = useContext(AppContext)
+	const {params} = useExtension()
 	return (
 		<Menu
 			open={app.contextMenu !== null}
@@ -229,28 +231,33 @@ const ContextMenu = () => {
 				</Typography>
 			</MenuItem>
 			<Divider />
-			<MenuItem
-				dense
-				disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}
-				onClick={() => {
-					app.handleContextClose()
-					app.handleMultiDetailView()
-				}}>
-				<ListItemIcon>
-					<EditOutlined fontSize='small' />
-				</ListItemIcon>
-				<ListItemText>
-					<Badge
-						badgeContent={app.items?.filter((item: any) => item.selected).length}
-						color='secondary'>
-						Edit selected
-						<Box style={{ width: '10px' }} />
-					</Badge>
-				</ListItemText>
-				<Typography variant='body2' color='text.secondary'>
-					E
-				</Typography>
-			</MenuItem>
+			{
+				params.metadataMap
+				.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
+				.length > 0 &&
+				<MenuItem
+					dense
+					disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}
+					onClick={() => {
+						app.handleContextClose()
+						app.handleMultiDetailView()
+					}}>
+					<ListItemIcon>
+						<EditOutlined fontSize='small' />
+					</ListItemIcon>
+					<ListItemText>
+						<Badge
+							badgeContent={app.items?.filter((item: any) => item.selected).length}
+							color='secondary'>
+							Edit selected
+							<Box style={{ width: '10px' }} />
+						</Badge>
+					</ListItemText>
+					<Typography variant='body2' color='text.secondary'>
+						E
+					</Typography>
+				</MenuItem>
+			}
 			<MenuItem
 				dense
 				disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}

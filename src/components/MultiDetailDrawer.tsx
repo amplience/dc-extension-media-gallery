@@ -81,6 +81,9 @@ const MultiDetailDrawer = () => {
 							defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
 								return item.entry[meta.target]
 							})) ? selectedItems[0]?.entry[meta.target] : ''}
+							placeholder={!allIdentical(selectedItems.map((item: MediaItem) => {
+								return item.entry[meta.target]
+							})) ? 'Multiple values' : ''}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -106,6 +109,9 @@ const MultiDetailDrawer = () => {
 							defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
 								return item.entry[meta.target]
 							})) ? selectedItems[0]?.entry[meta.target] : ''}
+							placeholder={!allIdentical(selectedItems.map((item: MediaItem) => {
+								return item.entry[meta.target]
+							})) ? 'Multiple values' : ''}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment
