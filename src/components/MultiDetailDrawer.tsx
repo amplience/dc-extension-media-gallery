@@ -145,6 +145,7 @@ const MultiDetailDrawer = () => {
 								renderInput={(params) => <TextField {...params} />}
 								onChange={(event: any) => {
 									app.tempMedia &&
+										event !== null &&
 										(app.tempMedia[meta.target] = event.$d.getTime() / 1000)
 									app.tempMedia &&
 										app.setTempMedia &&
