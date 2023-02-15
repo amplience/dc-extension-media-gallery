@@ -3,7 +3,8 @@ import {
 	CalendarMonthOutlined,
 	LockOutlined,
 	PhotoCameraFrontOutlined,
-	NotesOutlined
+	NotesOutlined,
+	CheckBox
 } from '@mui/icons-material'
 import {
 	SwipeableDrawer,
@@ -146,6 +147,8 @@ const MultiDetailDrawer = () => {
 								onChange={(event: any) => {
 									app.tempMedia &&
 										event !== null &&
+										event.$d && 
+										(event.$d !== 'Invalid Date') &&
 										(app.tempMedia[meta.target] = event.$d.getTime() / 1000)
 									app.tempMedia &&
 										app.setTempMedia &&
