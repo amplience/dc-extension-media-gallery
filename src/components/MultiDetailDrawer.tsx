@@ -128,12 +128,19 @@ const MultiDetailDrawer = () => {
 						/>
 					)
 				case 'date':
-					const value = app.tempMedia && app.tempMedia[meta.target]
+					const value = allIdentical(selectedItems.map((item: MediaItem) => {
+						return item.entry[meta.target]
+					})) ? selectedItems[0]?.entry[meta.target] : null
+
+					const placeholder=!allIdentical(selectedItems.map((item: MediaItem) => {
+						return item.entry[meta.target]
+					})) ? ' (multiple values)' : ''
+
 					if (meta.editable) {
 						return (
 							<DateTimePicker
 								key={meta.target}
-								label={meta.label}
+								label={meta.label + placeholder}
 								value={value == null ? null : value * 1000}
 								renderInput={(params) => <TextField {...params} />}
 								onChange={(event: any) => {
