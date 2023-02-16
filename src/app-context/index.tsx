@@ -101,7 +101,7 @@ type AppContextData = {
 	selectImportItem: (id: string) => void
 	selectItem: (id: string) => void
 	saveItem?: () => void
-	saveItems?: () => void
+	saveItems?: (media: MediaItem) => void
 	dragOrder: (active: any, over: any) => void
 	error?: string
 	setError: (error: string | undefined) => void
@@ -287,19 +287,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	 * Opening multiple media details view
 	 */
 		const handleMultiDetailView = () => {
-			const item: Entry = {
-				photo: {
-					_meta: {
-						schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
-					},
-					id: '',
-					name: '',
-					endpoint: '',
-					defaultHost: ''
-				},
-				date: ''
-			}
-			setTempMedia(item)
 			setMultiDetailDrawerOpen(true)
 		}
 
@@ -938,8 +925,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		/**
 		 * Save item
 		 */
-		const saveItems = () => {
+		const saveItems = (tempMedia: any) => {
 			setMultiDetailDrawerOpen(false)
+			console.log("Multi-saving", tempMedia)
 			
 			// save to multiple items
 			const updates: any[] = []
@@ -952,6 +940,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 						updates.push({
 							property: meta.target,
 							value: tempMedia[meta.target]
+						})
+					}
+					if (tempMedia && tempMedia[meta.target + '_clear']) {
+						updates.push({
+							property: meta.target,
+							value: ''
 						})
 					}
 				})

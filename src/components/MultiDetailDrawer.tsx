@@ -25,13 +25,27 @@ import {
 	Checkbox
 } from '@mui/material'
 import { AppContext } from '../app-context'
-import { useContext, useState } from 'react'
+import { useContext, useReducer, useState } from 'react'
 import { useExtension } from '../extension-context'
 import { MetadataMapEntry } from '../model/metadata-map'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { MediaItem } from '../model'
 import GenericImage from './GenericImage'
-import Entry from '../model/entry'
+
+const generateEmptyEntry = () => {
+	return {
+		photo: {
+			_meta: {
+				schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+			},
+			id: '',
+			name: '',
+			endpoint: '',
+			defaultHost: ''
+		},
+		date: ''
+	} as any
+}
 
 /**
  * A drawer that shows details for a media item, and allows fields to be edited.
@@ -54,6 +68,7 @@ const MultiDetailDrawer = () => {
 		},
 		date: ''
 	} as any)
+	const [, forceUpdate] = useReducer(x => x + 1, 0);
 
 	/**
 	 * Returns a MUI Icon based on meta.icon value. 'author' returns <PhotoCameraFrontOutlined /> all else returns <NotesOutlined />
@@ -88,7 +103,6 @@ const MultiDetailDrawer = () => {
 	const metaEdit: any = params.metadataMap
 		.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
 		.map((meta: any) => {
-			console.log('render', tempMedia)
 			switch (meta.type) {
 				case 'string':
 					return (
@@ -124,11 +138,11 @@ const MultiDetailDrawer = () => {
 										sx={{ width: '120px' }}
 										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
 										onClick={() => {
-											setTempMedia((prev: any) => { 
-												prev[meta.target + '_clear'] = !prev[meta.target + '_clear'] 
-												return {...prev}
+											setTempMedia((prev: any) => {
+												prev[meta.target + '_clear'] = !prev[meta.target + '_clear']
+												return prev
 											})
-											console.log(tempMedia)
+											forceUpdate()
 										}}
 										label="Clear value" />
 								</FormGroup>
@@ -165,8 +179,7 @@ const MultiDetailDrawer = () => {
 										readOnly: !meta.editable
 									}}
 									onChange={(event) => {
-										tempMedia[meta.target] = !tempMedia[meta.target]
-										console.log(tempMedia)
+										tempMedia[meta.target] = event.target.value
 									}}
 								/>
 								<FormGroup>
@@ -174,11 +187,11 @@ const MultiDetailDrawer = () => {
 										sx={{ width: '120px' }}
 										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
 										onClick={() => {
-											setTempMedia((prev: any) => { 
-												prev[meta.target + '_clear'] = !prev[meta.target + '_clear'] 
-												return {...prev}
+											setTempMedia((prev: any) => {
+												prev[meta.target + '_clear'] = !prev[meta.target + '_clear']
+												return prev
 											})
-											console.log(tempMedia)
+											forceUpdate()
 										}}
 										label="Clear value" />
 								</FormGroup>
@@ -218,18 +231,18 @@ const MultiDetailDrawer = () => {
 										}}
 									/>
 									<FormGroup>
-									<FormControlLabel
-										sx={{ width: '120px' }}
-										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
-										onClick={() => {
-											setTempMedia((prev: any) => { 
-												prev[meta.target + '_clear'] = !prev[meta.target + '_clear'] 
-												return {...prev}
-											})
-											console.log(tempMedia)
-										}}
-										label="Clear value" />
-								</FormGroup>
+										<FormControlLabel
+											sx={{ width: '120px' }}
+											control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+											onClick={() => {
+												setTempMedia((prev: any) => {
+													prev[meta.target + '_clear'] = !prev[meta.target + '_clear']
+													return prev
+												})
+												forceUpdate()
+											}}
+											label="Clear value" />
+									</FormGroup>
 								</Stack>
 							</>
 						)
@@ -386,7 +399,13 @@ const MultiDetailDrawer = () => {
 					disabled={!dateValid}
 					sx={{ mr: 2 }}
 					variant='contained'
-					onClick={app.saveItems}>
+					onClick={() => {
+						console.log('TEMP MEDIA TO BE USED', tempMedia)
+						if (app.saveItems) {
+							app.saveItems(tempMedia)
+						}
+						setTempMedia(generateEmptyEntry())
+					}}>
 					Save
 				</Button>
 				<Button
