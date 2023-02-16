@@ -22,7 +22,7 @@ import {
 	Paper
 } from '@mui/material'
 import { AppContext } from '../app-context'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useExtension } from '../extension-context'
 import { MetadataMapEntry } from '../model/metadata-map'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -37,6 +37,7 @@ const MultiDetailDrawer = () => {
 	const app = useContext(AppContext)
 	const { params } = useExtension()
 	const selectedItems = app.items?.filter((item: MediaItem) => item.selected)
+	const [dateValid, setDateValid] = useState(true)
 
 	/**
 	 * Returns a MUI Icon based on meta.icon value. 'author' returns <PhotoCameraFrontOutlined /> all else returns <NotesOutlined />
@@ -145,6 +146,12 @@ const MultiDetailDrawer = () => {
 								value={value == null ? null : value * 1000}
 								renderInput={(params) => <TextField {...params} />}
 								onChange={(event: any) => {
+									if (event !== null &&
+										event.$d && isNaN(event.$d.getTime())) {
+										setDateValid(false)
+									} else {
+										setDateValid(true)
+									}
 									app.tempMedia &&
 										event !== null &&
 										event.$d && 
@@ -304,7 +311,11 @@ const MultiDetailDrawer = () => {
 				}}
 				direction={'row'}>
 				<Box sx={{ flexGrow: 1 }} />
-				<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItems}>
+				<Button 
+					disabled={!dateValid}
+					sx={{ mr: 2 }} 
+					variant='contained' 
+					onClick={app.saveItems}>
 					Save
 				</Button>
 				<Button

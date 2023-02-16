@@ -16,7 +16,7 @@ import {
 	Button
 } from '@mui/material'
 import { AppContext } from '../app-context'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import GenericImage from './GenericImage'
 import { useExtension } from '../extension-context'
 import { MetadataMapEntry } from '../model/metadata-map'
@@ -28,6 +28,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
  */
 const DetailDrawer = () => {
 	const app = useContext(AppContext)
+	const [dateValid, setDateValid] = useState(true)
 
 	const { params } = useExtension()
 
@@ -107,6 +108,12 @@ const DetailDrawer = () => {
 								value={value == null ? null : value * 1000}
 								renderInput={(params) => <TextField {...params} />}
 								onChange={(event: any) => {
+									if (event !== null &&
+										event.$d && isNaN(event.$d.getTime())) {
+										setDateValid(false)
+									} else {
+										setDateValid(true)
+									}
 									app.tempMedia &&
 										(app.tempMedia[meta.target] = event.$d.getTime() / 1000)
 									app.tempMedia &&
@@ -247,7 +254,11 @@ const DetailDrawer = () => {
 				}}
 				direction={'row'}>
 				<Box sx={{ flexGrow: 1 }} />
-				<Button sx={{ mr: 2 }} variant='contained' onClick={app.saveItem}>
+				<Button 
+					disabled={!dateValid}
+					sx={{ mr: 2 }} 
+					variant='contained' 
+					onClick={app.saveItem}>
 					Save
 				</Button>
 				<Button
