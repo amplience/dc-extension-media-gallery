@@ -927,7 +927,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		 */
 		const saveItems = (tempMedia: any) => {
 			setMultiDetailDrawerOpen(false)
-			console.log("Multi-saving", tempMedia)
 			
 			// save to multiple items
 			const updates: any[] = []

@@ -400,7 +400,6 @@ const MultiDetailDrawer = () => {
 					sx={{ mr: 2 }}
 					variant='contained'
 					onClick={() => {
-						console.log('TEMP MEDIA TO BE USED', tempMedia)
 						if (app.saveItems) {
 							app.saveItems(tempMedia)
 						}
