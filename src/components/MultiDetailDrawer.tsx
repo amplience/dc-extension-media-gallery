@@ -236,7 +236,7 @@ const MultiDetailDrawer = () => {
 				{
 					selectedItems &&
 					<>
-						<Typography variant='subtitle1'>{selectedItems.length} selected item{selectedItems.length > 0 && 's'}</Typography>
+						<Typography variant='subtitle1'>{selectedItems.length} selected item{selectedItems.length > 1 && 's'}</Typography>
 						<Paper style={{maxHeight: 250, overflow: 'auto'}}>
 						<List>
 						{
