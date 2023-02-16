@@ -19,7 +19,10 @@ import {
 	ListItem,
 	ListItemText,
 	ListItemIcon,
-	Paper
+	Paper,
+	FormGroup,
+	FormControlLabel,
+	Checkbox
 } from '@mui/material'
 import { AppContext } from '../app-context'
 import { useContext, useState } from 'react'
@@ -28,6 +31,7 @@ import { MetadataMapEntry } from '../model/metadata-map'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { MediaItem } from '../model'
 import GenericImage from './GenericImage'
+import Entry from '../model/entry'
 
 /**
  * A drawer that shows details for a media item, and allows fields to be edited.
@@ -38,6 +42,18 @@ const MultiDetailDrawer = () => {
 	const { params } = useExtension()
 	const selectedItems = app.items?.filter((item: MediaItem) => item.selected)
 	const [dateValid, setDateValid] = useState(true)
+	const [tempMedia, setTempMedia] = useState({
+		photo: {
+			_meta: {
+				schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+			},
+			id: '',
+			name: '',
+			endpoint: '',
+			defaultHost: ''
+		},
+		date: ''
+	} as any)
 
 	/**
 	 * Returns a MUI Icon based on meta.icon value. 'author' returns <PhotoCameraFrontOutlined /> all else returns <NotesOutlined />
@@ -63,7 +79,7 @@ const MultiDetailDrawer = () => {
 	function allIdentical(arr: string[]) {
 		for (var i = 1; i < arr.length; i++) {
 			if (arr[i] !== arr[0]) {
-			return false;
+				return false;
 			}
 		}
 		return true;
@@ -72,96 +88,150 @@ const MultiDetailDrawer = () => {
 	const metaEdit: any = params.metadataMap
 		.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
 		.map((meta: any) => {
+			console.log('render', tempMedia)
 			switch (meta.type) {
 				case 'string':
 					return (
-						<TextField
-							key={meta.target}
-							id={meta.target}
-							label={meta.label}
-							variant='standard'
-							defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
-								return item.entry[meta.target]
-							})) ? selectedItems[0]?.entry[meta.target] : ''}
-							placeholder={!allIdentical(selectedItems.map((item: MediaItem) => {
-								return item.entry[meta.target]
-							})) ? 'Multiple values' : ''}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position='start'>
-										{getIcon(meta)}
-									</InputAdornment>
-								),
-								readOnly: !meta.editable
-							}}
-							onChange={(event) => {
-								app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
-							}}
-						/>
+						<>
+							<Stack direction={'row'} gap={2}>
+								<TextField
+									sx={{ width: '100%' }}
+									key={meta.target}
+									id={meta.target}
+									label={meta.label}
+									variant='standard'
+									disabled={tempMedia[meta.target + '_clear']}
+									defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
+										return item.entry[meta.target]
+									})) ? selectedItems[0]?.entry[meta.target] : ''}
+									placeholder={!allIdentical(selectedItems.map((item: MediaItem) => {
+										return item.entry[meta.target]
+									})) ? 'Multiple values' : ''}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position='start'>
+												{getIcon(meta)}
+											</InputAdornment>
+										),
+										readOnly: !meta.editable
+									}}
+									onChange={(event) => {
+										tempMedia[meta.target] = event.target.value
+									}}
+								/>
+								<FormGroup>
+									<FormControlLabel
+										sx={{ width: '120px' }}
+										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+										onClick={() => {
+											setTempMedia((prev: any) => { 
+												prev[meta.target + '_clear'] = !prev[meta.target + '_clear'] 
+												return {...prev}
+											})
+											console.log(tempMedia)
+										}}
+										label="Clear value" />
+								</FormGroup>
+							</Stack>
+						</>
 					)
 				case 'multiline':
 					return (
-						<TextField
-							key={meta.target}
-							multiline
-							rows={4}
-							id={meta.target}
-							label={meta.label}
-							variant='standard'
-							defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
-								return item.entry[meta.target]
-							})) ? selectedItems[0]?.entry[meta.target] : ''}
-							placeholder={!allIdentical(selectedItems.map((item: MediaItem) => {
-								return item.entry[meta.target]
-							})) ? 'Multiple values' : ''}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment
-										style={{ display: 'flex', flexDirection: 'column-reverse' }}
-										position='start'>
-										{getIcon(meta)}
-									</InputAdornment>
-								),
-								readOnly: !meta.editable
-							}}
-							onChange={(event) => {
-								app.tempMedia && (app.tempMedia[meta.target] = event.target.value)
-							}}
-						/>
+						<>
+							<Stack direction={'row'} gap={2}>
+								<TextField
+									sx={{ width: '100%' }}
+									key={meta.target}
+									multiline
+									rows={4}
+									id={meta.target}
+									label={meta.label}
+									variant='standard'
+									disabled={tempMedia[meta.target + '_clear']}
+									defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
+										return item.entry[meta.target]
+									})) ? selectedItems[0]?.entry[meta.target] : ''}
+									placeholder={!allIdentical(selectedItems.map((item: MediaItem) => {
+										return item.entry[meta.target]
+									})) ? 'Multiple values' : ''}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment
+												style={{ display: 'flex', flexDirection: 'column-reverse' }}
+												position='start'>
+												{getIcon(meta)}
+											</InputAdornment>
+										),
+										readOnly: !meta.editable
+									}}
+									onChange={(event) => {
+										tempMedia[meta.target] = !tempMedia[meta.target]
+										console.log(tempMedia)
+									}}
+								/>
+								<FormGroup>
+									<FormControlLabel
+										sx={{ width: '120px' }}
+										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+										onClick={() => {
+											setTempMedia((prev: any) => { 
+												prev[meta.target + '_clear'] = !prev[meta.target + '_clear'] 
+												return {...prev}
+											})
+											console.log(tempMedia)
+										}}
+										label="Clear value" />
+								</FormGroup>
+							</Stack>
+						</>
 					)
 				case 'date':
 					const value = allIdentical(selectedItems.map((item: MediaItem) => {
 						return item.entry[meta.target]
 					})) ? selectedItems[0]?.entry[meta.target] : null
 
-					const placeholder=!allIdentical(selectedItems.map((item: MediaItem) => {
+					const placeholder = !allIdentical(selectedItems.map((item: MediaItem) => {
 						return item.entry[meta.target]
 					})) ? ' (multiple values)' : ''
 
 					if (meta.editable) {
 						return (
-							<DateTimePicker
-								key={meta.target}
-								label={meta.label + placeholder}
-								value={value == null ? null : value * 1000}
-								renderInput={(params) => <TextField {...params} />}
-								onChange={(event: any) => {
-									if (event !== null &&
-										event.$d && isNaN(event.$d.getTime())) {
-										setDateValid(false)
-									} else {
-										setDateValid(true)
-									}
-									app.tempMedia &&
-										event !== null &&
-										event.$d && 
-										(event.$d !== 'Invalid Date') &&
-										(app.tempMedia[meta.target] = event.$d.getTime() / 1000)
-									app.tempMedia &&
-										app.setTempMedia &&
-										app.setTempMedia({ ...app.tempMedia })
-								}}
-							/>
+							<>
+								<Stack direction={'row'} gap={2}>
+									<DateTimePicker
+										key={meta.target}
+										label={meta.label + placeholder}
+										value={value == null ? null : value * 1000}
+										disabled={tempMedia[meta.target + '_clear']}
+										renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
+										onChange={(event: any) => {
+											if (event !== null &&
+												event.$d && isNaN(event.$d.getTime())) {
+												setDateValid(false)
+											} else {
+												setDateValid(true)
+											}
+											event !== null &&
+												event.$d &&
+												(event.$d !== 'Invalid Date') &&
+												(tempMedia[meta.target] = event.$d.getTime() / 1000)
+										}}
+									/>
+									<FormGroup>
+									<FormControlLabel
+										sx={{ width: '120px' }}
+										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+										onClick={() => {
+											setTempMedia((prev: any) => { 
+												prev[meta.target + '_clear'] = !prev[meta.target + '_clear'] 
+												return {...prev}
+											})
+											console.log(tempMedia)
+										}}
+										label="Clear value" />
+								</FormGroup>
+								</Stack>
+							</>
 						)
 					} else {
 						return (
@@ -237,26 +307,27 @@ const MultiDetailDrawer = () => {
 					selectedItems &&
 					<>
 						<Typography variant='subtitle1'>{selectedItems.length} selected item{selectedItems.length > 1 && 's'}</Typography>
-						<Paper style={{maxHeight: 250, overflow: 'auto'}}>
-						<List>
-						{
-							selectedItems.map((item: MediaItem) => {
-								return (
-									<ListItem>
-										<ListItemIcon>
-										<GenericImage
-											item={item}
-											w={32}
-											zoomable={true}
-											aspect={{ w: 3, h: 2 }}
-											lazy={false}
-											fillWidth={true}></GenericImage>
-										</ListItemIcon>
-										<ListItemText primary={item?.entry?.photo?.name} />
-									</ListItem>
-							)})
-						}
-						</List>
+						<Paper style={{ maxHeight: 250, overflow: 'auto' }}>
+							<List>
+								{
+									selectedItems.map((item: MediaItem) => {
+										return (
+											<ListItem>
+												<ListItemIcon>
+													<GenericImage
+														item={item}
+														w={32}
+														zoomable={true}
+														aspect={{ w: 3, h: 2 }}
+														lazy={false}
+														fillWidth={true}></GenericImage>
+												</ListItemIcon>
+												<ListItemText primary={item?.entry?.photo?.name} />
+											</ListItem>
+										)
+									})
+								}
+							</List>
 						</Paper>
 					</>
 				}
@@ -311,10 +382,10 @@ const MultiDetailDrawer = () => {
 				}}
 				direction={'row'}>
 				<Box sx={{ flexGrow: 1 }} />
-				<Button 
+				<Button
 					disabled={!dateValid}
-					sx={{ mr: 2 }} 
-					variant='contained' 
+					sx={{ mr: 2 }}
+					variant='contained'
 					onClick={app.saveItems}>
 					Save
 				</Button>
