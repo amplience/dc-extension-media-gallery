@@ -114,7 +114,7 @@ const MultiDetailDrawer = () => {
 									id={meta.target}
 									label={meta.label}
 									variant='standard'
-									disabled={tempMedia[meta.target + '_clear']}
+									disabled={tempMedia[meta.target + '_$clear$']}
 									defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
 										return item.entry[meta.target]
 									})) ? selectedItems[0]?.entry[meta.target] : ''}
@@ -136,10 +136,10 @@ const MultiDetailDrawer = () => {
 								<FormGroup>
 									<FormControlLabel
 										sx={{ width: '120px' }}
-										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+										control={<Checkbox value={tempMedia[meta.target + '_$clear$']} size={'small'} />}
 										onClick={() => {
 											setTempMedia((prev: any) => {
-												prev[meta.target + '_clear'] = !prev[meta.target + '_clear']
+												prev[meta.target + '_$clear$'] = !prev[meta.target + '_$clear$']
 												return prev
 											})
 											forceUpdate()
@@ -161,7 +161,7 @@ const MultiDetailDrawer = () => {
 									id={meta.target}
 									label={meta.label}
 									variant='standard'
-									disabled={tempMedia[meta.target + '_clear']}
+									disabled={tempMedia[meta.target + '_$clear$']}
 									defaultValue={allIdentical(selectedItems.map((item: MediaItem) => {
 										return item.entry[meta.target]
 									})) ? selectedItems[0]?.entry[meta.target] : ''}
@@ -185,10 +185,10 @@ const MultiDetailDrawer = () => {
 								<FormGroup>
 									<FormControlLabel
 										sx={{ width: '120px' }}
-										control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+										control={<Checkbox value={tempMedia[meta.target + '_$clear$']} size={'small'} />}
 										onClick={() => {
 											setTempMedia((prev: any) => {
-												prev[meta.target + '_clear'] = !prev[meta.target + '_clear']
+												prev[meta.target + '_$clear$'] = !prev[meta.target + '_$clear$']
 												return prev
 											})
 											forceUpdate()
@@ -215,7 +215,7 @@ const MultiDetailDrawer = () => {
 										key={meta.target}
 										label={meta.label + placeholder}
 										value={value == null ? null : value * 1000}
-										disabled={tempMedia[meta.target + '_clear']}
+										disabled={tempMedia[meta.target + '_$clear$']}
 										renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
 										onChange={(event: any) => {
 											if (event !== null &&
@@ -233,10 +233,10 @@ const MultiDetailDrawer = () => {
 									<FormGroup>
 										<FormControlLabel
 											sx={{ width: '120px' }}
-											control={<Checkbox value={tempMedia[meta.target + '_clear']} size={'small'} />}
+											control={<Checkbox value={tempMedia[meta.target + '_$clear$']} size={'small'} />}
 											onClick={() => {
 												setTempMedia((prev: any) => {
-													prev[meta.target + '_clear'] = !prev[meta.target + '_clear']
+													prev[meta.target + '_$clear$'] = !prev[meta.target + '_$clear$']
 													return prev
 												})
 												forceUpdate()

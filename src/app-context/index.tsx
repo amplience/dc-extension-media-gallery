@@ -941,7 +941,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 							value: tempMedia[meta.target]
 						})
 					}
-					if (tempMedia && tempMedia[meta.target + '_clear']) {
+					if (tempMedia && tempMedia[meta.target + '_$clear$']) {
 						updates.push({
 							property: meta.target,
 							value: ''
