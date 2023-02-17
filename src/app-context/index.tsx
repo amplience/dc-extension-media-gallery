@@ -930,8 +930,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			
 			// save to multiple items
 			const updates: any[] = []
+			const removes: any[] = []
 
-			// listing updates
+			// listing updates & removes
 			params.metadataMap
 				.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
 				.forEach((meta: any) => {
@@ -942,9 +943,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 						})
 					}
 					if (tempMedia && tempMedia[meta.target + '_$clear$']) {
-						updates.push({
+						removes.push({
 							property: meta.target,
-							value: ''
 						})
 					}
 				})
@@ -955,6 +955,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					if (item.selected) {
 						updates.forEach((update: any) => {
 							item.entry[update.property] = update.value
+						})
+						removes.forEach((remove: any) => {
+							delete item.entry[remove.property]
 						})
 					}
 					return item
