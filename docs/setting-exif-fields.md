@@ -113,8 +113,8 @@ Installation parameters:
 
 ```json
 {
-  "clientId": "2f1f5720-8acc-43b5-9f67-bab73ba7524a",
-  "clientSecret": "2a6d15b2a29459ddabfe6da0870e884a8ac2717966e67273d6425c88d319a7ef",
+  "clientId": "xxxx",
+  "clientSecret": "yyyy",
   "configPath": "galleryConfig",
   "galleryPath": "photoGallery",
   "metadataMap": [
