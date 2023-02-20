@@ -199,11 +199,11 @@ const MultiDetailDrawer = () => {
 						</>
 					)
 				case 'date':
-					const value = allIdentical(selectedItems.map((item: MediaItem) => {
+					const value = tempMedia[meta.target] ?? (allIdentical(selectedItems.map((item: MediaItem) => {
 						return item.entry[meta.target]
-					})) ? selectedItems[0]?.entry[meta.target] : null
+					})) ? selectedItems[0]?.entry[meta.target] : null)
 
-					const placeholder = !allIdentical(selectedItems.map((item: MediaItem) => {
+					const placeholder = tempMedia[meta.target] != null || !allIdentical(selectedItems.map((item: MediaItem) => {
 						return item.entry[meta.target]
 					})) ? ' (multiple values)' : ''
 
@@ -228,6 +228,7 @@ const MultiDetailDrawer = () => {
 												event.$d &&
 												(event.$d !== 'Invalid Date') &&
 												(tempMedia[meta.target] = event.$d.getTime() / 1000)
+												forceUpdate()
 										}}
 									/>
 									<FormGroup>
@@ -283,6 +284,7 @@ const MultiDetailDrawer = () => {
 			open={app.multiDetailDrawerOpen}
 			onClose={() => {
 				if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(false)
+				setTempMedia(generateEmptyEntry())
 			}}
 			onOpen={() => {
 				if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(true)
@@ -411,6 +413,7 @@ const MultiDetailDrawer = () => {
 					variant='outlined'
 					onClick={() => {
 						if (app.setMultiDetailDrawerOpen) app.setMultiDetailDrawerOpen(false)
+						setTempMedia(generateEmptyEntry())
 					}}>
 					Cancel
 				</Button>
