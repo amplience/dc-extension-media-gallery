@@ -10,6 +10,7 @@ You can perform the following actions from the toolbar:
 |-------|---------|
 | ![Import icon](../media/icon-import.png)  | Import new media items. |
 | ![Select all icon](../media/icon-select-all.png) ![De-select all icon](../media/icon-select-none.png) | Select and deselect all media items. |
+| ![Edit icon](../media/icon-edit.png) | Multi-edit selected media items metadata. |
 | ![Remove icon](../media/icon-remove.png) | Remove selected media items. |
 | ![Sort icon](../media/icon-sort.png) | Sort collection (by date mofified, name and any user specified metadata eg. author/caption). |
 | ![Reset icon](../media/icon-reset.png) | Reset collection to its initial state. |
@@ -54,6 +55,14 @@ You can edit an item's details by clicking on the view icon in grid or list view
 
 Date Modified and Name are read only. You can view or edit additional metadata if specified in the extension configuration, for instance author and caption. Once saved, a notification will appear.
 
+## Multi-Edit media
+
+![Edit item](../media/multi-edit-items.png)
+
+You can edit multiple items metadata by clicking on the edit icon in the toolbar or the menu item in the context menu. You can also use the `E` keyboard shortcut.
+
+Date Modified and Name are read only. You can view or edit additional metadata if specified in the extension configuration, for instance author and caption. Form will show a vlaue if all items have the same, or 'Multiple values'. You can then edit values for all items, or clear the value using the `Clear value` checkbox.
+
 ## Grid View
 
 ![Grid View](../media/grid-view.png)
@@ -74,6 +83,7 @@ A context menu with all possible actions can be opened when right clicking on a 
 
 For some actions, notifications can appear on the top left corner of the interface:
 
+- Editing multiple media items.
 - Removing multiple media items.
 - Importing new media items.
 - Resetting the collection.
@@ -102,6 +112,7 @@ Global actions:
 | `i` | open the import drawer |
 | `a` | select all items |
 | `n` | deselect all items |
+| `E` | edit selected items |
 | `R` | remove selected items |
 | `s` | sort items |
 | `Z` | reset collection |
