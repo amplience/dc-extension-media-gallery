@@ -38,8 +38,6 @@ export const defaultMetadataMap: MetadataMap = [
  * Default values for specific exif sources if they are not present.
  */
 const defaultExifValues: any = {
-  artist: '',
-  description: ''
 };
 
 /**
