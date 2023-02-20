@@ -1,0 +1,62 @@
+{
+    "title": "Media Gallery Extension",
+    "description": "Installs the media gallery extension, and a content type that uses it.",
+    "icon": "./media-gallery.png",
+    "bundle": "./media-gallery.zip",
+    "bundleSignature": "123456789ABCDEF", /* Bundle signed via Private Key. ip' */
+
+    "properties": {
+        "clientId": {
+            "title": "Content Hub Client ID",
+            "description": "Client ID for the Content Hub",
+            "type": "string"
+        },
+        "clientSecret": {
+            "title": "Content Hub Client Secret",
+            "description": "Client Secret for the Content Hub",
+            "type": "string"
+        },
+        "withExample": {
+            "title": "Include Example Content",
+            "description": "Includes example content that uses the included content type.",
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "required": ["clientId", "clientSecret"],
+
+    "import": [
+        {
+            "type": "content-type-schema",
+            "files": [
+                [
+                    "./automation-files/schema/mediaGalleryObject.json",
+                    "./automation-files/schema/schemas/mediaGalleryObject-schema.json"
+                ]
+            ]
+        },
+        {
+            "type": "content-type",
+            "files": [
+                "./automation-files/type/mediaGalleryObject.json"
+            ]
+        },
+        {
+            "type": "content-item",
+            "files": [
+                {
+                    "condition": "withExample",
+                    "path": "automation-files/content-item/example.json"
+                }
+            ]
+        },
+        {
+            "type": "extension",
+            "files": [
+                "./automation-files/extensions/media-gallery.json.hbs"
+            ]
+        }
+    ],
+
+    "summary": "To use the Media Gallery Extension, ![screenshot](./screenshot.png)"
+}
