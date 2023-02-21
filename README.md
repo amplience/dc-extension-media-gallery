@@ -8,6 +8,11 @@ This extension allows you to manage a collection of image items easily, with imp
 
 -   [Prerequisites](./docs/prerequisites.md)
 
+## Dependency versions
+This extension was developed and tested with:
+- Node version `14.x`
+- NPM version `6.x`
+
 ## Quick Install
 
 To run the `npm` install scripts, you'll need to install some dependencies:
@@ -46,16 +51,16 @@ $ npm run import -- \
     -   [Setting EXIF fields](./docs/setting-exif-fields.md)
 -   [Features](./docs/features.md)
     -   [Toolbar](./docs/features.md#toolbar)
-    -   [Import Media](./docs//features.md#import-media)
-    -   [View Media](./docs//features.md#view-media)
-    -   [Edit Media](./docs//features.md#edit-media)
-    -   [Grid View](./docs//features.md#grid-view)
-    -   [List View](./docs//features.md#list-view)
-    -   [Context Menu](./docs//features.md#context-menu)
-    -   [Notifications](./docs//features.md#notifications)
-    -   [Keyboard Shortcuts](./docs//features.md#keyboard-shortcuts)
-    -   [Manual Re-ordering](./docs//features.md#manual-re-ordering)
-    -   [Sorting By](./docs//features.md#sorting-by)
+    -   [Import Media](./docs/features.md#import-media)
+    -   [View Media](./docs/features.md#view-media)
+    -   [Edit Media](./docs/features.md#edit-media)
+    -   [Grid View](./docs/features.md#grid-view)
+    -   [List View](./docs/features.md#list-view)
+    -   [Context Menu](./docs/features.md#context-menu)
+    -   [Notifications](./docs/features.md#notifications)
+    -   [Keyboard Shortcuts](./docs/features.md#keyboard-shortcuts)
+    -   [Manual Re-ordering](./docs/features.md#manual-re-ordering)
+    -   [Sorting By](./docs/features.md#sorting-by)
 -   Additional Topics
     -   [Buidling Locally](./docs/building-locally.md)
     -   [Available NPM Scripts](./docs/npm-scripts.md)

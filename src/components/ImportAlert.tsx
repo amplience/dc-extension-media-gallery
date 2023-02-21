@@ -40,7 +40,7 @@ const ImportAlert = () => {
 						if (fItem.id === item.id) {
 							if (fItem.dateModified < item.dateModified) {
 								updatedCount++
-							} else if (!_.isEqual(fItem.entry, item.entry)) {
+							} else if (!_.isEqual(_.omitBy(fItem.entry, _.isNil), _.omitBy(item.entry, _.isNil))) {
 								outOfSyncCount++
 							}
 						}

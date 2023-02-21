@@ -37,6 +37,8 @@ type AppContextData = {
 	setChApi?: Dispatch<SetStateAction<IChApi | undefined>>
 	detailDrawerOpen?: boolean
 	setDetailDrawerOpen?: Dispatch<SetStateAction<boolean>>
+	multiDetailDrawerOpen?: boolean
+	setMultiDetailDrawerOpen?: Dispatch<SetStateAction<boolean>>
 	importDrawerOpen?: boolean
 	setImportDrawerOpen?: Dispatch<SetStateAction<boolean>>
 	sortAnchorEl?: HTMLElement | null
@@ -65,6 +67,7 @@ type AppContextData = {
 	handleContextClose: () => void
 	handleContextMenu: (event: React.MouseEvent) => void
 	handleDetailView: (media: MediaItem) => void
+	handleMultiDetailView: () => void
 	handleFullScreenView: (media: MediaItem) => void
 	handleImport: () => void
 	handleRemoveSelected: () => void
@@ -98,6 +101,7 @@ type AppContextData = {
 	selectImportItem: (id: string) => void
 	selectItem: (id: string) => void
 	saveItem?: () => void
+	saveItems?: (media: MediaItem) => void
 	dragOrder: (active: any, over: any) => void
 	error?: string
 	setError: (error: string | undefined) => void
@@ -115,12 +119,14 @@ const defaultAppState = {
 	repo: null,
 	chApi: null,
 	detailDrawerOpen: false,
+	multiDetailDrawerOpen: false,
 	importDrawerOpen: false,
 	sortAnchorEl: null,
 	sortOpen: false,
 	currentMedia: null,
 	contextMenu: null,
 	handleDetailView: (media: MediaItem) => {},
+	handleMultiDetailView: () => {},
 	handleFullScreenView: (media: MediaItem) => {},
 	selectItem: (id: string) => {},
 	removeItem: (id: string) => {},
@@ -189,6 +195,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 	const [endpoint, setEndpoint] = useState<string>()
 	const [error, setError] = useState<string>()
 	const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
+	const [multiDetailDrawerOpen, setMultiDetailDrawerOpen] = useState(false)
 	const [importDrawerOpen, setImportDrawerOpen] = useState(false)
 	const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
 	const sortOpen = Boolean(sortAnchorEl)
@@ -275,6 +282,13 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		setTempMedia(temp)
 		setDetailDrawerOpen(true)
 	}
+
+	/**
+	 * Opening multiple media details view
+	 */
+		const handleMultiDetailView = () => {
+			setMultiDetailDrawerOpen(true)
+		}
 
 	/**
 	 * Closing sort menu
@@ -542,6 +556,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 				!fullscreenView &&
 				!importDrawerOpen &&
 				!detailDrawerOpen &&
+				!multiDetailDrawerOpen &&
 				!sortOpen &&
 				!dragging &&
 				!contextMenu
@@ -556,6 +571,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 					handleResetItems()
 				} else if (event.key === 'R') {
 					handleRemoveSelected()
+				} else if (event.key === 'E') {
+					handleMultiDetailView()
 				} else if (event.key.toLowerCase() === 'g') {
 					setGridMode(true)
 				} else if (event.key.toLowerCase() === 'l') {
@@ -906,6 +923,56 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		}
 
 		/**
+		 * Save item
+		 */
+		const saveItems = (tempMedia: any) => {
+			setMultiDetailDrawerOpen(false)
+			
+			// save to multiple items
+			const updates: any[] = []
+			const removes: any[] = []
+
+			// listing updates & removes
+			params.metadataMap
+				.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
+				.forEach((meta: any) => {
+					if (tempMedia && tempMedia[meta.target]) {
+						updates.push({
+							property: meta.target,
+							value: tempMedia[meta.target]
+						})
+					}
+					if (tempMedia && tempMedia[meta.target + '_$clear$']) {
+						removes.push({
+							property: meta.target,
+						})
+					}
+				})
+
+			// applying updates to each selected items
+			setItems((prevState: MediaItem[]) => {
+				return prevState.map((item: MediaItem) => {
+					if (item.selected) {
+						updates.forEach((update: any) => {
+							item.entry[update.property] = update.value
+						})
+						removes.forEach((remove: any) => {
+							delete item.entry[remove.property]
+						})
+					}
+					return item
+				})
+			})
+			setCurrentAlert({
+				severity: 'success',
+				message: `${items.filter((item: any) => item.selected).length} media details successfully saved!`
+			})
+			setTimeout(() => {
+				handleSnackOpen()
+			}, 500)
+		}
+
+		/**
 		 * Sort by Name asc
 		 */
 		const handleSortByNameAsc = () => {
@@ -1018,6 +1085,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			setChApi,
 			detailDrawerOpen,
 			setDetailDrawerOpen,
+			multiDetailDrawerOpen,
+			setMultiDetailDrawerOpen,
 			importDrawerOpen,
 			setImportDrawerOpen,
 			sortAnchorEl,
@@ -1044,6 +1113,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			handleContextClose,
 			handleContextMenu,
 			handleDetailView,
+			handleMultiDetailView,
 			handleFullScreenView,
 			handleImport,
 			handleRemoveSelected,
@@ -1076,6 +1146,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 			selectImportItem,
 			selectItem,
 			saveItem,
+			saveItems,
 			sensors,
 			dragOrder,
 			error,
@@ -1095,6 +1166,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
 		repos,
 		chApi,
 		detailDrawerOpen,
+		multiDetailDrawerOpen,
 		importDrawerOpen,
 		sortAnchorEl,
 		sortOpen,

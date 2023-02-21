@@ -11,7 +11,8 @@ import {
 	ZoomInOutlined,
 	ZoomOutOutlined,
 	ListOutlined,
-	AppsOutlined
+	AppsOutlined,
+	EditOutlined
 } from '@mui/icons-material'
 import {
 	AppBar,
@@ -109,11 +110,30 @@ const AppToolbar = () => {
 					<GridViewOutlined />
 				</IconButton>
 				<Divider orientation='vertical' variant='middle' sx={{ ml: 1, mr: 1 }} flexItem />
+				{
+					params.metadataMap
+					.filter((meta: any) => meta.visibility.indexOf('edit') !== -1)
+					.length > 0 &&
+					<IconButton
+						sx={{ color: 'white' }}
+						aria-label={`edit selected`}
+						title='Edit selected'
+						disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}
+						onClick={app.handleMultiDetailView}
+						size='small'>
+						<Badge
+							badgeContent={app.items?.filter((item: MediaItem) => item.selected).length}
+							color='secondary'>
+							<EditOutlined />
+						</Badge>
+					</IconButton>
+				}
 				<IconButton
 					sx={{ color: 'white' }}
 					aria-label={`remove selected`}
 					title='Remove selected'
 					size='small'
+					disabled={app.items?.filter((item: MediaItem) => item.selected).length === 0}
 					onClick={app.handleRemoveSelected}>
 					<Badge
 						badgeContent={app.items?.filter((item: MediaItem) => item.selected).length}
