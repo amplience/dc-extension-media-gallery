@@ -144,7 +144,7 @@ const MultiDetailDrawer = () => {
 											})
 											forceUpdate()
 										}}
-										label="Clear value" />
+										label="Clear" />
 								</FormGroup>
 							</Stack>
 						</>
@@ -193,7 +193,7 @@ const MultiDetailDrawer = () => {
 											})
 											forceUpdate()
 										}}
-										label="Clear value" />
+										label="Clear" />
 								</FormGroup>
 							</Stack>
 						</>
@@ -242,7 +242,7 @@ const MultiDetailDrawer = () => {
 												})
 												forceUpdate()
 											}}
-											label="Clear value" />
+											label="Clear" />
 									</FormGroup>
 								</Stack>
 							</>
