@@ -61,7 +61,7 @@ Date Modified and Name are read only. You can view or edit additional metadata i
 
 You can edit multiple items metadata by clicking on the edit icon in the toolbar or the menu item in the context menu. You can also use the `E` keyboard shortcut.
 
-Date Modified and Name are read only. You can view or edit additional metadata if specified in the extension configuration, for instance author and caption. Form will show a vlaue if all items have the same, or 'Multiple values'. You can then edit values for all items, or clear the value using the `Clear value` checkbox.
+Date Modified and Name are read only. You can view or edit additional metadata if specified in the extension configuration, for instance author and caption. Form will show a vlaue if all items have the same, or 'Multiple values'. You can then edit values for all items, or clear the value using the `Clear` checkbox.
 
 > Note: this interface is only available if there are editable addtional EXIF properties specified in the extension installation parameters.
 
