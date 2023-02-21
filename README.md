@@ -8,6 +8,11 @@ This extension allows you to manage a collection of image items easily, with imp
 
 -   [Prerequisites](./docs/prerequisites.md)
 
+## Dependency versions
+This extension was developed and tested with:
+- Node version `14.x`
+- NPM version `6.x`
+
 ## Quick Install
 
 To run the `npm` install scripts, you'll need to install some dependencies:
