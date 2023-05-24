@@ -10,8 +10,8 @@ This extension allows you to manage a collection of image items easily, with imp
 
 ## Dependency versions
 This extension was developed and tested with:
-- Node version `14.x`
-- NPM version `6.x`
+- Node version `18.x`
+- NPM version `9.x`
 
 ## Quick Install
 
