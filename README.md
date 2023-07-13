@@ -1,5 +1,3 @@
-[![Amplience Dynamic Content](media/header.png)](https://amplience.com/dynamic-content)
-
 ![Dynamic Content Media Gallery Extension](media/mouse-drag-and-drop.png)
 
 # Dynamic Content Media Gallery Extension
