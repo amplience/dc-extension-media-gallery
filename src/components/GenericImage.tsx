@@ -98,6 +98,8 @@ const GenericImage: FC<Props> = ({
 						transition: 'opacity 0.5s ease-out',
 						opacity: `${imageLoading ? 0 : disabled ? 0.5 : 1}`,
 						position: `${imageLoading ? 'absolute' : 'relative'}`,
+						top: imageLoading ? 0 : undefined,
+						left: imageLoading ? 0 : undefined,
 						maxWidth: '100%',
 						maxHeight: '100%',
 						width: `${fillWidth ? '100%' : 'auto'}`,
