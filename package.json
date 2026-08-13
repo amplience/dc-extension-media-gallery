@@ -2,6 +2,9 @@
   "name": "dc-extension-media-gallery",
   "version": "1.1.1",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "devDependencies": {
     "@amplience/dc-cli": "^0.18.0",
     "@types/lodash": "^4.14.191",
